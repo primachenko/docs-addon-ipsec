@@ -1,0 +1,55 @@
+---
+title: IPsec Add-On Guide
+owner: Security Engineering
+---
+
+<strong><%= modified_date %></strong>
+
+This guide describes the Pivotal Cloud Foundry&reg; (PCF) IPsec add-on. The topics included cover installation and configuration, troubleshooting, and credential rotation. Your organization may require IPSec if you transmit sensitive data, such as financial or cardholder information.
+
+<p class="note"><strong>Note</strong>: If you apply IPsec to your PCF deployment, you cannot remove IPsec without tearing down the entire deployment.</p>	
+
+## <a id='ipsec-details'></a>IPsec Overview ##
+
+The IPsec add-on for PCF provides level three network security with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. It adds a co-located strongSwan job to each BOSH deployed VM.. 
+
+IPsec encrypts IP data flow between hosts, between security gateways, and between security gateways and hosts. This approach secures network traffic within a Cloud Foundry deployment and provides internal system protection if a malicious actor breaches your firewall. 
+
+## <a id='ipsec-details'></a>PCF IPsec Implementation Details ##
+The PCF IPsec add-on implements the following cryptographic suite:
+<table border='1' class='nice'>
+<tr>
+	<th>Key Agreement (Diffie-Hellman)</th>
+	<td>IKEv2 Main Mode</td>
+</tr>
+<tr>
+	<th>Bulk Encryption</th>
+	<td>AES128GCM16</td>
+</tr>
+<tr>
+	<th>Hashing</th>
+	<td><code>SHA1</code></td>
+</tr>
+<tr>
+	<th>Integrity/Authentication Tag</th>
+	<td>128 bit GHASH ICV</td>
+</tr>
+<tr>
+	<th>Digital Signing</th>
+	<td>RSA 3072/4096</td>
+</tr>
+<tr>
+	<th>Peer Authentication Method</th>
+	<td>Public/Private Key</td>
+</tr>
+</table>
+
+
+## <a id='install-configue'></a>IPsec Table of Contents##
+Refer to the following topics to learn more about the IPsec add-on:
+
+* [Downloading, Installing and Configuring IPsec](./ipsec-install.html)
+* [Setting Up and Rotating Certificates for IPsec](./ipsec-credentials.html)
+* [Troubleshooting IPsec](./ipsec-troubleshooting.html)
+
+

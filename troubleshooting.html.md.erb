@@ -3,6 +3,95 @@ title: Troubleshooting Pivotal Cloud Foundry&reg; IPSec Add-On
 owner: Security Engineering
 ---
 
-blocked, w8ing on secTeam review
+<strong><%= modified_date %></strong>
 
-#Troubleshooting
+This topic provides instructions to verify that strongSwan-based IPsec works with your Pivotal Cloud Foundry® (PCF) deployment and general recommendations for troubleshooting IPsec. 
+
+## <a id='verify-ipsec'></a>Verify that IPsec Works with PCF
+To verify that IPsec works between two hosts, check that traffic is encrypted in the deployment by running `tcpdump` and performing the ping test:
+
+1. Select two hosts in your deployment with IPsec enabled and note their IP addresses. These will be referenced below as `<IP-ADDRESS-1>` and `<IP-ADDRESS-2>`
+
+1. $ ssh <IP-ADDRESS-1>
+1. On the first host, run the following, and allow it to continue running:
+<pre class="terminal">$ tcpdump host <IP-ADDRESS-2></pre>
+1. From a separate command line run:
+<pre class="terminal">$ ssh <IP-ADDRESS-2></pre>
+1. On the second host, run:
+<pre class="terminal">$ ping <IP-ADDRESS-1></pre>
+1. Verify that the packet type is ESP. The output from `tcpdump` will look similar to the following `03:01:15.242731 IP <IP-ADDRESS-2> > <IP-ADDRESS-1>: ESP(spi=0xcfdbb261,seq=0x3), length 100`.
+1. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted.
+
+1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
+1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for ‘ipsec’ and the status of the IPsec job.
+1. Run `ipsec statusall NAME-OF-JOB` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
+
+If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPSec](./installing.html) topic and review your installation. 
+
+If you encounter issues with installing IPsec, reference the following [Troubleshooting IPsec](#troubleshoot-ipsec) section.
+
+## <a id='troubleshoot-ipsec'></a>Troubleshoot IPsec
+
+### IPsec Installation Issues
+
+<table border='1' class='nice'><caption>Packet Loss</caption>
+	<tr>
+		<th>Symptom</th>
+		<td>Unresponsive applications or incomplete responses, particularly for large payloads</td>
+	</tr>
+	<tr>
+		<th>Details:</th>	
+		<td>IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
+		</td>
+	</tr>
+	<tr>
+		<th>Solution</th>
+		<td>Implement a 100 MTU difference between host VM and the contained application container, applying one of the approaches below.
+		</td>
+	</tr>
+		<th>Option 1 Details </th>
+		<td>Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.</td>
+	<tr>
+		<th>Option 2 Details</th>
+		<td>Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK_INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK_INTERFACE with the network interface used to communicate with other VMs For example: 
+			<code>$ ifconfig NETWORK_INTERFACE mtu 1400</code></td>
+		</tr>
+	</table>   
+
+<hr> 
+
+### <a id="packet-loss"></a> Packet Loss
+
+**Symptom**: Unresponsive applications or incomplete responses, particularly for large payloads
+
+**Explanation**: IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
+
+If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
+
+**Solution**: Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
+
+* Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.
+
+* Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example: 
+<code>$ ifconfig NETWORK-INTERFACE mtu 1400</code>
+
+<hr>
+
+### <a id="packet-loss"></a> Packet Loss
+
+#### Symptom: 
+Unresponsive applications or incomplete responses, particularly for large payloads
+
+#### Explanation: 
+IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
+
+If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
+
+####Solution: 
+Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
+
+* Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.
+
+* Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example: 
+<code>$ ifconfig NETWORK-INTERFACE mtu 1400</code>
+

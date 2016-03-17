@@ -71,18 +71,18 @@ Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-p
 (canary): 	Action Failed 
 get_task: 	Task 044424f7-c5f2-4382-5d81-57bacefbc238 
 result: 	Stopping Monitored Services: Stopping service 
-ipsec: 		Sending stop request to monit: Request failed, 
+ipsec: 		Sending stop request to Monit: Request failed, 
 response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05:22)..
 </pre>
 
 #### Explanation: Asynchronous `monit` Job Priorities
-This issue occurs when monit job priorities are asynchronous. This error can occur when monit uses a "check file" check on an NFS mount that is unreachable, see the [monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for more details. IPsec causes monit to hang in this case and it will not recover.
+This issue occurs when Monit job priorities are asynchronous. This error can occur when Monit uses a "check file" check on an NFS mount that is unreachable, see the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for more details. IPsec causes Monit to hang in this case and it will not recover.
 
 #### Solution
 
 1. `bosh ssh` into the stuck instance.
 <pre class="terminal">$ sv stop monit</pre>
-1. Check to see if your previous command terminated monit process.  
+1. Check to see if your previous command terminated Monit process.  
 <pre class="terminal">$ killall -s 9 /var/vcap/bosh/bin/monit</pre>
 1. Edit /var/vcap/monit/job/0000_nfs_mounter.monitrc and comment out all lines with #.
 <pre class="terminal">$ sv start monit</pre>

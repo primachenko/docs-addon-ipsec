@@ -32,43 +32,18 @@ If you encounter issues with installing IPsec, reference the following [Troubles
 
 ## <a id='troubleshoot-ipsec'></a>Troubleshoot IPsec
 
-### IPsec Installation Issues
+### <a id="ipsec-installation-issues"></a> IPsec Installation Issues
 
-<table border='1' class='nice'><caption>Packet Loss</caption>
-	<tr>
-		<th>Symptom</th>
-		<td>Unresponsive applications or incomplete responses, particularly for large payloads</td>
-	</tr>
-	<tr>
-		<th>Details:</th>	
-		<td>IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
-		</td>
-	</tr>
-	<tr>
-		<th>Solution</th>
-		<td>Implement a 100 MTU difference between host VM and the contained application container, applying one of the approaches below.
-		</td>
-	</tr>
-		<th>Option 1 Details </th>
-		<td>Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.</td>
-	<tr>
-		<th>Option 2 Details</th>
-		<td>Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK_INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK_INTERFACE with the network interface used to communicate with other VMs For example: 
-			<code>$ ifconfig NETWORK_INTERFACE mtu 1400</code></td>
-		</tr>
-	</table>   
+#### Symptom
+Unresponsive applications or incomplete responses, particularly for large payloads
 
-<hr> 
-
-### <a id="packet-loss"></a> Packet Loss
-
-**Symptom**: Unresponsive applications or incomplete responses, particularly for large payloads
-
-**Explanation**: IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
+#### Explanation: Packet Loss
+IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
 
 If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
 
-**Solution**: Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
+#### Solution
+Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
 
 * Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.
 
@@ -77,21 +52,74 @@ If your VMs were created with an Amazon PV stemcell, the default MTU value is 15
 
 <hr>
 
-### <a id="packet-loss"></a> Packet Loss
-
-#### Symptom: 
+#### Symptom
 Unresponsive applications or incomplete responses, particularly for large payloads
 
-#### Explanation: 
-IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
+#### Explanation: Network Degradation 
+IPsec data encryption increases the size of packet payloads. If the number of requests and the size of your files are large, the network may degrade.
 
-If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
+#### Solution
+Scale your deployment by allocating more processing power to your VM CPU or GPUs, which, additionally, decreases the packet encryption time. One way to increase network performance is to compress the data prior to encryption. This approach increases performance by reducing the amount of data transferred.
 
-####Solution: 
-Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
+<hr>
 
-* Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. Edit the BOSH manifest property for Garden before you deploy. Pivotal recommends an MTU of 1400, which creates 100 MTU headroom.
+### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 
-* Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example: 
-<code>$ ifconfig NETWORK-INTERFACE mtu 1400</code>
+#### Symptom
+Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working. For example, this error shows a symptom of IPsec failure, a failed clock_global-partition:
+
+<pre>
+Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-partition-abf4378108ba40fd9a43/0 (ddb1fbfa-71b1-4114-a82c-fd75867d54fc) (canary): Action Failed get_task: Task 044424f7-c5f2-4382-5d81-57bacefbc238 result: Stopping Monitored Services: Stopping service ipsec: Sending stop request to monit: Request failed, response: Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05:22)..
+</pre>
+
+#### Explanation
+This issue occurs when monit job priorities are asynchronous.
+
+#### Solution
+
+<hr>
+
+#### Symptom
+App fails to start with the following message:
+<pre>FAILED
+Server error, status code: 500, error code: 10001, message: An unknown error occurred.</pre>
+The Cloud Controller log shows it is unable to communicate with Diego due to `getaddrinfo` failing.
+
+#### Explanation
+This error indicates a “split brain” issue with consul.
+
+#### Solution
+Confirm this diagnosis by checking the peers.json file from /var/vcap/store/consul_agent/raft. If it is null, then there may be a split brain. To fix this problem:
+* Run `monit stop` on all consul servers
+* Run `rm -rf /var/vcap/store/consul_agent/` on all consul servers
+* Run `monit start` on all consul servers one at a time
+* Restart the consul_agent process on the Cloud Controller VM. You may need to restart consul_agent on other VMs as well.
+
+<hr>
+#### Symptom
+You see that communication is not encrypted between two VMs.
+
+#### Explanation: The IPsec BOSH job is not running on either VM.
+This problem could happen if both IPsec jobs crash, both IPsec jobs fail to start, or the subnet configuration is incorrect. There is a momentary gap between the time when an instance is created and when BOSH sets up IPsec. During this time, data can be sent unencrypted. This length of time depends on the instance type, IAAS, and other factors. For example, on a t2.micro on AWS, the time from networking start to IPsec connection was measured at 95.45 seconds.
+
+#### Solution
+Set up a networking restriction on host VMs to only allow IPsec protocol and block the normal TCP/UDP traffic. For example, in AWS, configure a network security group with the minimal networking setting  (???#additional-infrastructure-configuration) and block all other TCP and UDP ports. 
+
+<p class="note"><strong>Note</strong>: When configuring a network security group, IPsec adds an additional layer to the original communication protocol. If a certain connection is targeting a port number, for example port 8080 with TCP, it actually uses IP protocol 50/51 instead. Due to this detail, traffic targeted at a blocked port may be able to go through.</p>
+
+<hr>
+
+#### Symptom
+You see unencrypted app messages in the logs.
+
+#### Explanation: etcd has a “split brain”
+
+#### Solution
+Check for split brain etcd by connecting with `bosh ssh` into each etcd node:
+`$ curl localhost:4001/v2/members`
+Check if the members are consistent on all of etcd. If a node has only itself as a member, it has formed its own cluster and it has developed “split brain.” To fix this issue, SSH into the split brain VM and run the following:
+`$ sudo su -; monit stop etcd`
+`$ rm -r /var/vcap/store/etcd`
+`$ monit start etcd`
+Check the logs to confirm the node rejoined the existing cluster.
 

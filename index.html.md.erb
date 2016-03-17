@@ -5,13 +5,13 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This guide describes the Pivotal Cloud Foundry&reg; (PCF) IPsec add-on. The topics included in this guide cover installation and configuration, troubleshooting, and credential rotation. Your organization may require IPSec if you transmit sensitive data.
+This guide describes the [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) IPsec add-on. The topics included in this guide cover installation and configuration, troubleshooting, and credential rotation. Your organization may require IPSec if you transmit sensitive data.
 
 <p class="note"><strong>Note</strong>: If you apply the IPsec add-onto your PCF deployment, you cannot remove IPsec without removing and reinstalling the entire deployment.</p>	
 
 ## Overview ##
 
-The IPsec add-on for PCF provides security to the transport layer of network  with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. The IPsec add-on provides a strongSwan job to each BOSH-deployed virtual machine (VM). 
+The IPsec add-on for PCF provides security to the transport layer of the OSI model with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. The IPsec add-on provides a strongSwan job to each BOSH-deployed virtual machine (VM). 
 
 IPsec encrypts IP data flow between hosts, between security gateways, and between security gateways and hosts. The PCF IPsec add-on secures network traffic within a Cloud Foundry deployment and provides internal system protection if a malicious actor breaches your firewall. 
 
@@ -44,8 +44,8 @@ The PCF IPsec add-on implements the following cryptographic suite:
 </tr>
 </table>
 
-Refer to the following topics to learn more about the IPsec add-on:
+Refer to the following topics for more information about the IPsec add-on:
 
-* [Downloading, Installing and Configuring IPsec](./installing.html)
+* [Downloading, Installing, and Configuring IPsec](./installing.html)
 * [Setting Up and Rotating Certificates for IPsec](./credentials.html)
 * [Troubleshooting IPsec](./troubleshooting.html)

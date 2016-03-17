@@ -10,8 +10,7 @@ This topic provides instructions to verify that strongSwan-based IPsec works wit
 ## <a id='verify-ipsec'></a>Verify that IPsec Works with PCF
 To verify that IPsec works between two hosts, you can check that traffic is encrypted in the deployment with `tcpdump`, perform the ping test, and check the logs with the steps below.
 
-1. Check traffic encryption and perform the ping test. 
-	1. Select two hosts in your deployment with IPsec enabled and note their IP addresses. These are referenced below as `IP-ADDRESS-1` and `IP-ADDRESS-2`. 
+1. Check traffic encryption and perform the ping test. Select two hosts in your deployment with IPsec enabled and note their IP addresses. These are referenced below as `IP-ADDRESS-1` and `IP-ADDRESS-2`. 
 	1. SSH into `IP-ADDRESS-1`.
 	<pre class="terminal">$ ssh IP-ADDRESS-1</pre>
 	1. On the first host, run the following, and allow it to continue running.
@@ -20,8 +19,8 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	<pre class="terminal">$ ssh IP-ADDRESS-2</pre>
 	1. On the second host, run the following:
 	<pre class="terminal">$ ping IP-ADDRESS-1</pre>
-	1. Verify that the packet type is ESP. The output from `tcpdump` will look similar to the following 
-<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>If the traffic shows `ESP` as the packet type, traffic is successfully encrypted.
+	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following: 
+	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
 1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
 1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for ‘ipsec’ and the status of the IPsec job.
 1. Run `ipsec statusall NAME-OF-JOB` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
@@ -76,7 +75,7 @@ ipsec: 		Sending stop request to monit: Request failed,
 response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05:22)..
 </pre>
 
-#### Explanation
+#### Explanation: Asynchronous `monit` Job Priorities
 This issue occurs when monit job priorities are asynchronous. This error can occur when monit uses a "check file" check on an NFS mount that is unreachable, see the [monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for more details. IPsec causes monit to hang in this case and it will not recover.
 
 #### Solution
@@ -102,7 +101,7 @@ error code: 10001,
 message: An unknown error occurred.</pre>
 The Cloud Controller log shows it is unable to communicate with Diego due to `getaddrinfo` failing.
 
-#### Explanation
+#### Explanation: Split Brain `consul`
 This error indicates a “split brain” issue with consul.
 
 #### Solution
@@ -116,8 +115,8 @@ Confirm this diagnosis by checking the peers.json file from /var/vcap/store/cons
 #### Symptom
 You see that communication is not encrypted between two VMs.
 
-#### Explanation: The IPsec BOSH job is not running on either VM.
-This problem could happen if both IPsec jobs crash, both IPsec jobs fail to start, or the subnet configuration is incorrect. There is a momentary gap between the time when an instance is created and when BOSH sets up IPsec. During this time, data can be sent unencrypted. This length of time depends on the instance type, IAAS, and other factors. For example, on a t2.micro on AWS, the time from networking start to IPsec connection was measured at 95.45 seconds.
+#### Explanation: Error in Network Configuration
+The IPsec BOSH job is not running on either VM. This problem could happen if both IPsec jobs crash, both IPsec jobs fail to start, or the subnet configuration is incorrect. There is a momentary gap between the time when an instance is created and when BOSH sets up IPsec. During this time, data can be sent unencrypted. This length of time depends on the instance type, IAAS, and other factors. For example, on a t2.micro on AWS, the time from networking start to IPsec connection was measured at 95.45 seconds.
 
 #### Solution
 Set up a networking restriction on host VMs to only allow IPsec protocol and block the normal TCP/UDP traffic. For example, in AWS, configure a network security group with the minimal networking setting as shown below and block all other TCP and UDP ports. 
@@ -157,7 +156,7 @@ Set up a networking restriction on host VMs to only allow IPsec protocol and blo
 #### Symptom
 You see unencrypted app messages in the logs.
 
-#### Explanation: etcd has a “split brain”
+#### Explanation: `etcd` Split Brain
 
 #### Solution
 1. Check for split brain etcd by connecting with `bosh ssh` into each etcd node: <pre class="terminal">$ curl localhost:4001/v2/members</p>

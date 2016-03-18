@@ -16,16 +16,18 @@ Make sure that you have the following:
 
 * BOSH deployed through Ops Manager 1.7 or higher
 
-<p class="note"><strong>IMPORTANT!</strong> You must install the IPsec add-on before installing any other tiles to enable
+<p class="note"><strong>Note</strong>: You must install the IPsec add-on before installing any other tiles to enable
  the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the 
 Elastic Runtime tile, to enable IPsec for all subsequent installations. </p>
 
-<p class="note"><strong>Note:</strong> For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for
+<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for
  AWS. If you are using PV stemcells, see Preventing Packet Loss in the Troubleshooting topic to adjust MTU values.</p>
 
 ##<a id="config-network"></a>Configure Network Security
 
 ###<a id="aws"></a>AWS
+
+Follow these steps:
 
 1. Navigate to the security group with the description “PCF VMs Security Group”.
 
@@ -60,11 +62,52 @@ Elastic Runtime tile, to enable IPsec for all subsequent installations. </p>
 
 ###<a id="vsphere"></a>vSphere
 
+Follow this step:
+
 * Confirm that your network allows protocols 50 and 51 and UDP on port 500.
 
 ##<a id="create-mfest"></a>Create the IPsec manifest
 
-1. Download the sample IPsec manifest `ipsec-addon.yml` from \< location of sample file TBD >.
+Follow these steps:
+
+1. Download the sample IPsec manifest `ipsec-addon.yml` from \< location of sample file TBD \>.
+ The sample YAML file looks like this:
+  <pre>releases:
+  \- {name: ipsec, <strong>version</strong>: 8.10.0}<br>
+  addons:
+  \- name: ipsec-addon
+    jobs:
+    \- <strong>name</strong>: ipsec
+      release: ipsec
+    properties:
+      ipsec:
+        <strong>ipsec\_subnets</strong>:
+        \- 10.0.1.1/20
+        <strong>no\_ipsec\_subnets</strong>:
+        \- 10.0.1.1/32   # gateway
+        \- 10.0.1.10/32  # bosh director
+        <strong>instance\_certificate</strong>: |
+          -----BEGIN CERTIFICATE-----
+          MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+          ...
+          -----END CERTIFICATE-----
+        <strong>instance\_private\_key</strong>: |
+          -----BEGIN RSA PRIVATE KEY-----
+          MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
+          ...
+          -----END
+        <strong>ca\_certificates</strong>:
+        \- |
+          -----BEGIN CERTIFICATE-----
+          MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+          ...
+          -----END CERTIFICATE-----
+        \- |
+          -----BEGIN CERTIFICATE-----
+          MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+          ...
+          -----END CERTIFICATE-----
+   <strong>prestart\_timeout</strong>: 30 </pre>
 
 2. Configure the IPsec manifest file:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
@@ -75,46 +118,6 @@ Elastic Runtime tile, to enable IPsec for all subsequent installations. </p>
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. 
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In general, you only need one CA certificate, the one used to sign the instance certificate. However, during CA credential rotation, you need two CA certificates.  
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default value that sets the number of seconds for IPsec to successfully start before failing.
-
-<pre>
-releases:
-- {name: ipsec, <strong>version</strong>: 8.10.0}
-
-addons:
-- name: ipsec-addon
-  jobs:
-  - <strong>name</strong>: ipsec
-    release: ipsec
-  properties:
-    ipsec:
-      <strong>ipsec_subnets</strong>:
-      - 10.0.1.1/20
-      <strong>no_ipsec_subnets</strong>:
-      - 10.0.1.1/32   # gateway
-      - 10.0.1.10/32  # bosh director
-      <strong>instance_certificate</strong>: |
-        -----BEGIN CERTIFICATE-----
-        MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-        ...
-        -----END CERTIFICATE-----
-      <strong>instance_private_key</strong>: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
-        ...
-        -----END RSA PRIVATE KEY-----
-      <strong>ca_certificates</strong>:
-      - |
-        -----BEGIN CERTIFICATE-----
-        MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-        ...
-        -----END CERTIFICATE-----
-      - |
-        -----BEGIN CERTIFICATE-----
-        MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-        ...
-        -----END CERTIFICATE-----
- <strong>prestart_timeout</strong>: 30
-</pre> 
 
 <p class="note"><strong>Note:</strong> The ipsec manifest might need to be updated when applying changes that result in changes to network subnets.</p>
 
@@ -149,21 +152,26 @@ Logged in as 'director'
  You should see the IPsec binary file.  
  [Add screenshot.]
 
-9. Run `bosh update runtime-config PATH/ipsec-addon.yml`
- [There are outstanding questions on this step.]
+9. Run `bosh update runtime-config PATH/ipsec-addon.yml`.
 
-10. Run `bosh runtime-config` 
+10. Run `bosh runtime-config`. 
 
 11. Navigate to your Installation Dashboard in Ops Manager.
  <p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
 
-
 12. Click **Apply Changes**.
+
+13. Because the `ipsec-addon.yml` contains sensitive information, after applying it, encrypt it or move it to a secure location.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 
 1. Run `monit summary` and confirm that your ipsec job is listed as a bosh job:
- [Add code snippet.]
+<pre>
+The Monit daemon 5.2.5 uptime: 18h 32m
+\<other jobs show here\>
+Process 'ipsec'                     running
+System 'system\_localhost'           running
+</pre>
 
 2. Run `LONGPATH/ipsec statusall`
 <pre>

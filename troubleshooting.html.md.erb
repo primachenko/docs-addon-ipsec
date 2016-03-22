@@ -76,7 +76,7 @@ response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05
 </pre>
 
 #### Explanation: Asynchronous `monit` Job Priorities
-This issue occurs when Monit job priorities are asynchronous. This error can occur when Monit uses a "check file" check on an NFS mount that is unreachable, see the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for more details. IPsec causes Monit to hang in this case and it will not recover.
+This issue occurs when Monit job priorities are asynchronous. This error can occur when Monit uses a "check file" check on an NFS mount that is unreachable. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information. IPsec causes Monit to hang in this case and it will not recover.
 
 #### Solution
 
@@ -88,7 +88,7 @@ This issue occurs when Monit job priorities are asynchronous. This error can occ
 <pre class="terminal">$ sv start monit</pre>
 1. Continue with your deploy procedure.
 
-<p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. In PCF deployments using CF releases greater than CF v231, this error should not be an issue.</p>
+<p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231.</p>
 
 <hr>
 
@@ -102,13 +102,14 @@ message: An unknown error occurred.</pre>
 The Cloud Controller log shows it is unable to communicate with Diego due to `getaddrinfo` failing.
 
 #### Explanation: Split Brain `consul`
-This error indicates a “split brain” issue with consul.
+This error indicates a “split brain” issue with Consul.
 
 #### Solution
 Confirm this diagnosis by checking the peers.json file from /var/vcap/store/consul\_agent/raft. If it is null, then there may be a split brain. To fix this problem:
-* Run `monit stop` on all consul servers
-* Run `rm -rf /var/vcap/store/consul_agent/` on all consul servers
-* Run `monit start` on all consul servers one at a time
+
+* Run `monit stop` on all Consul servers
+* Run `rm -rf /var/vcap/store/consul_agent/` on all Consul servers
+* Run `monit start` on all Consul servers one at a time
 * Restart the consul\_agent process on the Cloud Controller VM. You may need to restart consul\_agent on other VMs as well.
 
 <hr>

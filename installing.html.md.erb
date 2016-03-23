@@ -8,11 +8,11 @@ owner: Security Engineering
 This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment. 
 ##<a id="prereqs"></a>Prerequisites
 
-Make sure that you have the following: 
+To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin: 
 
 * AWS or vSphere as your IaaS 
 
-* PCF operator admin rights
+* PCF operator administration rights
 
 * BOSH deployed through Ops Manager 1.7 or higher
 
@@ -21,9 +21,10 @@ Make sure that you have the following:
 Elastic Runtime tile, to enable IPsec for all subsequent installations. </p>
 
 <p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for
- AWS. If you are using PV stemcells, see Preventing Packet Loss in the Troubleshooting topic to adjust MTU values.</p>
+ AWS. If you are using PV stemcells, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.</p>
 
 ##<a id="config-network"></a>Configure Network Security
+Refer to the appropriate section below for your IaaS network configuration details.
 
 ###<a id="aws"></a>AWS
 
@@ -62,16 +63,14 @@ Follow these steps:
 
 ###<a id="vsphere"></a>vSphere
 
-Follow this step:
-
-* Confirm that your network allows protocols 50 and 51 and UDP on port 500.
+Confirm that your network allows protocols 50 and 51 and UDP on port 500.
 
 ##<a id="create-mfest"></a>Create the IPsec manifest
 
-Follow these steps:
+Follow these steps to create the IPsec manifest for your deployment:
 
 1. Download the sample IPsec manifest `ipsec-addon.yml` from \< location of sample file TBD \>.
- The sample YAML file looks like this:
+ The sample YAML file looks similar to the text below:
   <pre>releases:
   \- {name: ipsec, <strong>version</strong>: 8.10.0}<br>
   addons:
@@ -109,72 +108,89 @@ Follow these steps:
           -----END CERTIFICATE-----
    <strong>prestart\_timeout</strong>: 30 </pre>
 
-2. Configure the IPsec manifest file:
+2. Configure the IPsec manifest file, as described:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
- * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. This might be the entire deployment, or a portion of the network in your deployment. Encrypt any network over which business-sensitive data passes.
- * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director and your network gateway. Also list any other IPs within your ipsec\_subnet that you want to communicate in the clear.
+ * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted, including the entire deployment, or a portion of the network in your deployment. Encrypt any network that handles business-sensitive data.
+ * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director and your network gateway. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. 
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. 
- * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In general, you only need one CA certificate, the one used to sign the instance certificate. However, during CA credential rotation, you need two CA certificates.  
- * <code>prestart\_timeout:</code> You can optionally modify the 30 second default value that sets the number of seconds for IPsec to successfully start before failing.
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  
+ * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to successfully start before it fails.
 
-<p class="note"><strong>Note:</strong> The ipsec manifest might need to be updated when applying changes that result in changes to network subnets.</p>
+<p class="note"><strong>Note:</strong> If your deployment changes in a way that modifies the subnets over which traffic should be encrypted, the manifest file will need to be updated to reflect those changes and redeployed.</p>
 
-##<a id="download-deploy"></a>Download and Deploy the IPsec add-on  
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on  
 
 1. Download the IPsec add-on software binary from The Pivotal Network to your local machine. [Add url and screenshot here. ]
 
-2. Copy the software binary to your Ops Manager instance, for example,
-`$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR_OPS_MANAGER_DIRECTOR_IP:`
+2. Copy the software binary to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-DIRECTOR-IP:</pre>
 
-3. Copy the IPsec manifest file to your Ops Manager instance, for example,
-<pre>$ scp -i PATH/TO/PRIVATE/KEY ipsec-addon.yml ubuntu@YOUR_OPS_MANAGER_DIRECTOR_IP:</pre>
+3. Copy the IPsec manifest file to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-DIRECTOR-IP:</pre>
 
-4. From a command line, SSH into Ops Manager <br>
- `$ ssh -i PATH/TO/PRIVATE/KEY ubuntu@YOUR_OPS_MANAGER_DIRECTOR_IP`
+4. SSH into Ops Manager.
+ <pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-DIRECTOR-IP<-pre>
 
-5. CD to the software binary location in your working directory.
+5. Navigate to the software binary location in your working directory.
+<pre class="terminal">
+$ cd PATH-TO-BINARY</pre>
 
-6. Target your Ops Manager instance with BOSH: [There are outstanding questions on this step. Maybe YOUR\_OPS\_MANAGER\_IP is the correct target.]
-<pre>
-bosh target YOUR\_OPS\_MANAGER\_DIRECTOR\_IP
-Target set to 'Ops Manager'
-Your username: director
-Enter password: \*\*\*\*\*
-Logged in as 'director'
+6. Target your Ops Manager instance with BOSH.<pre class="terminal">
+  $ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP 
+  Target set to 'Ops Manager'
+  Your username: director
+  Enter password: ******************
+  Logged in as 'director'
 </pre> 
 
-7. Run `bosh upload release PATH_TO_BINARY/BINARY_NAME.tar`
+7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-8. Optionally, confirm that the IPsec software binary has been uploaded: 
-`$ bosh releases`
+8. Optionally, confirm that the upload completion of the IPsec software binary from the command line or in Ops Manager.
+<pre class="terminal">$ bosh releases</pre>
  You should see the IPsec binary file.  
  [Add screenshot.]
 
-9. Run `bosh update runtime-config PATH/ipsec-addon.yml`.
+9. Update your runtime configuration to include the IPsec add-on.
+<pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
 
-10. Run `bosh runtime-config`. 
+10. Verify your runtime configuration changes.
 
-11. Navigate to your Installation Dashboard in Ops Manager.
- <p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
+    <pre class="terminal">
+    $ bosh runtime-config
+    Acting as user 'admin' on 'micro'
+
+    releases:
+     <span>-</span> {name: strongswan, version: 6.0.0}
+
+    addons:
+     name: security
+      jobs:
+      <span>-</span> name: strongswan
+        release: strongswan
+    ...
+    </pre>
+
+11. Navigate to your **Installation Dashboard** in Ops Manager.
+<p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
 
 12. Click **Apply Changes**.
 
-13. Because the `ipsec-addon.yml` contains sensitive information, after applying it, encrypt it or move it to a secure location.
+13. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and/or moving it to a secure location.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 
-1. Run `monit summary` and confirm that your ipsec job is listed as a bosh job:
-<pre>
+1. Run `monit summary` to confirm that your `ipsec` job is listed as a `bosh` job.
+<pre class="terminal">
 The Monit daemon 5.2.5 uptime: 18h 32m
-\<other jobs show here\>
+...
 Process 'ipsec'                     running
 System 'system\_localhost'           running
 </pre>
 
-2. Run `LONGPATH/ipsec statusall`
-<pre>
+2. Run `PATH-TO-IPSEC/ipsec statusall`.
+<pre class="terminal">
 root@0d2655a4-fe6d-4597-8828-27faea7b381b:/var/vcap/bosh\_ssh/bosh\_3yr05zp24# /var/vcap/packages/strongswan-5.3.5/sbin/ipsec statusall
 Status of IKE charon daemon (strongSwan 5.3.5, Linux 3.19.0-56-generic, x86\_64):
   uptime: 18 hours, since Mar 16 23:58:50 2016

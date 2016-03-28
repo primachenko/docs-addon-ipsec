@@ -69,8 +69,7 @@ Confirm that your network allows protocols 50 and 51 and UDP on port 500.
 
 Follow these steps to create the IPsec manifest for your deployment:
 
-1. Download the sample IPsec manifest `ipsec-addon.yml` from \< location of sample file TBD \>.
- The sample YAML file looks similar to the text below:
+1. Create an IPsec manifest file `ipsec-addon.yml` starting with the code below as a template. 
   <pre>releases:
   \- {name: ipsec, <strong>version</strong>: 8.10.0}<br>
   addons:
@@ -108,7 +107,7 @@ Follow these steps to create the IPsec manifest for your deployment:
           -----END CERTIFICATE-----
    <strong>prestart\_timeout</strong>: 30 </pre>
 
-2. Configure the IPsec manifest file, as described:
+2. Replace the properties listed in the file as follows:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted, including the entire deployment, or a portion of the network in your deployment. Encrypt any network that handles business-sensitive data.
@@ -122,7 +121,7 @@ Follow these steps to create the IPsec manifest for your deployment:
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on  
 
-1. Download the IPsec add-on software binary from The Pivotal Network to your local machine. [Add url and screenshot here. ]
+1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine. 
 
 2. Copy the software binary to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-DIRECTOR-IP:</pre>

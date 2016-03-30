@@ -18,7 +18,7 @@ To complete the IPsec installation, check that you have satisfied the following 
 
 <p class="note"><strong>Note</strong>: You must install the IPsec add-on before installing any other tiles to enable
  the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the 
-Elastic Runtime tile, to enable IPsec for all subsequent installations. </p>
+Elastic Runtime tile. </p>
 
 <p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for
  AWS. If you are using PV stemcells, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.</p>
@@ -30,7 +30,7 @@ Refer to the appropriate section below for your IaaS network configuration detai
 
 Follow these steps:
 
-1. Navigate to the security group with the description “PCF VMs Security Group”.
+1. Navigate to the **PCF VMs Security Group**.
 
 2. Set up the following **Inbound Rules**:
 
@@ -74,50 +74,50 @@ Follow these steps to create the IPsec manifest for your deployment:
   \- {name: ipsec, <strong>version</strong>: 8.15.0}<br>
   addons:
   \- name: ipsec-addon
-    jobs:
-    \- <strong>name</strong>: ipsec
-      release: ipsec
-    properties:
-      ipsec:
-        <strong>ipsec\_subnets</strong>:
-        \- 10.0.1.1/20
-        <strong>no\_ipsec\_subnets</strong>:
-        \- 10.0.1.1/32   # gateway
-        \- 10.0.1.10/32  # bosh director
-        <strong>instance\_certificate</strong>: |
-          -----BEGIN CERTIFICATE-----
-          MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-          ...
-          -----END CERTIFICATE-----
-        <strong>instance\_private\_key</strong>: |
-          -----BEGIN RSA PRIVATE KEY-----
-          MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
-          ...
-          -----END
-        <strong>ca\_certificates</strong>:
-        \- |
-          -----BEGIN CERTIFICATE-----
-          MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-          ...
-          -----END CERTIFICATE-----
-        \- |
-          -----BEGIN CERTIFICATE-----
-          MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-          ...
-          -----END CERTIFICATE-----
-   <strong>prestart\_timeout</strong>: 30 </pre>
+      jobs:
+      \- <strong>name</strong>: ipsec
+        release: ipsec
+      properties:
+        ipsec:
+          <strong>ipsec\_subnets</strong>:
+          \- 10.0.1.1/20
+          <strong>no\_ipsec\_subnets</strong>:
+          \- 10.0.1.1/32   # gateway
+          \- 10.0.1.10/32  # bosh director
+          <strong>instance\_certificate</strong>: |
+            -----BEGIN CERTIFICATE-----
+            MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+            ...
+            -----END CERTIFICATE-----
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
+            ...
+            -----END RSA PRIVATE KEY-----
+          <strong>ca\_certificates</strong>:
+            \- |
+            -----BEGIN CERTIFICATE-----
+            MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+            ...
+            -----END CERTIFICATE-----
+            \- |
+            -----BEGIN CERTIFICATE-----
+            MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+            ...
+            -----END CERTIFICATE-----
+          <strong>prestart\_timeout</strong>: 30 </pre>
 
 2. Replace the properties listed in the file as follows:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
- * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted, including the entire deployment, or a portion of the network in your deployment. Encrypt any network that handles business-sensitive data.
+ * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
  * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director and your network gateway. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. 
- * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. 
+ * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  
- * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to successfully start before it fails.
+ * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
 
-<p class="note"><strong>Note:</strong> If your deployment changes in a way that modifies the subnets over which traffic should be encrypted, the manifest file will need to be updated to reflect those changes and redeployed.</p>
+<p class="note"><strong>Note:</strong> To modify <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on  
 
@@ -146,26 +146,26 @@ $ cd PATH-TO-BINARY</pre>
 
 7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-8. Optionally, confirm that the upload completion of the IPsec software binary from the command line. You should see the IPsec binary file.  
+8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.  
 <pre class="terminal">$ bosh releases</pre>
 
 9. Update your runtime configuration to include the IPsec add-on.
 <pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
 
-10. Verify your runtime configuration changes.
+10. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
 
     <pre class="terminal">
     $ bosh runtime-config
     Acting as user 'admin' on 'micro'
 
     releases:
-     <span>-</span> {name: strongswan, version: 6.0.0}
+     <span>-</span> {name: ipsec, version: 8.15.0}
 
     addons:
-     name: security
+     name: ipsec-addon
       jobs:
-      <span>-</span> name: strongswan
-        release: strongswan
+      <span>-</span> name: ipsec
+        release: ipsec
     ...
     </pre>
 
@@ -186,7 +186,7 @@ Process 'ipsec'                     running
 System 'system\_localhost'           running
 </pre>
 
-2. Run `PATH-TO-IPSEC/ipsec statusall`.
+2. Run `PATH-TO-IPSEC/ipsec statusall` to verify that IPsec is running. 
 <pre class="terminal">
 $ /var/vcap/packages/strongswan-5.3.5/sbin/ipsec statusall
 Status of IKE charon daemon (strongSwan 5.3.5, Linux 3.19.0-56-generic, x86\_64):

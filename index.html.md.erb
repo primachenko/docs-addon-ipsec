@@ -1,0 +1,51 @@
+---
+title: Securing Data in Transit with the IPsec Add-on
+owner: Security Engineering
+---
+
+<strong><%= modified_date %></strong>
+
+This guide describes the [Pivotal Cloud Foundry&reg;](https://network.pivotal.io/products/pivotal-cf) (PCF) IPsec add-on. The topics included in this guide cover installation and configuration, troubleshooting, and credential rotation. Your organization may require IPSec if you transmit sensitive data.
+
+<p class="note"><strong>Note</strong>: If you apply the IPsec add-on to your PCF deployment, you cannot remove IPsec without removing and reinstalling the entire deployment.</p>	
+
+## Overview ##
+
+The IPsec add-on for PCF provides security to the network layer of the OSI model with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. The IPsec add-on provides a strongSwan job to each BOSH-deployed virtual machine (VM). 
+
+IPsec encrypts IP data flow between hosts, between security gateways, and between security gateways and hosts. The PCF IPsec add-on secures network traffic within a Cloud Foundry deployment and provides internal system protection if a malicious actor breaches your firewall. 
+
+## PCF IPsec Implementation Details ##
+The PCF IPsec add-on implements the following cryptographic suite:
+<table border='1' class='nice'>
+<tr>
+	<th>Key Agreement (Diffie-Hellman)</th>
+	<td>IKEv2 Main Mode</td>
+</tr>
+<tr>
+	<th>Bulk Encryption</th>
+	<td>AES128GCM16</td>
+</tr>
+<tr>
+	<th>Hashing</th>
+	<td><code>SHA1</code></td>
+</tr>
+<tr>
+	<th>Integrity/Authentication Tag</th>
+	<td>128 bit GHASH ICV</td>
+</tr>
+<tr>
+	<th>Digital Signing</th>
+	<td>RSA 3072/4096</td>
+</tr>
+<tr>
+	<th>Peer Authentication Method</th>
+	<td>Public/Private Key</td>
+</tr>
+</table>
+
+Refer to the following topics for more information about the IPsec add-on:
+
+* [Downloading, Installing, and Configuring IPsec](./installing.html)
+* [Setting Up and Rotating Certificates for IPsec](./credentials.html)
+* [Troubleshooting IPsec](./troubleshooting.html)

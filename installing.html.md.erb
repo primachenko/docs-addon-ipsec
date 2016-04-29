@@ -1,0 +1,225 @@
+---
+title: Installing Pivotal Cloud Foundry&reg; IPSec Add-On
+owner: Security Engineering
+---
+
+<strong><%= modified_date %></strong>
+
+This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment. 
+##<a id="prereqs"></a>Prerequisites
+
+To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin: 
+
+* AWS or vSphere as your IaaS 
+
+* PCF operator administration rights
+
+* BOSH deployed through Ops Manager 1.7 or higher
+
+<p class="note"><strong>Note</strong>: You must install the IPsec add-on before installing any other tiles to enable
+ the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the 
+Elastic Runtime tile. </p>
+
+<p class="note"><strong>Note</strong>: IPsec has not been verified to not adversely affect the functionality of every available service tile. Therefore, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
+
+<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for AWS, which are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.</p> 
+
+##<a id="config-network"></a>Configure Network Security
+Refer to the appropriate section below for your IaaS network configuration details.
+
+###<a id="aws"></a>AWS
+
+Follow these steps:
+
+1. Navigate to the **PCF VMs Security Group**.
+
+2. Set up the following **Inbound Rules**:
+
+<table border="1" class="nice">
+<tr>
+  <th>Type</th>
+  <th>Protocol</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>AH (51)</td>
+  <td>All</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>ESP (50)</td>
+  <td>All</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>Custom UDP Rule</td>
+  <td>UDP(17)</td>
+  <td>500</td>
+  <td>0.0.0.0/0</td>
+</tr>
+</table>
+
+###<a id="vsphere"></a>vSphere
+
+Confirm that your network allows protocols 50 and 51 and UDP on port 500.
+
+##<a id="create-mfest"></a>Create the IPsec manifest
+
+Follow these steps to create the IPsec manifest for your deployment:
+
+1. Create an IPsec manifest file `ipsec-addon.yml` starting with the code below as a template. 
+  <pre>releases:
+  \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
+  addons:
+  \- name: ipsec-addon
+      jobs:
+      \- <strong>name</strong>: ipsec
+        release: ipsec
+      properties:
+        ipsec:
+          <strong>ipsec\_subnets</strong>:
+          \- 10.0.1.1/20
+          <strong>no\_ipsec\_subnets</strong>:
+          \- 10.0.1.1/32   # gateway
+          \- 10.0.1.10/32  # bosh director
+          <strong>instance\_certificate</strong>: |
+            -----BEGIN CERTIFICATE-----
+            MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+            ...
+            -----END CERTIFICATE-----
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
+            ...
+            -----END RSA PRIVATE KEY-----
+          <strong>ca\_certificates</strong>:
+            \- |
+              -----BEGIN CERTIFICATE-----
+              MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+              ...
+              -----END CERTIFICATE-----
+            \- |
+              -----BEGIN CERTIFICATE-----
+              MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+              ...
+              -----END CERTIFICATE-----
+          <strong>prestart\_timeout</strong>: 30 </pre>
+
+2. Replace the properties listed in the file as follows:
+ * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
+ * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
+ * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
+ * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director and your network gateway. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
+ * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. 
+ * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  
+ * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
+
+<p class="note"><strong>Note:</strong> To modify <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> in an existing deployment, you must update the manifest file and redeploy.</p>
+
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on  
+
+1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine. 
+
+2. Copy the software binary to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
+
+3. Copy the IPsec manifest file to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
+
+4. SSH into Ops Manager.
+ <pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-VM-IP</pre>
+
+5. Navigate to the software binary location in your working directory.
+<pre class="terminal">
+$ cd PATH-TO-BINARY</pre>
+
+6. Target your BOSH director instance with BOSH.<pre class="terminal">
+  $ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP 
+  Target set to 'Ops Manager'
+  Your username: director
+  Enter password: ******************
+  Logged in as 'director'
+</pre> 
+
+7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
+
+8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.  
+<pre class="terminal">$ bosh releases</pre>
+
+9. Update your runtime configuration to include the IPsec add-on.
+<pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
+
+10. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
+
+    <pre class="terminal">
+    $ bosh runtime-config
+    Acting as user 'admin' on 'micro'
+
+    releases:
+     <span>-</span> {name: ipsec, version: 1.0.0}
+
+    addons:
+     name: ipsec-addon
+      jobs:
+      <span>-</span> name: ipsec
+        release: ipsec
+    ...
+    </pre>
+
+11. Navigate to your **Installation Dashboard** in Ops Manager.
+<p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
+
+12. Click **Apply Changes**.
+
+13. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and/or moving it to a secure location.
+
+##<a id="verify"></a>Verify Your IPsec Installation
+
+1. Run `monit summary` to confirm that your `ipsec` job is listed as a `bosh` job.
+<pre class="terminal">
+The Monit daemon 5.2.5 uptime: 18h 32m
+...
+Process 'ipsec'                     running
+System 'system\_localhost'           running
+</pre>
+
+2. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
+<pre class="terminal">
+$ /var/vcap/packages/strongswan-5.3.5/sbin/ipsec statusall
+Status of IKE charon daemon (strongSwan 5.3.5, Linux 3.19.0-56-generic, x86\_64):
+  uptime: 18 hours, since Mar 16 23:58:50 2016
+  malloc: sbrk 2314240, mmap 0, used 1182400, free 1131840
+  worker threads: 11 of 16 idle, 5/0/0/0 working, job queue: 0/0/0/0, scheduled: 206
+  loaded plugins: charon aes sha1 sha2 random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pkcs8 pkcs12 pem gmp xcbc cmac hmac attr kernel-netlink socket-default stroke
+Listening IP addresses:
+  10.10.5.66
+Connections:
+ipsec-10.10.4.0/24:  %any...%any  IKEv1/2
+ipsec-10.10.4.0/24:   local:  [CN=test-cert-1-ca-1] uses public key authentication
+ipsec-10.10.4.0/24:    cert:  "CN=test-cert-1-ca-1"
+ipsec-10.10.4.0/24:   remote: uses public key authentication
+ipsec-10.10.9.0/24:   child:  10.10.5.66/32 === 10.10.9.0/24 TRANSPORT
+no-ipsec-10.10.4.1/32:  %any...%any  IKEv1/2
+no-ipsec-10.10.4.1/32:   local:  uses public key authentication
+no-ipsec-10.10.4.1/32:   remote: uses public key authentication
+no-ipsec-10.10.4.1/32:   child:  dynamic === 10.10.4.1/32 PASS
+Shunted Connections:
+no-ipsec-10.10.4.1/32:  dynamic === 10.10.4.1/32 PASS
+no-ipsec-10.10.5.1/32:  dynamic === 10.10.5.1/32 PASS
+no-ipsec-10.10.6.1/32:  dynamic === 10.10.6.1/32 PASS
+Routed Connections:
+ipsec-10.10.9.0/24{6}:  ROUTED, TRANSPORT, reqid 6
+ipsec-10.10.9.0/24{6}:   10.10.5.66/32 === 10.10.9.0/24
+ipsec-10.10.8.0/24{5}:  ROUTED, TRANSPORT, reqid 5
+ipsec-10.10.4.0/24{1}:   10.10.5.66/32 === 10.10.4.0/24
+Security Associations (45 up, 0 connecting):
+ipsec-10.10.4.0/24[459]: ESTABLISHED 13 seconds ago, 10.10.5.66[CN=test-cert-1-ca-1]...10.10.4.38[CN=test-cert-1-ca-1]
+ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
+...
+</pre>
+
+

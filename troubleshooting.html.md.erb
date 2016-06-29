@@ -81,11 +81,12 @@ This issue occurs when Monit job priorities are asynchronous. This error can occ
 #### Solution
 
 1. `bosh ssh` into the stuck instance.
-<pre class="terminal">$ sv stop monit</pre>
-1. Check to see if your previous command terminated Monit process.  
-<pre class="terminal">$ killall -s 9 /var/vcap/bosh/bin/monit</pre>
-1. Edit /var/vcap/monit/job/0000_nfs_mounter.monitrc and comment out all lines with #.
-<pre class="terminal">$ sv start monit</pre>
+<pre class="terminal">
+$ sudo su
+# sv stop agent
+</pre>
+1. Recreate the vms using bosh cloud check.
+<pre class="terminal">$ bosh cck /var/vcap/bosh/bin/monit</pre>
 1. Continue with your deploy procedure.
 
 <p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231.</p>

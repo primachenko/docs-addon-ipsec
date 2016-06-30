@@ -80,12 +80,16 @@ This issue occurs when Monit job priorities are asynchronous. This error can occ
 
 #### Solution
 
-1. `bosh ssh` into the stuck instance.
+1. `bosh ssh` into the stuck instance:
+<pre class="terminal">
+$ bosh ssh JOB INDEX 
+</pre>
+1. Authenticate as root and use the `sv stop agent` command to kill the BOSH Agent:
 <pre class="terminal">
 $ sudo su
 # sv stop agent
 </pre>
-1. Recreate the vms using bosh cloud check.
+1. Recreate the VMs using `bosh cloudcheck`:
 <pre class="terminal">$ bosh cck /var/vcap/bosh/bin/monit</pre>
 1. Continue with your deploy procedure.
 

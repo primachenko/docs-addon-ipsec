@@ -172,3 +172,18 @@ You see unencrypted app messages in the logs.
 	1. <pre class="terminal">	$ monit start etcd</p>
 1. Check the logs to confirm the node rejoined the existing cluster.
 
+<hr>
+
+#### Symptom
+
+When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster. 
+
+#### Explanation: Known Issue
+
+This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7. This issue does not apply to operators who are using WebDAV as their Cloud Controller blobstore. 
+
+This problem exists independently of IPsec, and is not caused by IPsec. However, because the order of job shutdown is arbitrary, it is possible that when both are installed on the same machine, the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing.
+
+#### Solution
+
+Follow the instructions in the [BOSH Cloudcheck](../pivotalcf/customizing/trouble-advanced.html#cck) section of the Advanced Troubleshooting with the BOSH CLI topic to use `bosh cloudcheck` to recreate the hanging VM.

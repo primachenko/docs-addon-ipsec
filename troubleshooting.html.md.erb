@@ -44,7 +44,7 @@ If your VMs were created with an Amazon PV stemcell, the default MTU value is 15
 #### Solution
 Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
 
-* Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. In the ERT tile configuration, Networking section change "Applications Network Maximum Transmission Unit (MTU) (in bytes)" before you deploy. Decrease it from the default value of 1454 to 1354.
+* Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. In the ERT tile configuration, click **Networking** and modify **Applications Network Maximum Transmission Unit (MTU) (in bytes)** before you deploy. Decrease it from the default value of 1454 to 1354.
 
 * Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example: 
 <code>$ ifconfig NETWORK-INTERFACE mtu 1600</code>

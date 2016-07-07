@@ -23,7 +23,7 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
 1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
 1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for ‘ipsec’ and the status of the IPsec job.
-1. Run `ipsec statusall NAME-OF-JOB` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
+1. Run `ipsec statusall` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
 
 If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPSec](./installing.html) topic and review your installation. 
 

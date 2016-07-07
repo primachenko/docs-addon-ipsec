@@ -111,7 +111,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director and your network gateway. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
+ * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. 
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  

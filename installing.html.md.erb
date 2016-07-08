@@ -10,9 +10,9 @@ This topic describes how to prepare your network for IPsec, create an IPsec mani
 
 To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin: 
 
-* AWS or vSphere as your IaaS 
+* AWS, vSphere, or OpenStack as your IaaS 
 
-* PCF operator administration rights
+* Pivotal Cloud Foundry&reg; (PCF) operator administration rights
 
 * BOSH deployed through Ops Manager 1.7 or higher
 
@@ -22,7 +22,7 @@ Elastic Runtime tile. </p>
 
 <p class="note"><strong>Note</strong>: IPsec has not been verified to not adversely affect the functionality of every available service tile. Therefore, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
 
-<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and HVM stemcells for AWS, which are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.</p> 
+<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p> 
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
@@ -65,6 +65,41 @@ Follow these steps:
 ###<a id="vsphere"></a>vSphere
 
 Confirm that your network allows protocols 50 and 51 and UDP on port 500.
+
+###<a id="openstack"></a>OpenStack
+
+<p class="note"><strong>Note</strong>: The following network configuration is optimized for Mirantis OpenStack, but other OpenStack distributions have a similar workflow.</p> 
+
+For Mirantis OpenStack, follow these steps:
+
+1. Navigate to **Project / Access & Security**.
+
+1. Select the security group and click **Manage Rules**.
+
+1. Set up the following **Ingress and Egress Rules**. Adjust the source CIDR as needed for your environment.
+
+<table border="1" class="nice">
+<tr>
+  <th>IP Protocol</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>50</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>51</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>UDP</td>
+  <td>500</td>
+  <td>0.0.0.0/0</td>
+</tr>
+</table>
 
 ##<a id="create-mfest"></a>Create the IPsec manifest
 
@@ -111,7 +146,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director. List any other IPs within your ipsec\_subnet that you want to communicate without encryption.
+ * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director. List any other IPs in your PCF deployment that you want to communicate without encryption.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section. 
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  

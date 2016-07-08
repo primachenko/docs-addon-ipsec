@@ -23,8 +23,9 @@ cd certstrap/
 
 ./bin/certstrap sign PCF\ IPsec\ peer --CA PCF\ IPsec\ AddOn\ CA
 
-openssl x509 -in out/PCF_IPsec_AddOn_CA.crt -inform pem -text
-openssl x509 -in out/PCF_IPsec_peer.crt -inform pem -text
+# To display the certs using openssl, uncomment the following two lines.
+#openssl x509 -in out/PCF_IPsec_AddOn_CA.crt -inform pem -text
+#openssl x509 -in out/PCF_IPsec_peer.crt -inform pem -text
 
 rm -rf ./out/PCF_IPsec_peer.csr
 

@@ -63,7 +63,9 @@ Scale your deployment by allocating more processing power to your VM CPU or GPUs
 ### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 
 #### Symptom
-Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working. For example, this error shows a symptom of IPsec failure, a failed clock_global-partition:
+Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working. 
+
+For example, this error shows a symptom of IPsec failure, a failed `clock_global-partition`:
 
 <pre class="terminal">
 Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-partition-abf4378108ba40fd9a43/0 
@@ -76,7 +78,14 @@ response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05
 </pre>
 
 #### Explanation: Asynchronous `monit` Job Priorities
-This issue occurs when Monit job priorities are asynchronous. This error can occur when Monit uses a "check file" check on an NFS mount that is unreachable. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information. IPsec causes Monit to hang in this case and it will not recover.
+
+When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster. 
+
+This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7. 
+
+This issue occurs when monit job priorities are asynchronous. Because the order of job shutdown is arbitrary, it is possible that the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information. 
+
+<p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231. The error also does not apply to PCF deployments that use WebDAV as their Cloud Controller blobstore.</p>
 
 #### Solution
 
@@ -89,11 +98,18 @@ $ bosh ssh JOB INDEX
 $ sudo su
 # sv stop agent
 </pre>
-1. Recreate the VMs using `bosh cloudcheck`:
-<pre class="terminal">$ bosh cck /var/vcap/bosh/bin/monit</pre>
-1. Continue with your deploy procedure.
+1. Run `bosh cloudcheck` to detect the missing monit job VM.
+<pre class="terminal">
+ # bosh cloudcheck
+  VM with cloud ID `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' missing:
+  <br>
+  <span>-</span> Ignore problem
+  <span>-</span> Recreate VM using last known apply spec
+  <span>-</span> Delete VM reference (DANGEROUS!)
+</pre>
+1. Choose `Recreate VM using last known apply spec`.
 
-<p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231.</p>
+1. Continue with your deploy procedure.
 
 <hr>
 
@@ -112,7 +128,7 @@ This error indicates a “split brain” issue with Consul.
 #### Solution
 Confirm this diagnosis by checking the `peers.json` file from /var/vcap/store/consul\_agent/raft. If it is null, then there may be a split brain. To fix this problem, follow these steps:
 
-1. Run `monit stop` on all Consul servers.
+1. Run `monit stop` on all Consul servers:
 1. Run `rm -rf /var/vcap/store/consul_agent/` on all Consul servers.
 1. Run `monit start consul_agent` on all Consul servers one at a time.
 1. Restart the consul\_agent process on the Cloud Controller VM. You may need to restart consul\_agent on other VMs, as well.
@@ -139,19 +155,19 @@ Set up a networking restriction on host VMs to only allow IPsec protocol and blo
 <td>Custom Protocol</td>
 <td>AH (51)</td>
 <td>All</td>
-<td>0.0.0.0/0</td>
+<td>10.0.0.0/16</td>
 </tr>
 <tr>
 <td>Custom Protocol</td>
 <td>ESP (50)</td>
 <td>All</td>
-<td>0.0.0.0/0</td>
+<td>10.0.0.0/16</td>
 </tr>
 <tr>
 <td>Custom UDP Rule</td>
 <td>UDP</td>
 <td>500</td>
-<td>0.0.0.0/0</td>
+<td>10.0.0.0/16</td>
 </tr>
 </table>
 
@@ -172,19 +188,3 @@ You see unencrypted app messages in the logs.
 	1. <pre class="terminal"># rm -r /var/vcap/store/etcd</p>
 	1. <pre class="terminal"># monit start etcd</p>
 1. Check the logs to confirm the node rejoined the existing cluster.
-
-<hr>
-
-#### Symptom
-
-When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster. 
-
-#### Explanation: Known Issue
-
-This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7. This issue does not apply to operators who are using WebDAV as their Cloud Controller blobstore. 
-
-This problem exists independently of IPsec, and is not caused by IPsec. However, because the order of job shutdown is arbitrary, it is possible that when both are installed on the same machine, the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing.
-
-#### Solution
-
-Follow the instructions in the [BOSH Cloudcheck](../pivotalcf/customizing/trouble-advanced.html#cck) section of the Advanced Troubleshooting with the BOSH CLI topic to use `bosh cloudcheck` to recreate the hanging VM.

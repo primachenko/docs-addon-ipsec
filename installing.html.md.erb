@@ -20,7 +20,7 @@ To complete the IPsec installation, check that you have satisfied the following 
  the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the 
 Elastic Runtime tile. </p>
 
-<p class="note"><strong>Note</strong>: IPsec has not been verified to not adversely affect the functionality of every available service tile. Therefore, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
+<p class="note"><strong>Note</strong>: IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
 
 <p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p> 
 

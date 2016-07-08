@@ -33,7 +33,7 @@ Follow these steps:
 
 1. Navigate to the **PCF VMs Security Group**.
 
-2. Set up the following **Inbound Rules**:
+2. Set up the following **Inbound Rules**. Adjust the source CIDR as needed for your environment.
 
 <table border="1" class="nice">
 <tr>
@@ -146,7 +146,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director. List any other IPs in your PCF deployment that you want to communicate without encryption.
+ * <code>no\_ipsec\_subnets:</code> List the IP addresses of your BOSH director, and any other IPs in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section. 
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  

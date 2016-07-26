@@ -1,16 +1,16 @@
 ---
-title: Troubleshooting Pivotal Cloud Foundry&reg; IPSec Add-On
+title: Troubleshooting Pivotal Cloud Foundry IPSec Add-On
 owner: Security Engineering
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic provides instructions to verify that strongSwan-based IPsec works with your Pivotal Cloud Foundry® (PCF) deployment and general recommendations for troubleshooting IPsec. 
+This topic provides instructions to verify that strongSwan-based IPsec works with your Pivotal Cloud Foundry® (PCF) deployment and general recommendations for troubleshooting IPsec.
 
 ## <a id='verify-ipsec'></a>Verify that IPsec Works with PCF
 To verify that IPsec works between two hosts, you can check that traffic is encrypted in the deployment with `tcpdump`, perform the ping test, and check the logs with the steps below.
 
-1. Check traffic encryption and perform the ping test. Select two hosts in your deployment with IPsec enabled and note their IP addresses. These are referenced below as `IP-ADDRESS-1` and `IP-ADDRESS-2`. 
+1. Check traffic encryption and perform the ping test. Select two hosts in your deployment with IPsec enabled and note their IP addresses. These are referenced below as `IP-ADDRESS-1` and `IP-ADDRESS-2`.
 	1. SSH into `IP-ADDRESS-1`.
 	<pre class="terminal">$ ssh IP-ADDRESS-1</pre>
 	1. On the first host, run the following, and allow it to continue running.
@@ -19,13 +19,13 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	<pre class="terminal">$ ssh IP-ADDRESS-2</pre>
 	1. On the second host, run the following:
 	<pre class="terminal">$ ping IP-ADDRESS-1</pre>
-	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following: 
+	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following:
 	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
 1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
 1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for ‘ipsec’ and the status of the IPsec job.
 1. Run `ipsec statusall` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
 
-If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPSec](./installing.html) topic and review your installation. 
+If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPSec](./installing.html) topic and review your installation.
 
 If you encounter issues with installing IPsec, reference the following [Troubleshooting IPsec](#troubleshoot-ipsec) section.
 
@@ -37,16 +37,16 @@ If you encounter issues with installing IPsec, reference the following [Troubles
 Unresponsive applications or incomplete responses, particularly for large payloads
 
 #### Explanation: Packet Loss
-IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets. 
+IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets.
 
-If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU. 
+If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU.
 
 #### Solution
 Implement a 100 MTU difference between host VM and the contained application container, using one of the following approaches:
 
 * Decrease the MTU of the application containers to a value lower than the MTU of the VM for that container. In the ERT tile configuration, click **Networking** and modify **Applications Network Maximum Transmission Unit (MTU) (in bytes)** before you deploy. Decrease it from the default value of 1454 to 1354.
 
-* Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example: 
+* Increase the MTU of the application container VMs to a value greater than 1500. Pivotal recommends a headroom of 100. Run <code>ifconfig NETWORK-INTERFACE mtu MTU-VALUE</code> to make this change. Replace NETWORK-INTERFACE with the network interface used to communicate with other VMs For example:
 <code>$ ifconfig NETWORK-INTERFACE mtu 1600</code>
 
 <hr>
@@ -54,7 +54,7 @@ Implement a 100 MTU difference between host VM and the contained application con
 #### Symptom
 Unresponsive applications or incomplete responses, particularly for large payloads
 
-#### Explanation: Network Degradation 
+#### Explanation: Network Degradation
 IPsec data encryption increases the size of packet payloads. If the number of requests and the size of your files are large, the network may degrade.
 
 #### Solution
@@ -63,27 +63,27 @@ Scale your deployment by allocating more processing power to your VM CPU or GPUs
 ### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 
 #### Symptom
-Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working. 
+Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working.
 
 For example, this error shows a symptom of IPsec failure, a failed `clock_global-partition`:
 
 <pre class="terminal">
-Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-partition-abf4378108ba40fd9a43/0 
-(ddb1fbfa-71b1-4114-a82c-fd75867d54fc) 
-(canary): 	Action Failed 
-get_task: 	Task 044424f7-c5f2-4382-5d81-57bacefbc238 
-result: 	Stopping Monitored Services: Stopping service 
-ipsec: 		Sending stop request to Monit: Request failed, 
+Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-partition-abf4378108ba40fd9a43/0
+(ddb1fbfa-71b1-4114-a82c-fd75867d54fc)
+(canary): 	Action Failed
+get_task: 	Task 044424f7-c5f2-4382-5d81-57bacefbc238
+result: 	Stopping Monitored Services: Stopping service
+ipsec: 		Sending stop request to Monit: Request failed,
 response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05:22)..
 </pre>
 
 #### Explanation: Asynchronous `monit` Job Priorities
 
-When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster. 
+When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster.
 
-This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7. 
+This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7.
 
-This issue occurs when monit job priorities are asynchronous. Because the order of job shutdown is arbitrary, it is possible that the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information. 
+This issue occurs when monit job priorities are asynchronous. Because the order of job shutdown is arbitrary, it is possible that the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information.
 
 <p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231. The error also does not apply to PCF deployments that use WebDAV as their Cloud Controller blobstore.</p>
 
@@ -91,7 +91,7 @@ This issue occurs when monit job priorities are asynchronous. Because the order 
 
 1. `bosh ssh` into the stuck instance:
 <pre class="terminal">
-$ bosh ssh JOB INDEX 
+$ bosh ssh JOB INDEX
 </pre>
 1. Authenticate as root and use the `sv stop agent` command to kill the BOSH Agent:
 <pre class="terminal">
@@ -116,9 +116,9 @@ $ sudo su
 #### Symptom
 App fails to start with the following message:
 <pre class="terminal">FAILED
-Server error, 
-status code: 500, 
-error code: 10001, 
+Server error,
+status code: 500,
+error code: 10001,
 message: An unknown error occurred.</pre>
 The Cloud Controller log shows it is unable to communicate with Diego due to `getaddrinfo` failing.
 
@@ -141,7 +141,7 @@ You see that communication is not encrypted between two VMs.
 The IPsec BOSH job is not running on either VM. This problem could happen if both IPsec jobs crash, both IPsec jobs fail to start, or the subnet configuration is incorrect. There is a momentary gap between the time when an instance is created and when BOSH sets up IPsec. During this time, data can be sent unencrypted. This length of time depends on the instance type, IAAS, and other factors. For example, on a t2.micro on AWS, the time from networking start to IPsec connection was measured at 95.45 seconds.
 
 #### Solution
-Set up a networking restriction on host VMs to only allow IPsec protocol and block the normal TCP/UDP traffic. For example, in AWS, configure a network security group with the minimal networking setting as shown below and block all other TCP and UDP ports. 
+Set up a networking restriction on host VMs to only allow IPsec protocol and block the normal TCP/UDP traffic. For example, in AWS, configure a network security group with the minimal networking setting as shown below and block all other TCP and UDP ports.
 
 <table border='1' class='nice'>
 	<caption>Additional AWS Configuration</caption>

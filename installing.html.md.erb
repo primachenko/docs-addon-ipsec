@@ -1,28 +1,28 @@
 ---
-title: Installing the Pivotal Cloud Foundry&reg; IPSec Add-On
+title: Installing the Pivotal Cloud Foundry IPSec Add-On
 owner: Security Engineering
 ---
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment. 
+This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment.
 ##<a id="prereqs"></a>Prerequisites
 
-To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin: 
+To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin:
 
-* AWS, vSphere, or OpenStack as your IaaS 
+* AWS, vSphere, or OpenStack as your IaaS
 
-* Pivotal Cloud Foundry&reg; (PCF) operator administration rights
+* Pivotal Cloud Foundry (PCF) operator administration rights
 
 * BOSH deployed through Ops Manager 1.7 or higher
 
 <p class="note"><strong>Note</strong>: You must install the IPsec add-on before installing any other tiles to enable
- the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the 
+ the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the
 Elastic Runtime tile. </p>
 
 <p class="note"><strong>Note</strong>: IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
 
-<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p> 
+<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p>
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
@@ -68,7 +68,7 @@ Confirm that your network allows protocols 50 and 51 and UDP on port 500.
 
 ###<a id="openstack"></a>OpenStack
 
-<p class="note"><strong>Note</strong>: The following network configuration is optimized for Mirantis OpenStack, but other OpenStack distributions have a similar workflow.</p> 
+<p class="note"><strong>Note</strong>: The following network configuration is optimized for Mirantis OpenStack, but other OpenStack distributions have a similar workflow.</p>
 
 For Mirantis OpenStack, follow these steps:
 
@@ -105,7 +105,7 @@ For Mirantis OpenStack, follow these steps:
 
 Follow these steps to create the IPsec manifest for your deployment:
 
-1. Create an IPsec manifest file `ipsec-addon.yml` starting with the code below as a template. 
+1. Create an IPsec manifest file `ipsec-addon.yml` starting with the code below as a template.
   <pre>releases:
   \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
   addons:
@@ -143,20 +143,20 @@ Follow these steps to create the IPsec manifest for your deployment:
           <strong>prestart\_timeout</strong>: 30 </pre>
 
 2. Replace the properties listed in the file as follows:
- * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network. 
- * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`. 
+ * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
+ * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
  * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director, and any other IPs in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
- * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section. 
- * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase. 
- * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.  
+ * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section.
+ * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
 
 <p class="note"><strong>Note:</strong> To modify <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> in an existing deployment, you must update the manifest file and redeploy.</p>
 
-##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on  
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
-1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine. 
+1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
 2. Copy the software binary to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
@@ -172,16 +172,16 @@ Follow these steps to create the IPsec manifest for your deployment:
 $ cd PATH-TO-BINARY</pre>
 
 6. Target your BOSH director instance with BOSH.<pre class="terminal">
-  $ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP 
+  $ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP
   Target set to 'Ops Manager'
   Your username: director
   Enter password: ******************
   Logged in as 'director'
-</pre> 
+</pre>
 
 7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.  
+8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
 <pre class="terminal">$ bosh releases</pre>
 
 9. Update your runtime configuration to include the IPsec add-on.

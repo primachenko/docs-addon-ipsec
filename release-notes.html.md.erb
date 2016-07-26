@@ -5,9 +5,9 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic contains release notes for the Pivotal Cloud Foundry &reg; (PCF) IPsec add-on.
+This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
-##  v1.5.31 
+##  v1.5.31
 
 ### New Features
 
@@ -27,18 +27,18 @@ This topic contains release notes for the Pivotal Cloud Foundry &reg; (PCF) IPse
 
 	These messages are both expected, and harmless. As a caution to end users, the StrongSwan software now emits a warning message when it detects that the installation includes a manually configured set of plug-ins. As a matter of security hygiene best practices, the IPsec add-on has always used a manual (explicit) configuration, and loads a restricted set of StrongSwan plug-ins. Any unused plug-ins are not loaded.  The newest version of StrongSwan now issues this warning message when it detects that situation. The actual list of plug-ins in use has been determined to be appropriate for use of StrongSwan in the PCF environment. This warning is expected, and should be ignored.
 
-* **Certificate Verification**: There is a known issue with the CA certificate validation. The IPsec add-on supports credential rotation with minimal downtime. The host instance certificate can be rotated at any time by doing a deployment. In addition, the CA certificate that is used to verify trust in the host certificates can be rotated with minimal downtime by doing multiple deployments. 
+* **Certificate Verification**: There is a known issue with the CA certificate validation. The IPsec add-on supports credential rotation with minimal downtime. The host instance certificate can be rotated at any time by doing a deployment. In addition, the CA certificate that is used to verify trust in the host certificates can be rotated with minimal downtime by doing multiple deployments.
 	<br><br>
-	However, because all VMs typically share the same instance certificate, they will trust each other without relying upon the CA certificate. The CA certificate is not actually needed until the operator does a deployment to rotate the instance certificate(s). While that deployment is running, some of the VMs will have received a new instance certificate, while other VMs are still operating using the prior instance certificate. During this time, while the instance certificates are different, the validation of the peer instance certificate will rely upon the common CA certificate in order to establish trust in the counterparty. 
+	However, because all VMs typically share the same instance certificate, they will trust each other without relying upon the CA certificate. The CA certificate is not actually needed until the operator does a deployment to rotate the instance certificate(s). While that deployment is running, some of the VMs will have received a new instance certificate, while other VMs are still operating using the prior instance certificate. During this time, while the instance certificates are different, the validation of the peer instance certificate will rely upon the common CA certificate in order to establish trust in the counterparty.
 	<br><br>
 	If the CA certificate is malformed, or otherwise invalid, this problem will remain latent until the time when the instance certificate is being rotated. It is only during that deployment when the operator will discover that the CA certificate is not valid. Of course, as long as the CA certificate is valid, there is no problem.
 	<br><br>
-	It is recommended that operators use a tool such as OpenSSL to verify that the CA certificate they are choosing to configure is in fact valid, and contains the appropriate details for proper end-entity authentication of the VM in the deployment (such as subjectName, issuerName, and validity dates, etc). 
+	It is recommended that operators use a tool such as OpenSSL to verify that the CA certificate they are choosing to configure is in fact valid, and contains the appropriate details for proper end-entity authentication of the VM in the deployment (such as subjectName, issuerName, and validity dates, etc).
 	<br><br>
 	Operators can use their favorite certificate management tool to confirm that their certificate matches what they expect. Using OpenSSL, one can issue the command:
 	<pre class="terminal">
 	$ openssl x509 -in myCA.crt -text
 	</pre>
-	If this command produces valid output, then the certificate will be OK when configured for IPsec. 
+	If this command produces valid output, then the certificate will be OK when configured for IPsec.
 
 * **MTU Sizing**: Use 1354 on OpenStack. Keep the default on AWS and vSphere.

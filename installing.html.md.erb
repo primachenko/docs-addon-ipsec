@@ -31,9 +31,11 @@ Refer to the appropriate section below for your IaaS network configuration detai
 
 Follow these steps:
 
-1. Navigate to the **PCF VMs Security Group**.
+1. Navigate to **EC2 Dashboard - Security Groups**.
 
-2. Set up the following **Inbound Rules**. Adjust the source CIDR as needed for your environment.
+2. Select the Security Group with the description **PCF VMs Security Group** and click **Edit**.
+
+3. Set up the following **Inbound Rules**. Adjust the source CIDR as needed for your environment.
 
 <table border="1" class="nice">
 <tr>
@@ -272,7 +274,7 @@ Rerunning the scripts overwrites your current keys and the certificates.
 
 ### Generate a Self-Signed Certificate with OpenSSL
 
-1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl` bash script.
+1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
 1. Change into the directory where you downloaded the script:
   <pre class="terminal">$ cd ~/workspace</pre>
 1. Change the permissions of the script:

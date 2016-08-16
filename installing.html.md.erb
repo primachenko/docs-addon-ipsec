@@ -8,7 +8,7 @@ owner: Security Engineering
 This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment.
 ##<a id="prereqs"></a>Prerequisites
 
-To complete the IPsec installation, check that you have satisfied the following prerequisites before you begin:
+To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
 
 * AWS, vSphere, or OpenStack as your IaaS
 
@@ -16,13 +16,20 @@ To complete the IPsec installation, check that you have satisfied the following 
 
 * BOSH deployed through Ops Manager 1.7 or higher
 
-<p class="note"><strong>Note</strong>: You must install the IPsec add-on before installing any other tiles to enable
- the IPsec functionality. Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the
-Elastic Runtime tile. </p>
+<p class="note"><strong>Note</strong>: You must install the IPsec add-on before 
+installing any other tiles to enable the IPsec functionality. Pivotal 
+recommends installing IPsec immediately after Ops Manager, and before 
+installing the Elastic Runtime tile. </p>
 
-<p class="note"><strong>Note</strong>: IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.</p>
+<p class="note"><strong>Note</strong>: IPsec may affect the functionality of 
+other service tiles. As a result, Pivotal recommends deploying Elastic Runtime 
+and each service tile to different isolated subnets. Alternatively, you can 
+minimally deploy all service tiles to a single isolated subnet, apart from the 
+Elastic Runtime subnet.</p>
 
-<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p>
+<p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu 
+stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells 
+are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the <em>Troubleshooting</em> topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p>
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
@@ -31,7 +38,7 @@ Refer to the appropriate section below for your IaaS network configuration detai
 
 Follow these steps:
 
-1. Navigate to **EC2 Dashboard - Security Groups**.
+1. Navigate to **EC2 Dashboard > Security Groups**.
 
 2. Select the Security Group with the description **PCF VMs Security Group** and click **Edit**.
 
@@ -66,7 +73,7 @@ Follow these steps:
 
 ###<a id="vsphere"></a>vSphere
 
-Confirm that your network allows protocols 50 and 51 and UDP on port 500.
+Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
 
 ###<a id="openstack"></a>OpenStack
 
@@ -148,8 +155,8 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director, and any other IPs in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
- * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section.
+ * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director, and any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
+ * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
@@ -173,12 +180,13 @@ Follow these steps to create the IPsec manifest for your deployment:
 <pre class="terminal">
 $ cd PATH-TO-BINARY</pre>
 
-6. Target your BOSH director instance with BOSH.<pre class="terminal">
-  $ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP
-  Target set to 'Ops Manager'
-  Your username: director
-  Enter password: ******************
-  Logged in as 'director'
+6. Target your BOSH director instance with BOSH.
+<pre class="terminal">
+$ bosh target YOUR-OPS-MANAGER-DIRECTOR-IP
+Target set to 'Ops Manager'
+Your username: director
+Enter password: ******************
+Logged in as 'director'
 </pre>
 
 7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
@@ -275,7 +283,7 @@ Rerunning the scripts overwrites your current keys and the certificates.
 ### Generate a Self-Signed Certificate with OpenSSL
 
 1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
-1. Change into the directory where you downloaded the script:
+1. Navigate to the directory where you downloaded the script:
   <pre class="terminal">$ cd ~/workspace</pre>
 1. Change the permissions of the script:
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>

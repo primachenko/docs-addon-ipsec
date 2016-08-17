@@ -7,11 +7,21 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
+##  v1.5.35
+
+* **Bug Fixes**: This latest release corrects an issue that was discovered when the no-IPsec subnet configuration is empty.
+
+##  v1.5.34
+
+### New Features
+
+* **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 5.5.0
+
 ##  v1.5.31
 
 ### New Features
 
-* **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 1.5.4.
+* **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 5.4.0
 * **Supported IAASes**: This version of the IPsec add-on adds support for OpenStack. It has been tested with OpenStack version 8.0.1, using Elastic Runtime version 1.7.9, and Ops Manager version 1.7.1 and greater. The IPsec add-on is now supported on AWS, vSphere, and OpenStack.
 * **Bug Fixes**: This latest release corrects an issue that was discovered that could cause communication between hosts located in the IPsec subnet, and the no-IPsec subnet, to fail. This release includes a more robust implementation of the processing logic that controls the StrongSwan configuration which ensures that communication in a heterogeneous deployment (containing both IPsec and no-IPsec subnets) should always work as intended.
 

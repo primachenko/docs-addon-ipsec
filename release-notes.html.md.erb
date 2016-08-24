@@ -7,15 +7,14 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
-##  v1.5.35
+##  v1.5.37
 
-* **Bug Fixes**: This latest release corrects an issue that was discovered when the no-IPsec subnet configuration is empty.
-
-##  v1.5.34
+* **Bug Fixes**: This release corrects an issue that was discovered when the no-IPsec subnet configuration is empty.
 
 ### New Features
 
 * **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 5.5.0
+* **Gentle Shutdown**: This version includes additional shutdown processing logic with the goal of ensuring other jobs are allowed time to exit cleanly at shutdown. Shutdown will be delayed until other jobs have exited, up to a deployer-configurable timeout value.
 
 ##  v1.5.31
 
@@ -27,7 +26,7 @@ This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-
 
 ### Known Issues
 
-* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 1.5.4, this version of the IPsec add-on will emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:
+* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on will emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:
 
 	```
 	!! Your strongswan.conf contains manual plugin load options for charon.

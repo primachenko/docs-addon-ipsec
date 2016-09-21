@@ -187,4 +187,67 @@ You see unencrypted app messages in the logs.
 	1. <pre class="terminal"># monit stop etcd</p>
 	1. <pre class="terminal"># rm -r /var/vcap/store/etcd</p>
 	1. <pre class="terminal"># monit start etcd</p>
-1. Check the logs to confirm the node rejoined the existing cluster.
+	1. Check the logs to confirm the node rejoined the existing cluster.
+
+<hr>
+
+#### Symptom
+
+IPsec deployment fails with Error filling in template 'pre-start.erb' 
+
+<pre class="terminal">
+Error 100: Unable to render instance groups for deployment. Errors are:
+   - Unable to render jobs for instance group 'consul_server-partition-f9c4b18fd83cf3114d7f'. Errors are:
+     - Unable to render templates for job 'ipsec'. Errors are:
+       - Error filling in template 'pre-start.erb' (line 12: undefined method `each_with_index' for #<String:0x0055e9e36d2c98>)
+   - Unable to render jobs for instance group 'nats-partition-f9c4b18fd83cf3114d7f'. Errors are:
+     - Unable to render templates for job 'ipsec'. Errors are:
+       - Error filling in template 'pre-start.erb' (line 12: undefined method `each_with_index' for #<String:0x0055e9e36d2c98>)
+</pre>
+
+#### Explanation: Typo in deployment descritor YAML syntax.
+
+#### Solution
+1. Using your favorite editor, check the deployment descriptor YAML syntax for the CA certificates entry:
+
+<pre class="terminal">
+releases:
+- {name: ipsec, version: 1.0.0}
+
+addons:
+- name: ipsec-addon
+  jobs:
+  - name: ipsec
+    release: ipsec
+  properties:
+    ipsec:
+      ipsec_subnets:
+      - 10.0.1.1/20
+      no_ipsec_subnets:
+      - 10.0.1.10/32  # bosh director
+      instance_certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+	...
+	-----END CERTIFICATE-----
+      instance_private_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEogIBAAKCAQEAtAkBjrzr5x9g0aWgyDEmLd7m9u/ZzpK7UScfANLaN7JiNz3c
+	...
+	-----END RSA PRIVATE KEY-----
+      ca_certificates:
+        - |
+         -----BEGIN CERTIFICATE-----
+         MIIEUDCCArigAwIBAgIJAJVLBeJ9Wm3TMA0GCSqGSIb3DQEBCwUAMB0xGzAZBgNV
+         BAMMElBDRiBJUHNlYyBBZGRPbiBDQTAeFw0xNjA4MTUxNzQwNDVaFw0xOTA4MTUx
+	 ... 
+         -----END CERTIFICATE-----
+</pre>
+
+Notice that the values that appear after the ca_certificates: key is (potentially) a list, and not just a single certificate.
+Therefore, this entry is required to be followed by a line starting with the dash character, and ending with the pipe
+character.  The lines following this contain the PEM encoded certificate(s).  The error message shown above indicating a problem
+with the method 'each_with_index' is a hint that the YAML syntax sequence - | is missing.  You must use this syntax
+even in the case where there will be only one CA certificate (it is a list of one entry).
+
+

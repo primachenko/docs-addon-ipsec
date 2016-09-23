@@ -22,8 +22,8 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following:
 	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
 1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
-1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for ‘ipsec’ and the status of the IPsec job.
-1. Run `ipsec statusall` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`.  `x.x.x` represents the version of strongSwan packaged into the IPsec.
+1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for "ipsec" and the status of the IPsec job.
+1. Run `ipsec statusall` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`. `x.x.x` represents the version of strongSwan packaged into the IPsec.
 
 If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPsec](./installing.html) topic and review your installation.
 
@@ -182,12 +182,13 @@ You see unencrypted app messages in the logs.
 
 #### Solution
 1. Check for split brain etcd by connecting with `bosh ssh` into each etcd node: <pre class="terminal">$ curl localhost:4001/v2/members</p>
-1. Check if the members are consistent on all of etcd. If a node has only itself as a member, it has formed its own cluster and developed “split brain.” To fix this issue, SSH into the split brain VM and run the following:
+1. Check if the members are consistent on all of etcd. If a node has only itself as a member, it has formed its own cluster and developed "split brain." To fix this issue, SSH into the split brain VM and run the following commands:
 	1. <pre class="terminal">$ sudo su -</p>
 	1. <pre class="terminal"># monit stop etcd</p>
 	1. <pre class="terminal"># rm -r /var/vcap/store/etcd</p>
 	1. <pre class="terminal"># monit start etcd</p>
-	1. Check the logs to confirm the node rejoined the existing cluster.
+
+1. Check the logs to confirm the node rejoined the existing cluster.
 
 <hr>
 
@@ -205,7 +206,7 @@ Error 100: Unable to render instance groups for deployment. Errors are:
        - Error filling in template 'pre-start.erb' (line 12: undefined method `each_with_index' for #<String:0x0055e9e36d2c98>)
 </pre>
 
-#### Explanation: Caused by a typographical or syntax error in the deployment descritor YAML syntax.
+#### Explanation: Typographical or syntax error in deployment descritor YAML syntax
 
 #### Solution
 Check the deployment descriptor YAML syntax for the CA certificates entry:

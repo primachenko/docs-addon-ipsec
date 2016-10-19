@@ -128,6 +128,7 @@ Follow these steps to create the IPsec manifest for your deployment:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
           \- 10.0.1.10/32  # bosh director
+          \- 10.0.1.4/32 # ops manager
           <strong>instance\_certificate</strong>: |
             -----BEGIN CERTIFICATE-----
             MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
@@ -155,7 +156,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director, and any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
+ * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.

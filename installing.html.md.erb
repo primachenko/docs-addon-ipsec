@@ -29,7 +29,7 @@ Elastic Runtime subnet.</p>
 
 <p class="note"><strong>Note</strong>: For IPsec, Pivotal recommends any Ubuntu 
 stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells 
-are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack, and the default values on AWS and vSphere.</p>
+are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on OpenStack and GCP, and the default values on AWS and vSphere.</p>
 
 <p class="note"><strong>Note</strong>: IPsec Add-on for PCF does not work on Windows.</p>
 
@@ -38,7 +38,7 @@ Refer to the appropriate section below for your IaaS network configuration detai
 
 ###<a id="aws"></a>AWS
 
-Follow these steps:
+To configure your AWS environment for IPsec, perform the following steps:
 
 1. Navigate to **EC2 Dashboard > Security Groups**.
 
@@ -81,7 +81,7 @@ Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
 
 <p class="note"><strong>Note</strong>: The following network configuration is optimized for Mirantis OpenStack, but other OpenStack distributions have a similar workflow.</p>
 
-For Mirantis OpenStack, follow these steps:
+To configure your Mirantis OpenStack environment for IPsec, perform the following steps:
 
 1. Navigate to **Project / Access & Security**.
 
@@ -112,7 +112,21 @@ For Mirantis OpenStack, follow these steps:
 </tr>
 </table>
 
-##<a id="create-mfest"></a>Create the IPsec manifest
+###<a id="gcp"></a>Google Cloud Platform
+
+To configure your Google Cloud Platform (GCP) environment for IPsec, perform the following steps:
+
+1. Navigate to the **Networking** section of the GCP Console. 
+1. Click **Firewall rules**.
+1. Click **Create Firewall Rule**.
+1. For **Name**, enter `ipsec`.
+1. For **Network**, select the network where Ops Manager is deployed. For example, **opsmgr**.
+1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
+1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
+1. Click **Create**. 
+1. Adjust your MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
+
+##<a id="create-mfest"></a>Create the IPsec Manifest
 
 Follow these steps to create the IPsec manifest for your deployment:
 
@@ -159,6 +173,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
  * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
  * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
+      <p class="note"><strong>Note</strong>: In GCP, if you are using the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1</code>.</p>
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.

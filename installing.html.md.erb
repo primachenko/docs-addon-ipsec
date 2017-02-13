@@ -160,7 +160,9 @@ Follow these steps to create the IPsec manifest for your deployment:
               MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
               ...
               -----END CERTIFICATE-----
-          <strong>prestart\_timeout</strong>: 30 </pre>
+          <strong>prestart\_timeout</strong>: 30 
+          <strong>esp\_proposals</strong>: aes128gcm16!
+          <strong>ike\_proposals</strong>: aes128-sha256-modp2048! </pre>
 
 2. Replace the properties listed in the file as follows:
  * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
@@ -172,6 +174,8 @@ Follow these steps to create the IPsec manifest for your deployment:
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
  * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
+ * <code>esp\_proposals:</code> Optionally modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+ * <code>ike\_proposals:</code>  Optionally modify the IKE (Main Mode) encryption and integrity algorithms, and Diffie-Helmen group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
 
 <p class="note"><strong>Note:</strong> To modify <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> in an existing deployment, you must update the manifest file and redeploy.</p>
 

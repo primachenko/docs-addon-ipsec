@@ -10,7 +10,7 @@ This topic describes how to prepare your network for IPsec, create an IPsec mani
 
 To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
 
-* Amazon Web Services (AWS), vSphere, Google Cloud Platform (GCP), or OpenStack as your IaaS
+* Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS) or OpenStack as your IaaS
 
 * Pivotal Cloud Foundry (PCF) operator administration rights
 
@@ -20,14 +20,37 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 Before installing the IPsec add-on, review the following list of limitations:
 
-* During installation, the IPsec add-on may disrupt connectivity. For minimal downtime, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile.
-* IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet.
+* During installation, the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec, a ~40 VM cluster will have ~60 mins of downtime. 
+* IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec (e.g. RabbitMQ) and must be placed in a non-IPsec subnet. 
 * For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on GCP and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
 * The IPsec add-on does not work on Windows.
 
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
+
+###<a id="gcp"></a>Google Cloud Platform
+
+To configure your Google Cloud Platform (GCP) environment for IPsec, perform the following steps:
+
+1. Navigate to the **Networking** section of the GCP Console. 
+1. Click **Firewall rules**.
+1. Click **Create Firewall Rule**.
+1. For **Name**, enter `ipsec`.
+1. For **Network**, select the network where Ops Manager is deployed. For example, **opsmgr**.
+1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
+1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
+1. Click **Create**. 
+1. Adjust your MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
+
+
+###<a id="vsphere"></a>vSphere
+
+Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
+
+###<a id="vsphere"></a>Azure
+
+Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
 
 ###<a id="aws"></a>AWS
 
@@ -68,10 +91,6 @@ To configure your AWS environment for IPsec, perform the following steps:
 
 <p class="note"><strong>Note</strong>: The default <strong>PCF VMs Security Group</strong> is typically specified with a subnet of <code>10.0.0.0/16</code>. If your PCF subnet is deployed to a different CIDR block, adjust the source as needed.</p>
 
-###<a id="vsphere"></a>vSphere
-
-Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
-
 ###<a id="openstack"></a>OpenStack
 
 <p class="note"><strong>Note</strong>: The following network configuration is optimized for Mirantis OpenStack, but other OpenStack distributions have a similar workflow.</p>
@@ -106,20 +125,6 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
   <td>0.0.0.0/0</td>
 </tr>
 </table>
-
-###<a id="gcp"></a>Google Cloud Platform
-
-To configure your Google Cloud Platform (GCP) environment for IPsec, perform the following steps:
-
-1. Navigate to the **Networking** section of the GCP Console. 
-1. Click **Firewall rules**.
-1. Click **Create Firewall Rule**.
-1. For **Name**, enter `ipsec`.
-1. For **Network**, select the network where Ops Manager is deployed. For example, **opsmgr**.
-1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
-1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
-1. Click **Create**. 
-1. Adjust your MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
@@ -235,7 +240,7 @@ Logged in as 'director'
     ...
     </pre>
 
-11. If you have already deployed Elastic Runtime, scale down the number of Consul instances to 1. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
+11. If you have already deployed Elastic Runtime (existing deployment), scale down the number of Consul instances to 1. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
 
 12. Navigate to your **Installation Dashboard** in Ops Manager.
 <p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>

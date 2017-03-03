@@ -27,13 +27,16 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 * BOSH deployed through Ops Manager 1.7 or later
 
+* Set the MTU for your IAAS. This is done in the Elastic Runtime tile, under Networking. Pivotal recommends MTU values of 1354 on GCP and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
+
 ##<a id="limitations"></a>Limitations
 
 Before installing the IPsec add-on, review the following list of limitations:
 
 * During installation, the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime. 
 * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec (e.g. RabbitMQ) and must be placed in a non-IPsec subnet. 
-* For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on GCP and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
+* For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. 
+
 * The IPsec add-on does not work on Windows.
 
 

@@ -154,6 +154,7 @@ Follow these steps to create the IPsec manifest for your deployment:
         release: ipsec
       properties:
         ipsec:
+          <strong>optional</strong>: false|true  # Available only on <strong>v1.6.x</strong> and above
           <strong>ipsec\_subnets</strong>:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
@@ -184,19 +185,22 @@ Follow these steps to create the IPsec manifest for your deployment:
           <strong>esp\_proposals</strong>: aes128gcm16!
           <strong>ike\_proposals</strong>: aes128-sha256-modp2048! </pre>
 
-2. Replace the properties listed in the file as follows:
- * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
- * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
- * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
- * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
+2. Replace the properties listed in the file as follows: 
+ * For <strong>v1.5.x</strong> and above:
+     * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
+     * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
+     * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
+     * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
       <p class="note"><strong>Note</strong>: In GCP, if you are using the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
- * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
- * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
- * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
- * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
- * <code>esp\_proposals:</code> You can optionally modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
- * <code>ike\_proposals:</code>  You can optionally modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
-
+     * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
+     * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
+     * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+     * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
+     * <code>esp\_proposals:</code> You can optionally modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+     * <code>ike\_proposals:</code>  You can optionally modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
+ * For <strong>v1.6.x</strong> and above:
+     * <code>optional:</code> Make IPsec enforcement optional. To add IPsec set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
+ 
 <p class="note"><strong>Note:</strong> To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
@@ -254,16 +258,26 @@ Logged in as 'director'
     ...
     </pre>
 
-11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, scale down the number of Consul instances to 1. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
+11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment
+     * For <strong>v1.5.x</strong> : Scale down the number of Consul instances to 1. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
+     * For <strong>v1.6.x</strong> and above:
+     Set the `optional` flag to `true`.
+     No changes to consul instances are required.
 
 12. Navigate to your **Installation Dashboard** in Ops Manager.
-<p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
+<p class="note"><strong>Note:</strong> For <strong>v1.5.x</strong> , the following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
 
-13. Click **Apply Changes**.
+13. Click **Apply Changes**
+     * For <strong>v1.6.x</strong> and above:
+      * Wait for the installation to complete.
+      * Set the `optional` flag to `false`.
+      * Update the runtime config (step 9).
+      * Navigate to your **Installation Dashboard** in Ops Manager (step 12).
+      * Click **Apply Changes**.
 
 14. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and/or moving it to a secure location.
 
-15. If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
+15. For <strong>v1.5.x</strong> : If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
 
 16. If you have not installed the Elastic Runtime tile, deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
 

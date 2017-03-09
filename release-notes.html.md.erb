@@ -7,13 +7,13 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
-##  v1.6.1
-* Supports Azure (Linux VMs)
-* Updated "xfrm_acq_expires" from 165 secs (default) to 6 secs to speed up retries
-* Fixed the ordering of IPsec and no-IPsec subnets
-* Use aes128-sha256-modp2048! as the default IKE proposal
-* Enable configuration of ESP proposals
-* Enable configuration of IKE proposals
+##  v1.6.3
+* Supports Azure (for Linux VMs)
+* Enables configuration of IKE and ESP proposals
+* Reduces downtime when applying IPsec to existing deployment through optional flag
+* Updates "xfrm_acq_expires" from 165 secs (default) to 6 secs to speed up retries
+* Fixes the ordering of IPsec and no-IPsec subnets
+* Uses aes128-sha256-modp2048! as the default IKE proposal
 
 ##  v1.5.37
 

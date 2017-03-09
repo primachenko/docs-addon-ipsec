@@ -33,11 +33,14 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 Before installing the IPsec add-on, review the following list of limitations:
 
-* During installation, the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime. 
-* IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec (e.g. RabbitMQ) and must be placed in a non-IPsec subnet. 
-* For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. 
-
 * The IPsec add-on does not work on Windows.
+
+* IPsec Release <strong>v1.5.x</strong> series
+  * During installation, the <strong>v1.5.x</strong> releases of IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. Consider upgrading to <strong>v1.6.x</strong> series to avoid downtime. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime.
+
+##<a id="bestpractices"></a>Best Practices
+  * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec (e.g. RabbitMQ) and must be placed in a non-IPsec subnet. 
+  * For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.
 
 
 ##<a id="config-network"></a>Configure Network Security
@@ -157,7 +160,7 @@ Follow these steps to create the IPsec manifest for your deployment:
     		- <strong>os</strong>: ubuntu-trusty
       properties:
         ipsec:
-          <strong>optional</strong>: false|true  # Available only on <strong>v1.6.x</strong> and above
+          <strong>optional</strong>: false|true  # Available since <strong>v1.6.x</strong>
           <strong>ipsec\_subnets</strong>:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
@@ -185,8 +188,10 @@ Follow these steps to create the IPsec manifest for your deployment:
               ...
               -----END CERTIFICATE-----
           <strong>prestart\_timeout</strong>: 30
-          <strong>esp\_proposals</strong>: aes128gcm16!
-          <strong>ike\_proposals</strong>: aes128-sha256-modp2048! </pre>
+          <strong>esp\_proposals</strong>: aes128gcm16!  # Available since <strong>v1.6.x</strong>
+          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!  # Available since <strong>v1.6.x
+	  </strong>
+</pre>
 
 2. Replace the properties listed in the file as follows: 
  * For <strong>v1.5.x</strong> and above:
@@ -200,16 +205,16 @@ Follow these steps to create the IPsec manifest for your deployment:
      * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
      * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
      * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
-     * <code>esp\_proposals:</code> You can optionally modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-     * <code>ike\_proposals:</code>  You can optionally modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
  * For <strong>v1.6.x</strong> and above:
      * <code>optional:</code> Make IPsec enforcement optional. To add IPsec set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
+     * <code>esp\_proposals:</code> You can optionally modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+     * <code>ike\_proposals:</code>  You can optionally modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
  
 <p class="note"><strong>Note:</strong> To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
-<p class="note warning"><strong>WARNING</strong>: Adding the IPSec add-on to an existing deployment results in app downtime.</p>
+<p class="note warning"><strong>WARNING</strong>: Adding the IPSec add-on version <strong>v1.5.x</strong> to an existing deployment results in app downtime. Consider deploying series <strong>v1.6.x</strong> and later to minimize downtime.</p>
 
 After deploying Ops Manager, perform the following steps to download and deploy the IPsec add-on:
 
@@ -269,7 +274,7 @@ Logged in as 'director'
      No changes to consul instances are required.
 
 12. Navigate to your **Installation Dashboard** in Ops Manager.
-<p class="note"><strong>Note:</strong> For <strong>v1.5.x</strong> , the following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
+<p class="note"><strong>Note:</strong> For <strong>v1.5.x</strong> , the following step cannot be undone without downtime. To minimize the impact, we recommend upgrading to <strong>v1.6.x</strong> series before removing IPsec from the deployment.</p>
 
 13. Click **Apply Changes**
      * For <strong>v1.6.x</strong> and above:

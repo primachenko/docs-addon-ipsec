@@ -210,7 +210,7 @@ Follow these steps to create the IPsec manifest for your deployment:
  * For <strong>v1.6.x</strong> and above:
      * <code>optional:</code> Make IPsec the enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
      * <code>esp\_proposals:</code> You have the option of modifying the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-     * <code>ike\_proposals:</code>  You have the option of modifying the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2_256_128 HMAC for integrity, and Group 14 for Diffie Hellman.
+     * <code>ike\_proposals:</code>  You have the option of modifying the IKE (Main Mode) encryption and integrity algorithms, and the Diffie Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
  
 <p class="note"><strong>Note:</strong> To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 

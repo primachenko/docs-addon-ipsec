@@ -62,11 +62,11 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 
 ###<a id="vsphere"></a>vSphere
 
-Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
+Confirm that your network allows protocols ESP (`50`) and AH (`51`), and UDP (`17') on port `500`.
 
 ###<a id="azure"></a>Azure
 
-* Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
+* Confirm that your network allows protocols ESP (`50`) and AH (`51`), and UDP (`17') on port `500`.
 
 * Adjust the MTU value to 1438 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
 
@@ -80,32 +80,32 @@ To configure your AWS environment for IPsec, perform the following steps:
 
 3. Set up the following **Inbound Rules**.
 
-<table border="1" class="nice">
-<tr>
-  <th>Type</th>
-  <th>Protocol</th>
-  <th>Port Range</th>
-  <th>Source</th>
-</tr>
-<tr>
-  <td>Custom Protocol</td>
-  <td>AH (51)</td>
-  <td>All</td>
-  <td>10.0.0.0/16</td>
-</tr>
-<tr>
-  <td>Custom Protocol</td>
-  <td>ESP (50)</td>
-  <td>All</td>
-  <td>10.0.0.0/16</td>
-</tr>
-<tr>
-  <td>Custom UDP Rule</td>
-  <td>UDP(17)</td>
-  <td>500</td>
-  <td>10.0.0.0/16</td>
-</tr>
-</table>
+  <table border="1" class="nice">
+  <tr>
+    <th>Type</th>
+    <th>Protocol</th>
+    <th>Port Range</th>
+    <th>Source</th>
+  </tr>
+  <tr>
+    <td>Custom Protocol</td>
+    <td>AH (51)</td>
+    <td>All</td>
+    <td>10.0.0.0/16</td>
+  </tr>
+  <tr>
+    <td>Custom Protocol</td>
+    <td>ESP (50)</td>
+    <td>All</td>
+    <td>10.0.0.0/16</td>
+  </tr>
+  <tr>
+    <td>Custom UDP Rule</td>
+    <td>UDP (17)</td>
+    <td>500</td>
+    <td>10.0.0.0/16</td>
+  </tr>
+  </table>
 
 <p class="note"><strong>Note</strong>: The default <strong>PCF VMs Security Group</strong> is typically specified with a subnet of <code>10.0.0.0/16</code>. If your PCF subnet is deployed to a different CIDR block, adjust the source as needed.</p>
 
@@ -128,17 +128,17 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
   <th>Source</th>
 </tr>
 <tr>
-  <td>50</td>
+  <td>ESP (50)</td>
   <td>Any</td>
   <td>0.0.0.0/0</td>
 </tr>
 <tr>
-  <td>51</td>
+  <td>AH (51)</td>
   <td>Any</td>
   <td>0.0.0.0/0</td>
 </tr>
 <tr>
-  <td>UDP</td>
+  <td>UDP (17)</td>
   <td>500</td>
   <td>0.0.0.0/0</td>
 </tr>

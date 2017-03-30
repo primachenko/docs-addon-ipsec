@@ -1,5 +1,5 @@
 ---
-title: Uninstalling the Pivotal Cloud Foundry IPsec Add-On
+title: Uninstalling the PCF IPsec Add-On
 owner: Security Engineering
 ---
 
@@ -19,18 +19,18 @@ owner: Security Engineering
 This topic describes how to uninstall IPsec from your deployment.
 ##<a id="limitation"></a>Limitations
 
-Uninstalling the IPsec addon is only supported in <strong>v1.6.x</strong> and above.
+Uninstalling the IPsec add-on is only supported in <strong>v1.6.x</strong> and above.
 
-##<a id="uninstall"></a>Uninstall IPsec addon
+##<a id="uninstall"></a>Uninstall the IPsec Add-On
 
-1. Retrieve the latest runtime config
+1. Retrieve the latest runtime config.
   <pre class="terminal">
     $ bosh runtime-config > PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
   </pre>
 
 2. Set the `optional` flag to `true` under IPsec properties.
 
-3. Update the runtime config
+3. Update the runtime config.
   <pre class="terminal">
     $ bosh update runtime-config PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
   </pre>
@@ -39,6 +39,10 @@ Uninstalling the IPsec addon is only supported in <strong>v1.6.x</strong> and ab
 5. Click **Apply Changes**.
 6. Wait for the installation to complete.
 7. Remove IPsec from the runtime config.
-8. Update the runtime config. This is detailed step 3.
-9. Navigate to your **Installation Dashboard** in Ops Manager. This is detailed step 3. 
+3. Update the runtime config.
+  <pre class="terminal">
+    $ bosh update runtime-config PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
+  </pre>
+
+9. Navigate to your **Installation Dashboard** in Ops Manager. 
 10. Click **Apply Changes**.

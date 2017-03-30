@@ -1,5 +1,5 @@
 ---
-title: Troubleshooting Pivotal Cloud Foundry IPsec Add-On
+title: Troubleshooting the PCF IPsec Add-On
 owner: Security Engineering
 ---
 
@@ -21,13 +21,13 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	<pre class="terminal">$ ping IP-ADDRESS-1</pre>
 	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following:
 	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
-1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you are using, and to verify that there is an established connection.
+1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you use, and to verify an established connection exists.
 1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for "ipsec" and the status of the IPsec job.
 1. Run `ipsec statusall` to return a detailed status report regarding your connections. The typical path for this binary: `/var/vcap/packages/strongswan-x.x.x/sbin`. `x.x.x` represents the version of strongSwan packaged into the IPsec.
 
-If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing IPsec](./installing.html) topic and review your installation.
+If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing the PCF IPsec Add-On](./installing.html) topic and review your installation.
 
-If you encounter issues with installing IPsec, reference the following [Troubleshooting IPsec](#troubleshoot-ipsec) section.
+If you encounter issues with installing IPsec, refer to the [Troubleshooting IPsec](#troubleshoot-ipsec) section of this topic.
 
 ## <a id='troubleshoot-ipsec'></a>Troubleshoot IPsec
 
@@ -250,7 +250,7 @@ addons:
         -----END CERTIFICATE-----
 </pre>
 
-In the example above, the values that appear after the <code>ca_certificates:</code> key are contained within a list and are not just a single certificate.
+In the example above, the values that appear after the <code>ca_certificates</code>: key are contained within a list and are not just a single certificate.
 This entry must be followed by a line starting with <code>-</code>, and ending with <code>|</code>.  The lines following this contain the PEM encoded certificate(s).
 
 The error message shown above indicating a problem with the <code>each\_with\_index</code> method provides a hint that the <code>- |</code> YAML syntax sequence is missing.  Use this syntax even in situations where there is only one CA certificate, for example a list of one entry.

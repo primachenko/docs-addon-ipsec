@@ -25,19 +25,9 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 * Pivotal Cloud Foundry (PCF) operator administration rights
 
-* BOSH deployed through Ops Manager 1.7 or later
+* BOSH deployed through Ops Manager 1.8 or later
 
 * Set the MTU for your IaaS in the Elastic Runtime tile, under **Networking**. Pivotal recommends MTU values of 1354 on GCP, 1438 on Azure, and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
-
-##<a id="limitations"></a>Limitations
-
-<<<<<<< HEAD
-The IPsec add-on v1.6 does not work on Windows.
-=======
-Before installing the IPsec add-on, review the following list of limitations:
-
-* IPsec Release v1.5.x series: During installation, the v1.5.x releases of the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. Upgrade to v1.6.x series to avoid downtime. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime.
->>>>>>> a185ced5375474e02432dd756ff38410f470fb11
 
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 
@@ -201,9 +191,9 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 Follow these steps to create the IPsec manifest for your deployment:
 
-1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
+### Create a manifest for Linux:</strong>
 
-  <strong>For Linux:</strong>
+1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
   <pre>releases:
   \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
   addons:
@@ -244,35 +234,31 @@ Follow these steps to create the IPsec manifest for your deployment:
               ...
               -----END CERTIFICATE-----
           <strong>prestart\_timeout</strong>: 30
-<<<<<<< HEAD
           <strong>esp\_proposals</strong>: aes128gcm16!
           <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
-</pre>
-
-2. Replace the values listed in the template as follows: 
-     * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
-     * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
-     * <code>include: stemcell - os</code>: Do not change the OS type. IPsec is only supported on `ubuntu-trusty`.
-     * <code>optional</code>: Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
-     * <code>ipsec\_subnets</code>: List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
-     * <code>no\_ipsec\_subnets</code>: List the IP address of your BOSH Director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services. Subnets for PCF managed services that do not support IPsec must be listed under `no-ipsec`.
-      <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
-     * <code>instance\_certificate</code>: Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
-     * <code>instance\_private\_key</code>: Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
-     * <code>ca\_certificates</code>: Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
-     * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
-     * <code>esp\_proposals</code>: You can modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-     * <code>ike\_proposals</code>: You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
- 
-=======
-          <strong>esp\_proposals</strong>: aes128gcm16!  # Available since <strong>v1.6.x</strong>
-          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!  # Available since <strong>v1.6.x</strong>
   </pre>
 
-  <strong>For Windows:</strong>
-  <pre>releases:
-  \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
-  addons:
+1. Replace the values listed in the template as follows:
+  * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
+  * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
+  * <code>include: stemcell - os</code>: IPsec for Linux is only supported on `ubuntu-trusty`.
+  * <code>optional</code>: <a name="optional"></a> Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
+  * <code>ipsec\_subnets</code>: <a name="ipsec_subnets"></a> list the subnets that you want to be encrypted. you can include the entire deployment or a portion of the network. encrypt any network that handles business-sensitive data.
+  * <code>no\_ipsec\_subnets</code>: <a name="no_ipsec_subnets"></a> list the ip address of your bosh director and ops manager vm, along with any other ip addresses in your pcf deployment that you want to communicate without encryption. pivotal recommends that you list the subnets that are used for pcf managed services. subnets for pcf managed services that do not support ipsec must be listed under `no-ipsec`.
+  <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
+  * <code>instance\_certificate</code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
+  * <code>instance\_private\_key</code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
+  * <code>ca\_certificates</code>: <a name="ca_certificates"></a> Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+  * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
+  * <code>esp\_proposals</code>: <a name="esp_proposals"></a> You can modify the ESP (Quick Mode) encryption and integrity algorithms.
+  The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+  * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
+  The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
+
+### Add Windows Support to Your Manifest (Optional)
+
+1. Add the following template to your `ipsec-addon.yml`, under `addons`, following the Linux add-on from above.
+  <pre>
   \- name: ipsec-windows-addon
       jobs:
       \- <strong>name</strong>: ipsec-win
@@ -282,7 +268,7 @@ Follow these steps to create the IPsec manifest for your deployment:
           \- <strong>os</strong>: windows2012R2
       properties:
         ipsec:
-          <strong>optional</strong>: false|true
+          <strong>optional</strong>: false
           <strong>ipsec\_subnets</strong>:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
@@ -308,54 +294,34 @@ Follow these steps to create the IPsec manifest for your deployment:
           <strong>main\_mode\_proposals</strong>:
             \- encryption: AES128
               hash: SHA256
-              keyexchange: DH14
+              keyexchange: DH14</pre>
 
-  </pre>
 
-2. Replace the values listed in the template as follows:
- * <strong>Linux:</strong>
-     * For v1.5.x and above:
-         * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
-         * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
-         * <code>include: stemcell - os</code>: IPsec v1.5.x is only supported on `ubuntu-trusty`.
-         * <code>ipsec\_subnets</code>: <a name="ipsec_subnets"></a> list the subnets that you want to be encrypted. you can include the entire deployment or a portion of the network. encrypt any network that handles business-sensitive data.
-         * <code>no\_ipsec\_subnets</code>: <a name="no_ipsec_subnets"></a> list the ip address of your bosh director and ops manager vm, along with any other ip addresses in your pcf deployment that you want to communicate without encryption. pivotal recommends that you list the subnets that are used for pcf managed services. subnets for pcf managed services that do not support ipsec must be listed under `no-ipsec`.
-          <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
-         * <code>instance\_certificate</code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
-         * <code>instance\_private\_key</code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
-         * <code>ca\_certificates</code>: <a name="ca_certificates"></a> Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
-         * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
-     * For <strong>v1.6.x</strong> and above:
-         * <code>optional</code>: <a name="optional"></a> Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
-         * <code>esp\_proposals</code>: <a name="esp_proposals"></a> You can modify the ESP (Quick Mode) encryption and integrity algorithms.
-          The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-         * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
-         The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
-
- * <strong>Windows:</strong>
-     * For <strong>v1.7.x</strong> and above:
-         * <code>jobs: - name</code>: It must be `ipsec-win` for windows.
-         * <code>include: stemcell - os</code>: IPsec is supported on `windows2012R2` stemcells.
-         * <code>ipsec\_subnets</code>: Same as [ipsec\_subnets](#ipsec_subnets) for Linux
-         * <code>no\_ipsec\_subnets</code>: Same as [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux
-         * <code>instance\_pfx</code>: This is the signed [instance\_certificate](#instance_certificate) and corresponding [instance\_private_key](#instance_private_key) that will be used by all instance VMs in PFX format (Base64 encoded). The certificate should be signed by one of the CAs in the ca_certificates property.
-         For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
-         * <code>ca\_certificates</code>: Same as [ca\_certificates](#ca_certificates) for Linux
-         * <code>optional</code>: Same as [optional](#optional) for Linux
-         * <code>quick\_mode\_proposals</code>: Array of Quick Mode algorithms for encryption and integrity. Should match list specified in [esp_proposals](#esp_proposals) for Linux.
-           The default:
-           <pre>
-           \- encryption: AESGCM128
-              hash: AESGMAC128
-           </pre>
-         * <code>main\_mode\_proposals</code>: Array of Main Mode algorithms for encryption, integrity and key exchange. Should match list specified in [ike_proposals](#ike_proposals) for Linux.
-           The default:
-           <pre>
-           \- encryption: AES128
-              hash: SHA256
-              keyexchange: DH14
-           </pre>
->>>>>>> a185ced5375474e02432dd756ff38410f470fb11
+1. Replace the values listed in the template as follows:
+   * <code>jobs: - name</code>: It must be `ipsec-win` for windows.
+   * <code>include: stemcell - os</code>: IPsec for Windows is only supported on `windows2012R2`.
+   * <code>ipsec\_subnets</code>: Same as [ipsec\_subnets](#ipsec_subnets) for Linux
+   * <code>no\_ipsec\_subnets</code>: Same as [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux
+   * <code>instance\_pfx</code>: The signed [instance\_certificate](#instance_certificate) and corresponding [instance\_private_key](#instance_private_key) that will be used by all instance VMs in PFX format (Base64 encoded). You can generate this PFX file using the following commands:
+     <pre>
+      $ openssl pkcs12 -export -out pcf-ipsec-peer.pfx -inkey pcf-ipsec-peer-key.pem -in pcf-ipsec-peer-cert.pem
+      $ base64 -b 64 -i pcf-ipsec-peer.pfx -o pcf-ipsec-peer.pfx.b64
+     </pre>
+   * <code>ca\_certificates</code>: Same as [ca\_certificates](#ca_certificates) for Linux
+   * <code>optional</code>: Same as [optional](#optional) for Linux
+   * <code>quick\_mode\_proposals</code>: Array of Quick Mode algorithms for encryption and integrity. Should match list specified in [esp_proposals](#esp_proposals) for Linux.
+     The default:
+     <pre>
+     \- encryption: AESGCM128
+          hash: AESGMAC128
+     </pre>
+   * <code>main\_mode\_proposals</code>: Array of Main Mode algorithms for encryption, integrity and key exchange. Should match list specified in [ike_proposals](#ike_proposals) for Linux.
+     The default:
+     <pre>
+     \- encryption: AES128
+          hash: SHA256
+          keyexchange: DH14
+     </pre>
 <p class="note"><strong>Note</strong>: To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
@@ -407,9 +373,12 @@ Logged in as 'director'
     addons:
      name: ipsec-addon
       jobs:
-      <span>-</span> name: ipsec # ipsec-win for windows
+      <span>-</span> name: ipsec
         release: ipsec
-    ...
+        ...
+      <span>-</span> name: ipsec-win  # if using Windows
+        release: ipsec
+        ...
     </pre>
 
 11. If you have not installed the Elastic Runtime tile, follow these steps:
@@ -429,8 +398,6 @@ Logged in as 'director'
 
 13. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
 
-
-
 ##<a id="verify"></a>Verify Your IPsec Installation
 
 After installing IPsec and deploying Elastic Runtime, perform the following steps to verify your IPsec installation:
@@ -448,6 +415,7 @@ The Monit daemon 5.2.5 uptime: 18h 32m
 Process 'ipsec'                     running
 System 'system\_localhost'           running
 </pre>
+
 
 2. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
 <pre class="terminal">
@@ -483,6 +451,12 @@ ipsec-10.10.4.0/24[459]: ESTABLISHED 13 seconds ago, 10.10.5.66[CN=test-cert-1-c
 ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
 ...
 </pre>
+
+
+1. If you installed IPsec for Windows, follow these steps:
+  1. From any Windows VM, open **Windows Firewall with Advanced Security**. 
+  1. Click **Connection Security Rules**. 
+  1. Confirm that you see rules for each `ipsec` and `no-ipsec` subnet that you listed in your manifest. 
 
 ##<a name="self-signed"></a>Generate a Self-Signed Certificate
 

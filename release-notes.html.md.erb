@@ -10,14 +10,6 @@ This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-
 ##  v1.7.0
 * IPsec support for Windows
 
-##  v1.6.3
-* Supports Azure (for Linux VMs).
-* Enables configuration of IKE and ESP proposals.
-* Reduces downtime when applying IPsec to existing deployment through optional flag.
-* Updates "xfrm\_acq\_expires" from 165 secs (default) to 6 secs to speed up retries.
-* Fixes the ordering of IPsec and no-IPsec subnets.
-* Uses aes128-sha256-modp2048! as the default IKE proposal.
-
 ### Known Issues
 
 * **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on will emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:

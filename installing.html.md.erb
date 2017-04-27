@@ -27,19 +27,15 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 * BOSH deployed through Ops Manager 1.7 or later
 
-* Set the MTU for your IaaS in the Elastic Runtime tile, under **Networking**. Pivotal recommends MTU values of 1354 on GCP, 1438 on Azure, and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
-
 ##<a id="limitations"></a>Limitations
 
 Before installing the IPsec add-on, review the following list of limitations:
 
-* The IPsec add-on does not work on Windows.
+* During installation, the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime. 
+* IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec (e.g. RabbitMQ) and must be placed in a non-IPsec subnet. 
+* For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values. Pivotal recommends MTU values of 1354 on GCP and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
+* The IPsec add-on v1.5 does not work on Windows.
 
-* IPsec Release v1.5.x series: During installation, the v1.5.x releases of the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. Upgrade to v1.6.x series to avoid downtime. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime.
-
-##<a id="bestpractices"></a>Best Practices
-  * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 
-  * For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic to adjust MTU values.
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
@@ -56,64 +52,16 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
 1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
 1. Click **Create**. 
-1. Adjust the MTU value to `1354` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic.
+1. Adjust your MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
 
 
 ###<a id="vsphere"></a>vSphere
 
-Confirm that your network allows the protocols listed in the table below.
+Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
 
-<table>
-  <tr>
-    <th width="33%">Protocol Name</th>
-    <th width="33%">Protocol Number</th>
-    <th width="33%">Port(s)</th>
-  </tr>
-  <tr>
-    <td>AH</td>
-    <td>51</td>
-    <td>Any</td>
-  </tr>
-  <tr>
-    <td>ESP</td>
-    <td>50</td>
-    <td>Any</td>
-  </tr>
-  <tr>
-    <td>UDP</td>
-    <td>17</td>
-    <td>500</td>
-  </tr>
-</table>
+###<a id="vsphere"></a>Azure
 
-
-###<a id="azure"></a>Azure
-
-1. Confirm that your network allows the protocols listed in the table below.
-  <table>
-    <tr>
-      <th width="33%">Protocol Name</th>
-      <th width="33%">Protocol Number</th>
-      <th width="33%">Port(s)</th>
-    </tr>
-    <tr>
-      <td>AH</td>
-      <td>51</td>
-      <td>Any</td>
-    </tr>
-    <tr>
-      <td>ESP</td>
-      <td>50</td>
-      <td>Any</td>
-    </tr>
-    <tr>
-      <td>UDP</td>
-      <td>17</td>
-      <td>500</td>
-    </tr>
-  </table>
-
-1. Adjust the MTU value to `1438` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic.
+Confirm that your network allows protocols `50` and `51`, and UDP on port `500`.
 
 ###<a id="aws"></a>AWS
 
@@ -123,37 +71,34 @@ To configure your AWS environment for IPsec, perform the following steps:
 
 2. Select the Security Group with the description **PCF VMs Security Group** and click **Edit**.
 
-3. Create the following **Inbound Rules**.
-  <table border="1" class="nice">
-  <tr>
-    <th>Type</th>
-    <th>Protocol Name</th>
-    <th>Protocol Number</th>
-    <th>Port Range</th>
-    <th>Source</th>
-  </tr>
-  <tr>
-    <td>Custom Protocol</td>
-    <td>AH</td>
-    <td>51</td>
-    <td>All</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  <tr>
-    <td>Custom Protocol</td>
-    <td>ESP</td>
-    <td>50</td>
-    <td>All</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  <tr>
-    <td>Custom UDP Rule</td>
-    <td>UDP</td>
-    <td>17</td>
-    <td>500</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  </table>
+3. Set up the following **Inbound Rules**.
+
+<table border="1" class="nice">
+<tr>
+  <th>Type</th>
+  <th>Protocol</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>AH (51)</td>
+  <td>All</td>
+  <td>10.0.0.0/16</td>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>ESP (50)</td>
+  <td>All</td>
+  <td>10.0.0.0/16</td>
+</tr>
+<tr>
+  <td>Custom UDP Rule</td>
+  <td>UDP(17)</td>
+  <td>500</td>
+  <td>10.0.0.0/16</td>
+</tr>
+</table>
 
 <p class="note"><strong>Note</strong>: The default <strong>PCF VMs Security Group</strong> is typically specified with a subnet of <code>10.0.0.0/16</code>. If your PCF subnet is deployed to a different CIDR block, adjust the source as needed.</p>
 
@@ -167,39 +112,36 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 1. Select the security group and click **Manage Rules**.
 
-1. Create the following **Ingress and Egress Rules**. Adjust the source CIDR as needed for your environment.
-  <table border="1" class="nice">
-  <tr>
-    <th>Protocol Name</th>
-    <th>Protocol Number</th>
-    <th>Port Range</th>
-    <th>Source</th>
-  </tr>
-  <tr>
-    <td>ESP</td>
-    <td>50</td>
-    <td>Any</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  <tr>
-    <td>AH</td>
-    <td>51</td>
-    <td>Any</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  <tr>
-    <td>UDP</td>
-    <td>17</td>
-    <td>500</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  </table>
+1. Set up the following **Ingress and Egress Rules**. Adjust the source CIDR as needed for your environment.
+
+<table border="1" class="nice">
+<tr>
+  <th>IP Protocol</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>50</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>51</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>UDP</td>
+  <td>500</td>
+  <td>0.0.0.0/0</td>
+</tr>
+</table>
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
 Follow these steps to create the IPsec manifest for your deployment:
 
-1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
+1. Create an IPsec manifest file `ipsec-addon.yml` starting with the code below as a template.
   <pre>releases:
   \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
   addons:
@@ -207,12 +149,8 @@ Follow these steps to create the IPsec manifest for your deployment:
       jobs:
       \- <strong>name</strong>: ipsec
         release: ipsec
-      include:
-      	stemcell:
-    		- <strong>os</strong>: ubuntu-trusty
       properties:
         ipsec:
-          <strong>optional</strong>: false|true  # Available since <strong>v1.6.x</strong>
           <strong>ipsec\_subnets</strong>:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
@@ -239,40 +177,31 @@ Follow these steps to create the IPsec manifest for your deployment:
               MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
               ...
               -----END CERTIFICATE-----
-          <strong>prestart\_timeout</strong>: 30
-          <strong>esp\_proposals</strong>: aes128gcm16!  # Available since <strong>v1.6.x</strong>
-          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!  # Available since <strong>v1.6.x
-	  </strong>
-</pre>
+          <strong>prestart\_timeout</strong>: 30</pre>
 
-2. Replace the values listed in the template as follows: 
- * For v1.5.x and above:
-     * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
-     * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
-     * <code>include: stemcell - os</code>: Do not change the OS type. IPsec is only supported on `ubuntu-trusty`.
-     * <code>ipsec\_subnets</code>: List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
-     * <code>no\_ipsec\_subnets</code>: List the IP address of your BOSH Director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services. Subnets for PCF managed services that do not support IPsec must be listed under `no-ipsec`.
-      <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
-     * <code>instance\_certificate</code>: Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
-     * <code>instance\_private\_key</code>: Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
-     * <code>ca\_certificates</code>: Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
-     * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
- * For <strong>v1.6.x</strong> and above:
-     * <code>optional</code>: Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
-     * <code>esp\_proposals</code>: You can modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-     * <code>ike\_proposals</code>: You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
- 
-<p class="note"><strong>Note</strong>: To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
+2. Replace the properties listed in the file as follows:
+ * <code>releases: - version:</code> Specify the version number of your IPsec download from Pivotal Network.
+ * <code>jobs: - name:</code> Do not change the name of this job. It must be `ipsec`.
+ * <code>ipsec\_subnets:</code> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
+ * <code>no\_ipsec\_subnets:</code> List the IP address of your BOSH director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services.
+      <p class="note"><strong>Note</strong>: In GCP, if you are using the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
+ * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
+ * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+ * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
 
-##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
 
-<p class="note warning"><strong>Warning</strong>: Adding the IPsec add-on version <strong>v1.5.x</strong> to an existing deployment results in app downtime. Deploy series <strong>v1.6.x</strong> and later to minimize downtime.</p>
+<p class="note"><strong>Note:</strong> To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
+
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
+
+<p class="note warning"><strong>WARNING</strong>: Adding the IPSec add-on to an existing deployment results in app downtime.</p>
 
 After deploying Ops Manager, perform the following steps to download and deploy the IPsec add-on:
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
-2. Copy the software binary to your Ops Manager instance. 
+2. Copy the software binary to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
 3. Copy the IPsec manifest file to your Ops Manager instance.
@@ -285,7 +214,7 @@ After deploying Ops Manager, perform the following steps to download and deploy 
 <pre class="terminal">
 $ cd PATH-TO-BINARY</pre>
 
-6. On the Ops Manager VM, target the internal IP address of your BOSH Director. When prompted, enter your BOSH Director credentials. To retrieve your BOSH Director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
+6. On the Ops Manager VM, target the internal IP address of your BOSH director. When prompted, enter your BOSH director credentials. To retrieve your BOSH director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
 <pre class="terminal">
 $ bosh --ca-cert /var/tempest/workspaces/default/root\_ca\_certificate target YOUR-BOSH-DIRECTOR-INTERNAL-IP
 Target set to 'p-bosh'
@@ -294,8 +223,7 @@ Enter password: ******************
 Logged in as 'director'
 </pre>
 
-7. Upload your release.
-<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
+7. Upload your release.<pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
 8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
 <pre class="terminal">$ bosh releases</pre>
@@ -320,27 +248,20 @@ Logged in as 'director'
     ...
     </pre>
 
-11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, complete the following steps.
-     * For <strong>v1.5.x</strong>: Scale down the number of Consul instances to `1`. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
-     * For <strong>v1.6.x</strong> and above: Set the `optional` flag to `true`. You do not need to scale the number of Consul instances.
+11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, scale down the number of Consul instances to 1. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
 
 12. Navigate to your **Installation Dashboard** in Ops Manager.
+<p class="note"><strong>Note:</strong> The following step cannot be undone. After you deploy IPsec, you cannot roll it back. </p>
 
-<p class="note"><strong>Note</strong>: For v1.5.x, you cannot revert the following step without downtime. To minimize the impact, we recommend upgrading to the v1.6.x series before removing IPsec from the deployment.</p>
+13. Click **Apply Changes**.
 
-13. Click **Apply Changes**
-     * For <strong>v1.6.x</strong> and above:
-      * Wait for the installation to complete.
-      * Set the `optional` flag to `false`.
-      * Update the runtime config. <pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
-      * Navigate to your **Installation Dashboard**.
-      * Click **Apply Changes**.
+14. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and/or moving it to a secure location.
 
-14. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
-
-15. For <strong>v1.5.x</strong>: If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
+15. If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
 
 16. If you have not installed the Elastic Runtime tile, deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
+
+
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 
@@ -348,7 +269,7 @@ After installing IPsec and deploying Elastic Runtime, perform the following step
 
 1. Run `bosh vms` to list the job VMs in your deployment. Choose the job name and index of any VM. The exact VM does not matter, because installing the IPsec add-on loads IPsec on all VMs deployed by Ops Manager.
 
-1. Run `bosh ssh JOB-NAME/INDEX` to open an SSH connection into the VM.
+1. Run `bosh ssh JOB-NAME/INDEX` to open a SSH connection into the VM.
 
 1. Run `sudo su -` to enter the root environment with root privileges.
 
@@ -417,7 +338,7 @@ Rerunning the scripts overwrites your current keys and the certificates.
 
 1. Download and install [Go](https://golang.org/dl/).
 1. [Download](./scripts/certstrap-create-ipsec-certs.sh) the `certstrap` bash script.
-1. Navigate to the directory where you downloaded the script:
+1. Change into the directory where you downloaded the script:
   <pre class="terminal">$ cd ~/workspace</pre>
 1. Change the permissions of the script:
   <pre class="terminal">$ chmod u+x certstrap-create-ipsec-certs.sh</pre>

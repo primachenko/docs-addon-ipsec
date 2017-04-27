@@ -31,11 +31,7 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 ##<a id="limitations"></a>Limitations
 
-Before installing the IPsec add-on, review the following list of limitations:
-
-* The IPsec add-on does not work on Windows.
-
-* IPsec Release v1.5.x series: During installation, the v1.5.x releases of the IPsec add-on may disrupt connectivity. For minimal downtime in new deployments, Pivotal recommends installing IPsec immediately after Ops Manager, and before installing the Elastic Runtime tile. For existing deployments, there will be downtime when applying IPsec. Upgrade to v1.6.x series to avoid downtime. For a cluster of approximately 40 VMs, you can expect approximately one hour of downtime.
+The IPsec add-on v1.6 does not work on Windows.
 
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 
@@ -212,7 +208,7 @@ Follow these steps to create the IPsec manifest for your deployment:
     		- <strong>os</strong>: ubuntu-trusty
       properties:
         ipsec:
-          <strong>optional</strong>: false|true  # Available since <strong>v1.6.x</strong>
+          <strong>optional</strong>: false
           <strong>ipsec\_subnets</strong>:
           \- 10.0.1.1/20
           <strong>no\_ipsec\_subnets</strong>:
@@ -240,16 +236,15 @@ Follow these steps to create the IPsec manifest for your deployment:
               ...
               -----END CERTIFICATE-----
           <strong>prestart\_timeout</strong>: 30
-          <strong>esp\_proposals</strong>: aes128gcm16!  # Available since <strong>v1.6.x</strong>
-          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!  # Available since <strong>v1.6.x
-	  </strong>
+          <strong>esp\_proposals</strong>: aes128gcm16!
+          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
 </pre>
 
 2. Replace the values listed in the template as follows: 
- * For v1.5.x and above:
      * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
      * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
      * <code>include: stemcell - os</code>: Do not change the OS type. IPsec is only supported on `ubuntu-trusty`.
+     * <code>optional</code>: Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
      * <code>ipsec\_subnets</code>: List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
      * <code>no\_ipsec\_subnets</code>: List the IP address of your BOSH Director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services. Subnets for PCF managed services that do not support IPsec must be listed under `no-ipsec`.
       <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
@@ -257,16 +252,12 @@ Follow these steps to create the IPsec manifest for your deployment:
      * <code>instance\_private\_key</code>: Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
      * <code>ca\_certificates</code>: Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
      * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
- * For <strong>v1.6.x</strong> and above:
-     * <code>optional</code>: Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
      * <code>esp\_proposals</code>: You can modify the ESP (Quick Mode) encryption and integrity algorithms. The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
      * <code>ike\_proposals</code>: You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group. The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
  
 <p class="note"><strong>Note</strong>: To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
-
-<p class="note warning"><strong>Warning</strong>: Adding the IPsec add-on version <strong>v1.5.x</strong> to an existing deployment results in app downtime. Deploy series <strong>v1.6.x</strong> and later to minimize downtime.</p>
 
 After deploying Ops Manager, perform the following steps to download and deploy the IPsec add-on:
 
@@ -320,27 +311,24 @@ Logged in as 'director'
     ...
     </pre>
 
-11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, complete the following steps.
-     * For <strong>v1.5.x</strong>: Scale down the number of Consul instances to `1`. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
-     * For <strong>v1.6.x</strong> and above: Set the `optional` flag to `true`. You do not need to scale the number of Consul instances.
+11. If you have not installed the Elastic Runtime tile, follow these steps:
+  1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. Click **Apply Changes**
+  1. Deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
 
-12. Navigate to your **Installation Dashboard** in Ops Manager.
+12. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, follow these steps:
+  1. Set the `optional` flag to `true`.
+  1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. Click **Apply Changes**
+  1. Wait for the installation to complete.
+  1. Set the `optional` flag to `false`.
+  1. Update the runtime config. <pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
+  1. Navigate to your **Installation Dashboard**.
+  1. Click **Apply Changes**.
 
-<p class="note"><strong>Note</strong>: For v1.5.x, you cannot revert the following step without downtime. To minimize the impact, we recommend upgrading to the v1.6.x series before removing IPsec from the deployment.</p>
+13. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
 
-13. Click **Apply Changes**
-     * For <strong>v1.6.x</strong> and above:
-      * Wait for the installation to complete.
-      * Set the `optional` flag to `false`.
-      * Update the runtime config. <pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
-      * Navigate to your **Installation Dashboard**.
-      * Click **Apply Changes**.
 
-14. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
-
-15. For <strong>v1.5.x</strong>: If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
-
-16. If you have not installed the Elastic Runtime tile, deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 

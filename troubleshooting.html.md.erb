@@ -67,11 +67,15 @@ Ops Manager returns an error when you click **Apply Changes** to [Upgrade the PC
 
 #### Explanation: Consul cluster failure
 
-When BOSH applies the IPsec Add-on the VMs in the Consul cluster, the VMs cannot communicate with each other, which causes the cluster to fail. This can result in many different errors. For instance, you may see an error in Ops Manager that says a Diego cell is failing. In this case, it is likely that the Diego cell is failing because Consul is not running. 
+When BOSH applies the IPsec Add-on the VMs in the Consul cluster, 
+the VMs cannot communicate with each other, which causes the cluster to fail. 
+This can result in many different errors. 
+For instance, you might see an error in Ops Manager that says a Diego cell is failing. 
+In this case, it is likely that the Diego cell is failing because Consul is not running. 
 
 #### Solution
 
-1. Scale down the number of Consul instances in Elastic Runtime to `1`. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
+1. Scale down the number of Consul instances in Elastic Runtime to `1`. For more information, see [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html).
 
 1. Click **Apply Changes**. 
 

@@ -189,9 +189,11 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
-Follow these steps to create the IPsec manifest for your deployment:
+Follow the steps in this section to create the IPsec manifest for your deployment. First, you must create a manifest that adds IPsec to the Linux VMs in your deployment. You can then optionally add Windows VM support if you are using the [PCF Runtime for Windows](https://docs.pivotal.io/pivotalcf/windows/index.html) tile.
 
-### Create a manifest for Linux:</strong>
+<p class="note"><strong>Note</strong>: To modify the configuration in an existing IPsec deployment, you must update the manifest file and redeploy.</p>
+
+### Create a manifest for Linux VMs:</strong>
 
 1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
   <pre>releases:
@@ -243,8 +245,8 @@ Follow these steps to create the IPsec manifest for your deployment:
   * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
   * <code>include: stemcell - os</code>: IPsec for Linux is only supported on `ubuntu-trusty`.
   * <code>optional</code>: <a name="optional"></a> Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
-  * <code>ipsec\_subnets</code>: <a name="ipsec_subnets"></a> list the subnets that you want to be encrypted. you can include the entire deployment or a portion of the network. encrypt any network that handles business-sensitive data.
-  * <code>no\_ipsec\_subnets</code>: <a name="no_ipsec_subnets"></a> list the ip address of your bosh director and ops manager vm, along with any other ip addresses in your pcf deployment that you want to communicate without encryption. pivotal recommends that you list the subnets that are used for pcf managed services. subnets for pcf managed services that do not support ipsec must be listed under `no-ipsec`.
+  * <code>ipsec\_subnets</code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
+  * <code>no\_ipsec\_subnets</code>: <a name="no_ipsec_subnets"></a> List the IP address of your BOSH Director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services. Subnets for PCF managed services that do not support IPsec must be listed under `no-ipsec`.
   <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
   * <code>instance\_certificate</code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
   * <code>instance\_private\_key</code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
@@ -255,9 +257,9 @@ Follow these steps to create the IPsec manifest for your deployment:
   * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
   The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
 
-### Add Windows Support to Your Manifest (Optional)
+### Add Windows VM Support to Your Manifest (Optional)
 
-1. Add the following template to your `ipsec-addon.yml`, under `addons`, following the Linux add-on from above.
+1. Add the following template to your `ipsec-addon.yml`, under `addons`, after the `ipsec-addon` for Linux from from above.
   <pre>
   \- name: ipsec-windows-addon
       jobs:
@@ -298,31 +300,29 @@ Follow these steps to create the IPsec manifest for your deployment:
 
 
 1. Replace the values listed in the template as follows:
-   * <code>jobs: - name</code>: It must be `ipsec-win` for windows.
+   * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec-win`.
    * <code>include: stemcell - os</code>: IPsec for Windows is only supported on `windows2012R2`.
-   * <code>ipsec\_subnets</code>: Same as [ipsec\_subnets](#ipsec_subnets) for Linux
-   * <code>no\_ipsec\_subnets</code>: Same as [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux
-   * <code>instance\_pfx</code>: The signed [instance\_certificate](#instance_certificate) and corresponding [instance\_private_key](#instance_private_key) that will be used by all instance VMs in PFX format (Base64 encoded). You can generate this PFX file using the following commands:
-     <pre>
-      $ openssl pkcs12 -export -out pcf-ipsec-peer.pfx -inkey pcf-ipsec-peer-key.pem -in pcf-ipsec-peer-cert.pem
+   * <code>ipsec\_subnets</code>: Copy and paste the value from [ipsec\_subnets](#ipsec_subnets) for Linux.
+   * <code>no\_ipsec\_subnets</code>: Copy and paste the value from [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux.
+   * <code>instance\_pfx</code>: In PFX format (Base64 encoded), enter the signed [instance\_certificate](#instance_certificate) and corresponding [instance\_private_key](#instance_private_key) that you specified for Linux. You can generate this PFX file using your certificate and key as input with the following commands:
+     <pre class="terminal">
+      $ openssl pkcs12 -export -out pcf-ipsec-peer.pfx -inkey YOUR-IPSEC-INSTANCE-PRIVATE-KEY.pem -in YOUR-IPSEC-INSTANCE-CERTIFICATE.pem
       $ base64 -b 64 -i pcf-ipsec-peer.pfx -o pcf-ipsec-peer.pfx.b64
      </pre>
-   * <code>ca\_certificates</code>: Same as [ca\_certificates](#ca_certificates) for Linux
-   * <code>optional</code>: Same as [optional](#optional) for Linux
-   * <code>quick\_mode\_proposals</code>: Array of Quick Mode algorithms for encryption and integrity. Should match list specified in [esp_proposals](#esp_proposals) for Linux.
-     The default:
+   * <code>ca\_certificates</code>: Copy and paste the value from [ca\_certificates](#ca_certificates) for Linux.
+   * <code>optional</code>: Copy and paste the value from [optional](#optional) for Linux.
+   * <code>quick\_mode\_proposals</code>: Array of Quick Mode algorithms for encryption and integrity. This value must match the list specified in [esp_proposals](#esp_proposals) for Linux. See the following default entry that matches the Linux default:
      <pre>
      \- encryption: AESGCM128
           hash: AESGMAC128
      </pre>
-   * <code>main\_mode\_proposals</code>: Array of Main Mode algorithms for encryption, integrity and key exchange. Should match list specified in [ike_proposals](#ike_proposals) for Linux.
+   * <code>main\_mode\_proposals</code>: Array of Main Mode algorithms for encryption, integrity, and key exchange. This value must match the list specified in [ike_proposals](#ike_proposals) for Linux. See the following default entry that matches the Linux default:
      The default:
      <pre>
      \- encryption: AES128
           hash: SHA256
           keyexchange: DH14
      </pre>
-<p class="note"><strong>Note</strong>: To modify the configuration in an existing deployment, you must update the manifest file and redeploy.</p>
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
 

@@ -189,11 +189,13 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
-Follow the steps in this section to create the IPsec manifest for your deployment. First, you must create a manifest that adds IPsec to the Linux VMs in your deployment. You can then optionally add Windows VM support if you are using the [PCF Runtime for Windows](https://docs.pivotal.io/pivotalcf/windows/index.html) tile.
+Follow the steps in this section to create the IPsec manifest for your deployment. 
 
 <p class="note"><strong>Note</strong>: To modify the configuration in an existing IPsec deployment, you must update the manifest file and redeploy.</p>
 
-### Create a manifest for Linux VMs:</strong>
+### Create a Manifest for Linux VMs:</strong>
+
+First, you must create a manifest that adds IPsec to the Linux VMs in your deployment. You can then optionally [add Windows VM support](#windowss) if you are using the [PCF Runtime for Windows](https://docs.pivotal.io/pivotalcf/windows/index.html) tile.
 
 1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
   <pre>releases:
@@ -257,7 +259,9 @@ Follow the steps in this section to create the IPsec manifest for your deploymen
   * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
   The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
 
-### Add Windows VM Support to Your Manifest (Optional)
+<a name="windows"></a> ### Add Windows VM Support to Your Manifest (Optional)
+
+Follow these steps if you want to add IPsec to Windows VMs in your deployment.
 
 1. Add the following template to your `ipsec-addon.yml`, under `addons`, after the `ipsec-addon` for Linux from from above.
   <pre>

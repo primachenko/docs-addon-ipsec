@@ -283,9 +283,16 @@ Follow these steps if you want to add IPsec to Windows VMs in your deployment.
           <strong>no\_ipsec\_subnets</strong>:
           \- 10.0.1.10/32  # bosh director
           \- 10.0.1.4/32 # ops manager
-          <strong>instance\_pfx</strong>: |
+          <strong>instance\_certificate</strong>: |
+            -----BEGIN CERTIFICATE-----
             MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
             ...
+            -----END CERTIFICATE-----
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN RSA PRIVATE KEY-----
+            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+            ...
+            -----END RSA PRIVATE KEY-----
           <strong>ca\_certificates</strong>:
             \- |
               -----BEGIN CERTIFICATE-----
@@ -311,11 +318,8 @@ Follow these steps if you want to add IPsec to Windows VMs in your deployment.
    * <code>include: stemcell - os</code>: IPsec for Windows is only supported on `windows2012R2`.
    * <code>ipsec\_subnets</code>: Copy and paste the value from [ipsec\_subnets](#ipsec_subnets) for Linux.
    * <code>no\_ipsec\_subnets</code>: Copy and paste the value from [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux.
-   * <code>instance\_pfx</code>: In PFX format (Base64 encoded), enter the signed [instance\_certificate](#instance_certificate) and corresponding [instance\_private_key](#instance_private_key) that you specified for Linux. You can generate this PFX file using your certificate and key as input with the following commands:
-     <pre class="terminal">
-      $ openssl pkcs12 -export -out pcf-ipsec-peer.pfx -inkey YOUR-IPSEC-INSTANCE-PRIVATE-KEY.pem -in YOUR-IPSEC-INSTANCE-CERTIFICATE.pem
-      $ base64 -b 64 -i pcf-ipsec-peer.pfx -o pcf-ipsec-peer.pfx.b64
-     </pre>
+   * <code>instance\_certificate</code>: Copy and paste the value from [instance\_certificate](#instance_certificate) for Linux.
+   * <code>instance\_private\_key</code>: Copy and paste the value from [instance\_private\_key](#instance_private_key) for Linux.
    * <code>ca\_certificates</code>: Copy and paste the value from [ca\_certificates](#ca_certificates) for Linux.
    * <code>optional</code>: Copy and paste the value from [optional](#optional) for Linux.
    * <code>quick\_mode\_proposals</code>: Array of Quick Mode algorithms for encryption and integrity. This value must match the list specified in [esp_proposals](#esp_proposals) for Linux. See the following default entry that matches the Linux default:

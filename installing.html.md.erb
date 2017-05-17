@@ -31,7 +31,8 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 
-  * For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic to adjust MTU values.
+  * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic to adjust MTU values.
+  * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
@@ -189,16 +190,25 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
-Follow the steps in this section to create the IPsec manifest for your deployment. 
+To add IPsec to VMs in your deployment, you must first create a manifest file `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both.
 
-<p class="note"><strong>Note</strong>: To modify the configuration in an existing IPsec deployment, you must update the manifest file and redeploy.</p>
+Start by creating an IPsec manifest file `ipsec-addon.yml`, with the code below as a template.
+<pre>releases:
+\- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
+addons:
+</pre>
 
-### Create a Manifest for Linux VMs:</strong>
+Add properties to the `ipsec-addon.yml` file as described below for [Linux VMs](#linux) and [Windows VMs](#windows).
 
-First, you must create a manifest that adds IPsec to the Linux VMs in your deployment. You can then optionally [add Windows VM support](#windows) if you are using the [PCF Runtime for Windows](https://docs.pivotal.io/pivotalcf/windows/index.html) tile.
+Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after you install [PCF Runtime for Windows](https://docs.pivotal.io/pivotalcf/windows/index.html) tile.
 
-1. Create an IPsec manifest file `ipsec-addon.yml`, starting with the code below as a template.
-  <pre>releases:
+### <a id="linux"></a> Add Linux VM Support to Your Manifest
+
+Follow these steps to add IPsec to Linux VMs in your deployment.
+
+1. Add the following to your `ipsec-addon.yml`, after the `addons:` line.
+  <pre>\- name: ipsec-addon
+releases:
   \- {name: ipsec, <strong>version</strong>: 1.0.0}<br>
   addons:
   \- name: ipsec-addon
@@ -257,16 +267,13 @@ First, you must create a manifest that adds IPsec to the Linux VMs in your deplo
   * <code>esp\_proposals</code>: <a name="esp_proposals"></a> You can modify the ESP (Quick Mode) encryption and integrity algorithms.
   The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
   * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
-  The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
+  The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
 
+### <a id="windows"></a> Add Windows VM Support to Your Manifest
 
-<a name="windows"></a> 
+Follow these steps to add IPsec to Windows VMs in your deployment.
 
-### (Optional) Add Windows VM Support to Your Manifest
-
-Follow these steps if you want to add IPsec to Windows VMs in your deployment.
-
-1. Add the following template to your `ipsec-addon.yml`, under `addons`, after the `ipsec-addon` for Linux from from above.
+1. Add the following to your `ipsec-addon.yml`, under `addons:`. Add this code under the `ipsec-addon` section for Linux, if you included one [above](#linux).
   <pre>
   \- name: ipsec-windows-addon
       jobs:
@@ -337,24 +344,24 @@ Follow these steps if you want to add IPsec to Windows VMs in your deployment.
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
 
-After deploying Ops Manager, perform the following steps to download and deploy the IPsec add-on:
+After deploying Ops Manager, perform the following steps to download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on:
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
-2. Copy the software binary to your Ops Manager instance. 
+1. Copy the software binary to your Ops Manager instance. 
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-3. Copy the IPsec manifest file to your Ops Manager instance.
+1. Copy the IPsec manifest file to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-4. SSH into Ops Manager.
+1. SSH into Ops Manager.
  <pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-VM-IP</pre>
 
-5. On the Ops Manager VM, navigate to the software binary location in your working directory.
+1. On the Ops Manager VM, navigate to the software binary location in your working directory.
 <pre class="terminal">
 $ cd PATH-TO-BINARY</pre>
 
-6. On the Ops Manager VM, target the internal IP address of your BOSH Director. When prompted, enter your BOSH Director credentials. To retrieve your BOSH Director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
+1. On the Ops Manager VM, target the internal IP address of your BOSH Director. When prompted, enter your BOSH Director credentials. To retrieve your BOSH Director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
 <pre class="terminal">
 $ bosh --ca-cert /var/tempest/workspaces/default/root\_ca\_certificate target YOUR-BOSH-DIRECTOR-INTERNAL-IP
 Target set to 'p-bosh'
@@ -363,16 +370,21 @@ Enter password: ******************
 Logged in as 'director'
 </pre>
 
-7. Upload your release.
+1. Upload your release.
 <pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
+1. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
 <pre class="terminal">$ bosh releases</pre>
 
-9. Update your runtime configuration to include the IPsec add-on.
-<pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
+1. Download your current runtime config and save as `bosh-manifest.yml`.
+<pre class="terminal">$ bosh runtime-config > bosh-manifest.yml</pre>
 
-10. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
+1. Append the contents of your IPsec manifest `ipsec-addon.yml` to `bosh-manifest.yml`.
+
+1. Update your runtime configuration to include the IPsec add-on.
+<pre class="terminal">$ bosh update runtime-config PATH/bosh-manifest.yml</pre>
+
+1. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
 
     <pre class="terminal">
     $ bosh runtime-config
@@ -392,12 +404,7 @@ Logged in as 'director'
         ...
     </pre>
 
-11. If you have not installed the Elastic Runtime tile, follow these steps:
-  1. Navigate to your **Installation Dashboard** in Ops Manager.
-  1. Click **Apply Changes**
-  1. Deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
-
-12. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, follow these steps:
+1. If you have already deployed Elastic Runtime or are adding IPsec to an existing deployment:
   1. Set the `optional` flag to `true`.
   1. Navigate to your **Installation Dashboard** in Ops Manager.
   1. Click **Apply Changes**
@@ -407,7 +414,12 @@ Logged in as 'director'
   1. Navigate to your **Installation Dashboard**.
   1. Click **Apply Changes**.
 
-13. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
+1. If Elastic Runtime tile is not yet installed:
+  1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. Click **Apply Changes**
+  1. Deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
+
+1. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 

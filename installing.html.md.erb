@@ -256,11 +256,11 @@ releases:
   * <code>releases: - version</code>: Specify the version number of your IPsec download from Pivotal Network.
   * <code>jobs: - name</code>: Do not change the name of this job. It must be `ipsec`.
   * <code>include: stemcell - os</code>: IPsec for Linux is only supported on `ubuntu-trusty`.
-  * <code>optional</code>: <a name="optional"></a> Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. Once IPsec has been successfully installed, set this flag back to `false` and redeploy.
+  * <code>optional</code>: <a name="optional"></a> Makes IPsec enforcement optional. To add IPsec, set this flag to `true`. After IPsec has been successfully installed, set this flag back to `false` and redeploy.
   * <code>ipsec\_subnets</code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted. You can include the entire deployment or a portion of the network. Encrypt any network that handles business-sensitive data.
   * <code>no\_ipsec\_subnets</code>: <a name="no_ipsec_subnets"></a> List the IP address of your BOSH Director and Ops Manager VM, along with any other IP addresses in your PCF deployment that you want to communicate without encryption. Pivotal recommends that you list the subnets that are used for PCF managed services. Subnets for PCF managed services that do not support IPsec must be listed under `no-ipsec`.
   <p class="note"><strong>Note</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
-  * <code>instance\_certificate</code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
+  * <code>instance\_certificate</code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. For more information, see [Generate a Self-Signed Certificate](#self-signed) above.
   * <code>instance\_private\_key</code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the instance\_certificate above. This key must not use a pass phrase.
   * <code>ca\_certificates</code>: <a name="ca_certificates"></a> Copy in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
   * <code>prestart\_timeout</code>: You can modify the 30 second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.
@@ -417,7 +417,7 @@ Logged in as 'director'
 1. If Elastic Runtime tile is not yet installed:
   1. Navigate to your **Installation Dashboard** in Ops Manager.
   1. Click **Apply Changes**
-  1. Deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
+  1. Deploy Elastic Runtime by following the installation instructions for your IaaS. For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) above.
 
 1. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
 

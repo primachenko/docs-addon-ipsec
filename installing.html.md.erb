@@ -31,7 +31,9 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 ##<a id="limitations"></a>Limitations
 
-The IPsec add-on v1.6 does not work on Windows.
+* The IPsec add-on v1.6 does not work on Windows.
+
+* The IPsec add-on v1.6 does not work with the RabbitMQ for PCF tile.
 
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 

@@ -7,6 +7,12 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
+##  v1.6.9
+* Note: this release does NOT write to Syslog; if Syslog is required, wait for the next patch release
+* Interim patch to avoid RabbitMQ syslog timing conflict (if you don't have this timing conflict, do not use this patch)
+* Update Strongswan to 5.5.3, fix USN-3301-1
+* Update golang to 1.8.1, Update openssl to 1.0.2k, Update openssl-fips to 2.0.14, Update gmp to 6.1.2
+
 ##  v1.6.3
 * Supports Azure (for Linux VMs).
 * Enables configuration of IKE and ESP proposals.

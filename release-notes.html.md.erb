@@ -5,7 +5,15 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
+This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec Add-on.
+
+##  v1.6.12
+<p class="note"><strong>Note</strong>: If you have conflicts with the RabbitMQ HAProxy, check the Knowledgebase at support.pivotal.io </p>
+
+* Restores syslog for logging
+* IPsec log location is now configurable (default is syslog)
+* Uses bosh stop instead of bosh drain
+
 
 ##  v1.6.9
 <p class="note"><strong>Note</strong>: This release does NOT write to Syslog; if you require Syslog, wait for the next patch release.</p>

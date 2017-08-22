@@ -59,6 +59,28 @@ IPsec data encryption increases the size of packet payloads. If the number of re
 #### Solution
 Scale your deployment by allocating more processing power to your VM CPU or GPUs, which, additionally, decreases the packet encryption time. One way to increase network performance is to compress the data prior to encryption. This approach increases performance by reducing the amount of data transferred.
 
+### <a id="ipsec-upgrade-issues"></a>IPsec Upgrade Issues
+
+#### Symptom
+
+Ops Manager returns an error when you click **Apply Changes** to [Upgrade the PCF IPsec Add-On](./upgrading.html).
+
+#### Explanation: Consul cluster failure
+
+When BOSH applies the IPsec Add-on the VMs in the Consul cluster, 
+the VMs cannot communicate with each other, which causes the cluster to fail. 
+This can result in many different errors. 
+For instance, you might see an error in Ops Manager that says a Diego cell is failing. 
+In this case, it is likely that the Diego cell is failing because Consul is not running. 
+
+#### Solution
+
+1. Scale down the number of Consul instances in Elastic Runtime to `1`. For more information, see [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html).
+
+1. Click **Apply Changes**. 
+
+1. After the install succeeds, scale up the number of Consul instances to the previous value.
+
 ### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 
 #### Symptom

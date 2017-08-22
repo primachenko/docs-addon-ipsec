@@ -7,13 +7,21 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec Add-on.
 
+##  v1.6.15
+**Release Date:** Aug 22, 2017
+<p class="note"><strong>Note</strong>: If you have conflicts with the RabbitMQ HAProxy, check the Knowledgebase at support.pivotal.io </p>
+
+* Fixes a certificate validation issue on Linux VMs - Validate instance certificate is signed by one of the CA certificates
+
 ##  v1.6.14
+**Release Date:** Aug 1, 2017
 <p class="note"><strong>Note</strong>: If you have conflicts with the RabbitMQ HAProxy, check the Knowledgebase at support.pivotal.io </p>
 
 * Fixes the Optional flag for applying IPsec to an existing cluster
 * Fixes log folder and files permissions (no impact to users)
 
 ##  v1.6.12
+**Release Date:** July 28, 2017
 <p class="note"><strong>Note</strong>: If you have conflicts with the RabbitMQ HAProxy, check the Knowledgebase at support.pivotal.io </p>
 
 * Restores syslog for logging
@@ -22,6 +30,7 @@ This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec Add-
 
 
 ##  v1.6.9
+**Release Date:** Jun 26, 2017
 <p class="note"><strong>Note</strong>: This release does NOT write to Syslog; if you require Syslog, wait for the next patch release.</p>
 
 * Interim patch to avoid RabbitMQ Syslog timing conflict. If you don't have this timing conflict, you can ignore this patch.
@@ -32,6 +41,8 @@ This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec Add-
 * Update gmp to 6.1.2.
 
 ##  v1.6.3
+**Release Date:** Mar 10, 2017
+
 * Supports Azure (for Linux VMs).
 * Enables configuration of IKE and ESP proposals.
 * Reduces downtime when applying IPsec to existing deployment through optional flag.

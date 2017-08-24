@@ -7,12 +7,16 @@ owner: Security Engineering
 
 This topic contains release notes for the Pivotal Cloud Foundry (PCF) IPsec add-on.
 
-##  v1.7.0
-* IPsec support for Windows
-
+##  v1.7.1
+* IPsec support for Windows cells
+* For ESP proposals, Windows default is AES128-GCM
+* For Key exchange, Windows default is AES128, SHA256 and DH14
+ 
 ### Known Issues
 
-* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on will emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:
+* **IKEv1 on Windows**: Windows uses IKEv1 for Key exchange. IKEv2 does not support multiple root certificates, which is used during certificate rotation. An issue has been filed with Microsoft. 
+
+* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on may emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:
 
 	```
 	!! Your strongswan.conf contains manual plugin load options for charon.

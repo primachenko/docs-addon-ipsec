@@ -22,54 +22,27 @@ The following table provides version and version-support information about MySQL
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.7</td>
+        <td>v1.7.1</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td></td>
+        <td>Aug 24, 2017</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
-        <td></td>
+        <td>1.8 or later</td>
     </tr>
     <tr>
         <td>Compatible Elastic Runtime version(s)</td>
-        <td></td>
+        <td>1.8 or later</td>
     </tr>
     <tr>
         <td>IaaS support</td>
-        <td></td>
+        <td>vSphere, GCP, AWS, Azure, Openstack</td>
     </tr>
 </table>
 
 ## <a id="implementation"></a> PCF IPsec Implementation Details
-The PCF IPsec add-on implements the following cryptographic suite:
-<table border='1' class='nice'>
-<tr>
-	<th>Key Agreement (Diffie-Hellman)</th>
-	<td>IKEv2 Main Mode</td>
-</tr>
-<tr>
-	<th>Bulk Encryption</th>
-	<td>AES128GCM16</td>
-</tr>
-<tr>
-	<th>Hashing</th>
-	<td><code>SHA2 256</code></td>
-</tr>
-<tr>
-	<th>Integrity/Authentication Tag</th>
-	<td>128 bit GHASH ICV</td>
-</tr>
-<tr>
-	<th>Digital Signing</th>
-	<td>RSA 3072/4096</td>
-</tr>
-<tr>
-	<th>Peer Authentication Method</th>
-	<td>Public/Private Key</td>
-</tr>
-</table>
 
 Refer to the following topics for more information about the IPsec add-on:
 

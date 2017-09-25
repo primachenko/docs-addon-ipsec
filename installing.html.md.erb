@@ -1,5 +1,5 @@
 ---
-title: Installing the Pivotal Cloud Foundry IPsec Add-On
+title: Installing the IPsec Add-on for PCF
 owner: Security Engineering
 ---
 
@@ -31,7 +31,7 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles, for example RabbitMQ, may not support IPsec, and must be placed in a non-IPsec subnet. 
-  * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic to adjust MTU values.
+  * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
   * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 
 ##<a id="config-network"></a>Configure Network Security
@@ -49,8 +49,7 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
 1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
 1. Click **Create**. 
-1. Adjust the MTU value to `1354` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic.
-
+1. Adjust the MTU value to `1354` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic.
 
 ###<a id="vsphere"></a>vSphere
 
@@ -106,7 +105,7 @@ Confirm that your network allows the protocols listed in the table below.
     </tr>
   </table>
 
-1. Adjust the MTU value to `1438` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the PCF IPsec Add-On_ topic.
+1. Adjust the MTU value to `1438` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the _Troubleshooting the XXXXX Add-On_ topic.
 
 ###<a id="aws"></a>AWS
 
@@ -342,7 +341,7 @@ Follow these steps to add IPsec to Windows VMs in your deployment.
           keyexchange: DH14
      </pre>
 
-##<a id="download-deploy"></a>Download and Deploy the IPsec Add-On
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
 After deploying Ops Manager, perform the following steps to download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on:
 

@@ -1,5 +1,5 @@
 ---
-title: Installing the Pivotal Cloud Foundry IPsec Add-On
+title: Installing the IPsec Add-on for PCF
 owner: Security Engineering
 ---
 
@@ -38,7 +38,6 @@ Before installing the IPsec add-on, review the following list of limitations:
 * For IPsec, Pivotal recommends any Ubuntu stemcells for vSphere and OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you are using PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> in the Troubleshooting topic to adjust MTU values.
 * The IPsec add-on v1.5 does not work on Windows.
 
-
 ##<a id="config-network"></a>Configure Network Security
 Refer to the appropriate section below for your IaaS network configuration details.
 
@@ -54,8 +53,8 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
 1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
 1. Click **Create**. 
-1. Adjust the MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
-
+<<<<<<< HEAD
+1. Adjust the MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic.
 
 ###<a id="vsphere"></a>vSphere
 
@@ -111,7 +110,7 @@ Confirm that your network allows the following protocols:
     </tr>
   </table>
 
-1. Adjust the MTU value to 1438 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the <em>Troubleshooting</em> topic.
+1. Adjust the MTU value to 1438 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic.
 
 ###<a id="aws"></a>AWS
 
@@ -251,7 +250,7 @@ Follow these steps to create the IPsec manifest for your deployment:
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
-<p class="note warning"><strong>WARNING</strong>: Adding the IPSec add-on to an existing deployment results in app downtime. Use IPsec add-on v1.6.x or later to avoid app downtime.</p>
+<p class="note warning"><strong>WARNING</strong>: Adding the IPSec add-on to an existing deployment results in app downtime. Use IPsec Add-on for PCF v1.6.x or later to avoid app downtime.</p>
 
 After deploying Ops Manager, perform the following steps to download and deploy the IPsec add-on:
 

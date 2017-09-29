@@ -341,6 +341,50 @@ Follow these steps to add IPsec to Windows VMs in your deployment.
           keyexchange: DH14
      </pre>
 
+<a name="proposals"></a>
+#### Linux and Windows Mixed Deployment Proposal Sets
+<table>
+  <tr>
+    <th rowspan="2">Encryption Type</th>
+    <th colspan="2">Linux IPsec Property</th>
+    <th colspan="2">Windows IPsec Property</th>
+  </tr>
+  <tr>
+    <th>ike_proposals</th>
+    <th>esp_proposals</th>
+    <th>main_mode_proposals</th>
+    <th>quick_mode_proposals</th>
+  </tr>
+  <tr>
+    <td>128 Bit Encryption</td>
+    <td><pre>aes128-sha256-modp2048!</pre></td>
+    <td><pre>aes128gcm16!</pre></td>
+    <td>
+    <pre>- encryption: AES128
+  hash: SHA256
+  keyexchange: DH14</pre>
+    </td>
+    <td>
+      <pre>- encryption: AESGCM128
+  hash: AESGMAC128</pre>
+     </td>
+  </tr>
+  <tr>
+    <td>256 Bit Encryption</td>
+    <td><pre>aes256-sha256-modp2048!</pre></td>
+    <td><pre>aes256gcm16!</pre></td>
+    <td>
+      <pre>- encryption: AES256
+  hash: SHA256
+  keyexchange: DH14</pre>
+    </td>
+    <td>
+      <pre>- encryption: AESGCM256
+  hash: AESGMAC256</pre>
+     </td>
+  </tr>
+</table>
+
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
 After deploying Ops Manager, perform the following steps to download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on:

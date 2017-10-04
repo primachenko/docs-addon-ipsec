@@ -7,6 +7,33 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
+##  v1.8.3
+* Updates strongSwan to 5.6.0
+* Updates OpenSSL to 1.0.2l
+* Updates OpenSSL FIPS to 2.0.16
+
+### New Features
+* Log level is configurable.
+* Key exchange is configurable.
+* Instance certificate is validated with the CA certificate on start.
+* **Bug Fix:** Stop script timeout is configurable.
+
+### Known Issues
+
+* **IKEv1 on Windows**: Windows uses IKEv1 for Key exchange. IKEv2 does not support multiple root certificates, which is used during certificate rotation. An issue has been filed with Microsoft. 
+
+* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on may emit a sequence of spurious configuration warning messages. The messages will be similar to the following:
+
+	```
+	!! Your strongswan.conf contains manual plugin load options for charon.
+	!! This is recommended for experts only, see
+	!! http://wiki.strongswan.org/projects/strongswan/wiki/PluginLoad
+	```
+
+	These messages are both expected and harmless. As a caution to end users, the StrongSwan software now emits a warning message when it detects that the installation includes a manually configured set of plug-ins. As a matter of security hygiene best practices, the IPsec add-on has always used a manual (explicit) configuration, and loads a restricted set of StrongSwan plug-ins. Any unused plug-ins are not loaded. The newest version of StrongSwan now issues this warning message when it detects that situation. The actual list of plug-ins in use has been determined to be appropriate for use of StrongSwan in the PCF environment. This warning is expected and should be ignored.
+
+* **MTU Sizing**: Use 1354 on OpenStack. Keep the default on AWS and vSphere.
+
 ##  v1.7.1
 * IPsec support for Windows cells
 * For ESP proposals, Windows default is AES128-GCM

@@ -249,6 +249,7 @@ releases:
           <strong>prestart\_timeout</strong>: 30
           <strong>esp\_proposals</strong>: aes128gcm16!
           <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
+          <strong>log\_level</strong>: 1
   </pre>
 
 1. Replace the values listed in the template as follows:
@@ -267,6 +268,8 @@ releases:
   The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
   * <code>ike\_proposals</code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
   The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
+  * <code>log\_level</code>: <a name="log\_level"></a> You can specify the IKE daemon numerical log level, ranging from -1 to 4.
+  Refer to https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest
 

@@ -34,7 +34,7 @@ If you encounter issues with installing IPsec, refer to the [Troubleshooting IPs
 ### <a id="ipsec-installation-issues"></a> IPsec Installation Issues
 
 #### Symptom
-Unresponsive applications or incomplete responses, particularly for large payloads
+Unresponsive apps or incomplete responses, particularly for large payloads
 
 #### Explanation: Packet Loss
 IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets.
@@ -51,7 +51,7 @@ Implement a 100 MTU difference between host VM and the contained application con
 
 <hr>
 #### Symptom
-Unresponsive applications or incomplete responses, particularly for large payloads
+Unresponsive apps or incomplete responses, particularly for large payloads
 
 #### Explanation: Network Degradation
 IPsec data encryption increases the size of packet payloads. If the number of requests and the size of your files are large, the network may degrade.

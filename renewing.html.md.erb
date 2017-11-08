@@ -14,9 +14,9 @@ This topic describes the process Pivotal recommends to renew expired certificate
     $ bosh runtime-config > PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
   </pre>
 
-2. Generate new set of certificates. (For development/test environments, you can use self-signed certificates. Pivota provides [Generate a Self-Signed Certificate](./installing.html#self-signed) as an option to retrive a new set of certificates.
+2. Generate a new set of certificates. For development or test environments, you can use self-signed certificates. Pivotal provides [Generate a Self-Signed Certificate](./installing.html#self-signed) as an option to retrieve a new set of certificates.
 
-3. Update the various certificate fields in the runtime config yml file(saved from step 1) with a new set of certificates. Refer to [Installing IPsec](./installing.html#instance_certificate) for more information regarding these fields.
+3. Update the various certificate fields in the runtime config yml file(saved from step 1) with a new set of certificates. See the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest) for more information about these fields.
   <pre>
   <strong>instance\_certificate</strong>: |
     -----BEGIN CERTIFICATE-----

@@ -22,28 +22,32 @@ To renew certificates after they have expired follow the steps below:
    from step 1 with a new set of certificates. 
    See the field descriptions under [Add Linux VM Support to Your Manifest](./installing.html#linux) 
    for more information about these fields.
+
   <pre>
-  <strong>instance\_certificate</strong>: |
-    -----BEGIN CERTIFICATE-----
-    MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-    ...
-    -----END CERTIFICATE-----
-  <strong>instance\_private\_key</strong>: |
-    -----BEGIN RSA PRIVATE KEY-----
-    EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-    ...
-    -----END RSA PRIVATE KEY-----
-  <strong>ca\_certificates</strong>:
-    \- |
-      -----BEGIN CERTIFICATE-----
-      MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-      ...
-      -----END CERTIFICATE-----
-    \- |
-      -----BEGIN CERTIFICATE-----
-      MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-      ...
-      -----END CERTIFICATE-----
+  properties:
+      ipsec:
+        <strong>optional</strong>: true
+        <strong>instance\_certificate</strong>: |
+          -----BEGIN CERTIFICATE-----
+          MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+          ...
+          -----END CERTIFICATE-----
+        <strong>instance\_private\_key</strong>: |
+          -----BEGIN RSA PRIVATE KEY-----
+          EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+          ...
+          -----END RSA PRIVATE KEY-----
+        <strong>ca\_certificates</strong>:
+          \- |
+            -----BEGIN CERTIFICATE-----
+            MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+            ...
+            -----END CERTIFICATE-----
+          \- |
+            -----BEGIN CERTIFICATE-----
+            MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+            ...
+            -----END CERTIFICATE-----
   </pre>
 
 4. Change the release version.
@@ -52,7 +56,6 @@ releases:
 \- {name: ipsec, version: NEW\_VERSION}
   </pre>
 
-
 5. Update the runtime config by running the following command:
   <pre>
     bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG
@@ -60,3 +63,5 @@ releases:
 
 6. Navigate to your **Installation Dashboard** in Ops Manager.
 7. Click **Apply Changes**.
+8. Remove the `optional: true` set in step 3.
+9. Repeat steps 5 to 7.

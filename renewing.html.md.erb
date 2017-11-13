@@ -7,7 +7,7 @@ owner: Security Engineering
 
 This topic describes the process Pivotal recommends to renew expired certificates used in the IPsec manifest.
 
-##<a id="renewing"></a>Renewing Expired IPsec Certificates.
+To renew expired IPsec certificates, do the following:
 
 1. Retrieve the latest runtime config.
   <pre class="terminal">
@@ -17,14 +17,14 @@ This topic describes the process Pivotal recommends to renew expired certificate
 2. Generate a new set of certificates. For development or test environments, you can use self-signed certificates. Pivotal provides [Generate a Self-Signed Certificate](./installing.html#self-signed) as an option to retrieve a new set of certificates.
 
 
-3. Update the optional field to true and various certificate fields in the runtime `config.yml` file saved from step 1 with a new set of certificates. See the field descriptions under [Add Linux VM Support to Your Manifest](./installing.html#linux) for more information about these fields.
+3. In the runtime `config.yml` file saved from step 1, update the `optional` field to `true`, and update the certificate fields with new certificates. See the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest) for more information about these fields.
   <pre>
   properties:
       ipsec:
         <strong>optional</strong>: true
         <strong>instance\_certificate</strong>: |
           -----BEGIN CERTIFICATE-----
-          MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+          EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
           ...
           -----END CERTIFICATE-----
         <strong>instance\_private\_key</strong>: |
@@ -35,12 +35,12 @@ This topic describes the process Pivotal recommends to renew expired certificate
         <strong>ca\_certificates</strong>:
           \- |
             -----BEGIN CERTIFICATE-----
-            MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+            EXAMPLEAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
             ...
             -----END CERTIFICATE-----
           \- |
             -----BEGIN CERTIFICATE-----
-            MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+            EXAMPLEAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
             ...
             -----END CERTIFICATE-----
   </pre>

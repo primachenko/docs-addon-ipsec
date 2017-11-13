@@ -11,39 +11,42 @@ To renew expired IPsec certificates, do the following:
 
 1. Retrieve the latest runtime config.
   <pre class="terminal">
-    $ bosh runtime-config > PATH\_TO\_RUNTIME\_CONFIG
+    $ bosh runtime-config > PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
   </pre>
 
-2. Generate a new set of certificates. For development or test environments, you can use self-signed certificates. Pivotal provides [Generate a Self-Signed Certificate](./installing.html#self-signed) as an option to retrieve a new set of certificates.
+2. Generate a new set of certificates. 
+   For development or test environments, you can use self-signed certificates. 
+   For information about self-signed certificates, see [Generate a Self-Signed Certificate](./installing.html#self-signed).
 
-
-3. In the runtime `config.yml` file saved from step 1, update the `optional` field to `true`, and update the certificate fields with new certificates. See the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest) for more information about these fields.
-  <pre>
-  properties:
-      ipsec:
-        <strong>optional</strong>: true
-        <strong>instance\_certificate</strong>: |
-          -----BEGIN CERTIFICATE-----
-          EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-          ...
-          -----END CERTIFICATE-----
-        <strong>instance\_private\_key</strong>: |
-          -----BEGIN RSA PRIVATE KEY-----
-          EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-          ...
-          -----END RSA PRIVATE KEY-----
-        <strong>ca\_certificates</strong>:
-          \- |
+3. In the runtime `config.yml` file saved from step 1, update the `optional` field to `true` and update the certificate fields with new certificates. 
+   For more information about these fields,
+   see the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest).
+    <pre>
+    properties:
+        ipsec:
+          <strong>optional</strong>: true
+          <strong>instance\_certificate</strong>: |
             -----BEGIN CERTIFICATE-----
-            EXAMPLEAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+            EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
             ...
             -----END CERTIFICATE-----
-          \- |
-            -----BEGIN CERTIFICATE-----
-            EXAMPLEAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN RSA PRIVATE KEY-----
+            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
             ...
-            -----END CERTIFICATE-----
-  </pre>
+            -----END RSA PRIVATE KEY-----
+          <strong>ca\_certificates</strong>:
+            \- |
+              -----BEGIN CERTIFICATE-----
+              ExampleAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+              ...
+              -----END CERTIFICATE-----
+            \- |
+              -----BEGIN CERTIFICATE-----
+              ExampleAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+              ...
+              -----END CERTIFICATE-----
+    </pre>
 
 4. Change the release version.
   <pre>
@@ -52,8 +55,8 @@ releases:
   </pre>
 
 5. Update the runtime config.
-  <pre class="terminal">
-    $ bosh update runtime-config PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
+  <pre>
+    bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG
   </pre>
 
 6. Navigate to your **Installation Dashboard** in Ops Manager.

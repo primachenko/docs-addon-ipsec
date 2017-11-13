@@ -9,7 +9,7 @@ This topic describes the process Pivotal recommends to renew expired certificate
 
 To renew expired IPsec credentials, do the following:
 
-1. Retrieve the latest runtime config.
+1. Retrieve the latest runtime config by running the following command:
   <pre>
     bosh runtime-config > PATH-TO-RUNTIME-CONFIG
   </pre>
@@ -18,33 +18,35 @@ To renew expired IPsec credentials, do the following:
    For development or test environments, you can use self-signed certificates. 
    For information about self-signed certificates, see [Generate a Self-Signed Certificate](./installing.html#self-signed).
 
-3. In the runtime `config.yml` file saved from step 1, update the `optional` field to `true`, and update the certificate fields with new certificates. See the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest) for more information about these fields.
-  <pre>
-  properties:
-      ipsec:
-        <strong>optional</strong>: true
-        <strong>instance\_certificate</strong>: |
-          -----BEGIN CERTIFICATE-----
-          EXAMPLEigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-          ...
-          -----END CERTIFICATE-----
-        <strong>instance\_private\_key</strong>: |
-          -----BEGIN RSA PRIVATE KEY-----
-          EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-          ...
-          -----END RSA PRIVATE KEY-----
-        <strong>ca\_certificates</strong>:
-          \- |
+3. In the runtime `config.yml` file saved from step 1, update the `optional` field to `true` and update the certificate fields with new certificates. 
+   For more information about these fields,
+   see the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest).
+    <pre>
+    properties:
+        ipsec:
+          <strong>optional</strong>: true
+          <strong>instance\_certificate</strong>: |
             -----BEGIN CERTIFICATE-----
-            EXAMPLECAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+            EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
             ...
             -----END CERTIFICATE-----
-          \- |
-            -----BEGIN CERTIFICATE-----
-            EXAMPLECAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN RSA PRIVATE KEY-----
+            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
             ...
-            -----END CERTIFICATE-----
-  </pre>
+            -----END RSA PRIVATE KEY-----
+          <strong>ca\_certificates</strong>:
+            \- |
+              -----BEGIN CERTIFICATE-----
+              ExampleAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+              ...
+              -----END CERTIFICATE-----
+            \- |
+              -----BEGIN CERTIFICATE-----
+              ExampleAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+              ...
+              -----END CERTIFICATE-----
+    </pre>
 
 4. Change the release version.
   <pre>

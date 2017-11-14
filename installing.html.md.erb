@@ -401,6 +401,8 @@ Rerunning the scripts overwrites your current keys and the certificates.
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
+1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
+   For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).
 
 ### Generate a Self-Signed Certificate with Certstrap
 
@@ -412,4 +414,3 @@ Rerunning the scripts overwrites your current keys and the certificates.
   <pre class="terminal">$ chmod u+x certstrap-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./certstrap-create-ipsec-certs.sh</pre>
-

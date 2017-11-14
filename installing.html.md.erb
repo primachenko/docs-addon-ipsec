@@ -241,7 +241,7 @@ Follow these steps to create the IPsec manifest for your deployment:
       <p class="note"><strong>Note</strong>: In GCP, if you are using the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
- * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA certificate rotation, you need two CA certificates.
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
 
 

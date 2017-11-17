@@ -53,7 +53,6 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 1. For **Source filter**, select **Allow from any source (0.0.0.0/0)**.
 1. For **Allowed protocols and ports**, enter `udp:500; ah; esp`.
 1. Click **Create**. 
-<<<<<<< HEAD
 1. Adjust the MTU value to 1354 by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Preventing Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic.
 
 ###<a id="vsphere"></a>vSphere
@@ -242,7 +241,7 @@ Follow these steps to create the IPsec manifest for your deployment:
       <p class="note"><strong>Note</strong>: In GCP, if you are using the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>, you must add the IP address of the default router in your subnet to <code>no\_ipsec\_subnets</code>. For example, <code>10.0.0.1/32</code>.</p>
  * <code>instance\_certificate:</code> Paste in the signed certificate for use by all your instance VMs. You must use one of the CAs in the ca\_certificates property to sign this certificate. For a development or test environment, you can use a self-signed certificate. See the [Generate a Self-Signed Certificate](#self-signed) section of this topic for more information.
  * <code>instance\_private\_key:</code> Paste in the private key that corresponds to the instance\_certificate above. The key must not use a pass phrase.
- * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+ * <code>ca\_certificates:</code> Paste in CA certificates for the instance VM to trust during the validation process. In most cases, you only need the CA certificate used to sign the instance certificate. During CA certificate rotation, you need two CA certificates.
  * <code>prestart\_timeout:</code> You can optionally modify the 30 second default prestart timeout value. The value limits the number of seconds allowed for IPsec to start before failing the attempt.
 
 
@@ -371,7 +370,7 @@ ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
 ...
 </pre>
 
-##<a name="self-signed"></a>Generate a Self-Signed Certificate
+##<a id="self-signed"></a>Generate a Self-Signed Certificate
 
 <p class="note"><strong>Note</strong>: Use a self-signed certificate only for development or test environments. Do not use a self-signed certificate for a production deployment. The scripts below generate private keys in a <code>certs</code> subdirectory.</p>
 
@@ -379,7 +378,7 @@ To generate a self-signed certificate for your IPsec manifest, you can use eithe
 
 Rerunning the scripts overwrites your current keys and the certificates.
 
-### Generate a Self-Signed Certificate with OpenSSL
+###<a id="openssl"></a> Generate a Self-Signed Certificate with OpenSSL
 
 1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
 1. Navigate to the directory where you downloaded the script:
@@ -388,8 +387,10 @@ Rerunning the scripts overwrites your current keys and the certificates.
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
+1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
+   For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).
 
-### Generate a Self-Signed Certificate with Certstrap
+###<a id="certstrap"></a> Generate a Self-Signed Certificate with Certstrap
 
 1. Download and install [Go](https://golang.org/dl/).
 1. [Download](./scripts/certstrap-create-ipsec-certs.sh) the `certstrap` bash script.

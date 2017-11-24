@@ -271,20 +271,20 @@ After deploying Ops Manager, perform the following steps to download and deploy 
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
-2. Copy the software binary to your Ops Manager instance. 
+1. Copy the software binary to your Ops Manager instance. 
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-3. Copy the IPsec manifest file to your Ops Manager instance.
+1. Copy the IPsec manifest file to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH/TO/PRIVATE/KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-4. SSH into Ops Manager.
+1. SSH into Ops Manager.
  <pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-VM-IP</pre>
 
-5. On the Ops Manager VM, navigate to the software binary location in your working directory.
+1. On the Ops Manager VM, navigate to the software binary location in your working directory.
 <pre class="terminal">
 $ cd PATH-TO-BINARY</pre>
 
-6. On the Ops Manager VM, target the internal IP address of your BOSH Director. When prompted, enter your BOSH Director credentials. To retrieve your BOSH Director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
+1. On the Ops Manager VM, target the internal IP address of your BOSH Director. When prompted, enter your BOSH Director credentials. To retrieve your BOSH Director credentials, navigate to Ops Manager, click the **Credentials** tab, and click **Link to Credential** next to **Director Credentials**. 
 <pre class="terminal">
 $ bosh --ca-cert /var/tempest/workspaces/default/root\_ca\_certificate target YOUR-BOSH-DIRECTOR-INTERNAL-IP
 Target set to 'p-bosh'
@@ -293,16 +293,16 @@ Enter password: ******************
 Logged in as 'director'
 </pre>
 
-7. Upload your release.
+1. Upload your release.
 <pre class="terminal">$ bosh upload release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-8. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
+1. Optionally, from the command line, confirm that the upload of the IPsec software binary completed. You should see the IPsec binary file.
 <pre class="terminal">$ bosh releases</pre>
 
-9. Update your runtime configuration to include the IPsec add-on.
+1. Update your runtime configuration to include the IPsec add-on.
 <pre class="terminal">$ bosh update runtime-config PATH/ipsec-addon.yml</pre>
 
-10. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
+1. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
 
     <pre class="terminal">
     $ bosh runtime-config
@@ -319,15 +319,15 @@ Logged in as 'director'
     ...
     </pre>
 
-11. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, complete the following steps.
+1. If you have already deployed Elastic Runtime and are adding IPsec to an existing deployment, complete the following steps.
      * For <strong>v1.5.x</strong>: Scale down the number of Consul instances to `1`. See the [Scaling Elastic Runtime](http://docs.pivotal.io/pivotalcf/opsguide/scaling-ert-components.html) topic for more information.
      * For <strong>v1.6.x</strong> and above: Set the `optional` flag to `true`. You do not need to scale the number of Consul instances.
 
-12. Navigate to your **Installation Dashboard** in Ops Manager.
+1. Navigate to your **Installation Dashboard** in Ops Manager.
 
-<p class="note"><strong>Note</strong>: For v1.5.x, you cannot revert the following step without downtime. To minimize the impact, we recommend upgrading to the v1.6.x series before removing IPsec from the deployment.</p>
+    <p class="note"><strong>Note</strong>: For v1.5.x, you cannot revert the following step without downtime. To minimize the impact, we recommend upgrading to the v1.6.x series before removing IPsec from the deployment.</p>
 
-13. Click **Apply Changes**
+1. Click **Apply Changes**
      * For <strong>v1.6.x</strong> and above:
       * Wait for the installation to complete.
       * Set the `optional` flag to `false`.
@@ -335,11 +335,11 @@ Logged in as 'director'
       * Navigate to your **Installation Dashboard**.
       * Click **Apply Changes**.
 
-14. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
+1. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
 
-15. For <strong>v1.5.x</strong>: If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
+1. For <strong>v1.5.x</strong>: If you scaled down the number of Consul instances in your existing Elastic Runtime deployment, scale the number of instances back to the previous value.
 
-16. If you have not installed the Elastic Runtime tile, deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
+1. If you have not installed the Elastic Runtime tile, deploy Elastic Runtime by following the installation instructions for your IaaS. See the [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) topic for more information.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 
@@ -359,7 +359,7 @@ Process 'ipsec'                     running
 System 'system\_localhost'           running
 </pre>
 
-2. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
+1. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
 <pre class="terminal">
 $ /var/vcap/packages/strongswan-5.3.5/sbin/ipsec statusall
 Status of IKE charon daemon (strongSwan 5.3.5, Linux 3.19.0-56-generic, x86\_64):

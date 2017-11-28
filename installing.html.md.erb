@@ -465,7 +465,7 @@ Logged in as 'director'
   1. Click **Apply Changes**
   1. Deploy Elastic Runtime by following the installation instructions for your IaaS. For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html) above.
 
-1. Secure the sensitive information in the `ipsec-addon.yml` file. Pivotal recommends encrypting the file and moving it to a secure location.
+1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information.  When the deployment process is completed, be sure to remove any unneeded copies of these files from the local workstation. Pivotal recommends that any archival copies of manifest files to be retained should be appropriately secured via encryption and/or logical access controls.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 

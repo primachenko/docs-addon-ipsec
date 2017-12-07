@@ -7,6 +7,8 @@ This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-
 The branches for this repo need examination: v1.8 was built from v1.7, and is the current live version.
 Fixes were made to the master branch over the past few months that need to be cherry-picked into v1.8.
 
+Don't update v1.5 doc. It needs to be removed from the publishing pipeline.
+
 
 ## Style Guide
 

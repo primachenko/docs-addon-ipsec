@@ -1,5 +1,5 @@
 ---
-title: Checking Expiration Dates of IPsec Certificates
+title: Checking Certificate Dates
 owner: Security Engineering
 ---
 
@@ -85,7 +85,7 @@ Follow the steps below to determine the expiration dates of your IPsec certifica
     For example, 
 
     <pre class='terminal'>
-    $ openssl x509 -text -inform pem -in /tmp/my-ipsec-ca-certificate.pem | grep "Not After"
+    $ openssl x509 -text -inform pem -in /tmp/my-ipsec-ca-cert.pem | grep "Not After"
              Not After : May 26 22:50:42 2026 GMT
     </pre>
 
@@ -101,7 +101,7 @@ Follow the steps below to determine the expiration dates of your IPsec certifica
 
     Keep in mind the lead time to obtain new certificates and the time to perform a deployment to apply them.
 
-    For information about rotating certificates, see [About the Procedures](#procedures) above.
+    For information, see [Rotating Active IPsec Certificates](credentials.html).
 
 10. For security hygiene, delete three temporary files that you created:
    the downloaded copy of the `runtime-config.yml` which contains the private key

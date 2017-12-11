@@ -7,34 +7,32 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
-##  v1.6.3
-* Supports Azure (for Linux VMs).
-* Enables configuration of IKE and ESP proposals.
-* Reduces downtime when applying IPsec to existing deployment through optional flag.
-* Updates "xfrm\_acq\_expires" from 165 secs (default) to 6 secs to speed up retries.
-* Fixes the ordering of IPsec and no-IPsec subnets.
-* Uses aes128-sha256-modp2048! as the default IKE proposal.
+##  v1.8.3
 
-##  v1.5.37
+**Release Date:** October 11, 2017
 
-* **Bug Fixes**: This release corrects an issue that was discovered when the no-IPsec subnet configuration is empty.
+**Features included in this release:**
 
-### New Features
+* Updates strongSwan to 5.6.0
+* Updates OpenSSL to 1.0.2l
+* Updates OpenSSL FIPS to 2.0.16
+* Log level is now configurable.
+* Key exchange is now configurable.
+* Instance certificate is validated with the CA certificate on start.
 
-* **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 5.5.0
-* **Gentle Shutdown**: This version includes additional shutdown processing logic with the goal of ensuring other jobs are allowed time to exit cleanly at shutdown. Shutdown will be delayed until other jobs have exited, up to a deployer-configurable timeout value.
+**Fixed issues in this release:**
 
-##  v1.5.31
+* Stop script timeout is configurable.
 
-### New Features
+**Known issues in this release:**
 
-* **StrongSwan**: This version of the IPsec add-on now uses StrongSwan version 5.4.0
-* **Supported IAASes**: This version of the IPsec add-on adds support for OpenStack. It has been tested with OpenStack version 8.0.1, using Elastic Runtime version 1.7.9, and Ops Manager version 1.7.1 and greater. The IPsec add-on is now supported on AWS, vSphere, and OpenStack.
-* **Bug Fixes**: This latest release corrects an issue that was discovered that could cause communication between hosts located in the IPsec subnet, and the no-IPsec subnet, to fail. This release includes a more robust implementation of the processing logic that controls the StrongSwan configuration which ensures that communication in a heterogeneous deployment (containing both IPsec and no-IPsec subnets) should always work as intended.
+* **IKEv1 on Windows**: Windows uses IKEv1 for Key exchange.
+  IKEv2 does not support multiple root certificates, and therefore does not support certificate rotation.
+  An issue has been filed with Microsoft. 
 
-### Known Issues
-
-* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan version 5.4.0, this version of the IPsec add-on will emit a sequence of spurious configuration warning messages. The messages will appear similar to the following:
+* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan v5.4.0,
+  this version of the IPsec add-on may emit a sequence of spurious configuration warning messages.
+  The messages are similar to the following:
 
 	```
 	!! Your strongswan.conf contains manual plugin load options for charon.
@@ -42,20 +40,15 @@ This topic contains release notes for the IPsec Add-on for PCF.
 	!! http://wiki.strongswan.org/projects/strongswan/wiki/PluginLoad
 	```
 
-	These messages are both expected, and harmless. As a caution to end users, the StrongSwan software now emits a warning message when it detects that the installation includes a manually configured set of plug-ins. As a matter of security hygiene best practices, the IPsec add-on has always used a manual (explicit) configuration, and loads a restricted set of StrongSwan plug-ins. Any unused plug-ins are not loaded.  The newest version of StrongSwan now issues this warning message when it detects that situation. The actual list of plug-ins in use has been determined to be appropriate for use of StrongSwan in the PCF environment. This warning is expected, and should be ignored.
+	These messages are both expected and harmless.
+        As a caution to end users, the StrongSwan software now emits a warning message
+        when it detects that the installation includes a manually configured set of plugins.
+        As a matter of security hygiene best practices, the IPsec add-on has always used a manual (explicit) configuration
+        and loads a restricted set of StrongSwan plugins.
+        Any unused plugins are not loaded.
+        The newest version of StrongSwan now issues this warning message when it detects that situation.
+        The actual list of plugins in use has been determined to be appropriate for use of StrongSwan in the PCF environment.
+        This warning is expected and should be ignored.
 
-* **Certificate Verification**: There is a known issue with the CA certificate validation. The IPsec add-on supports credential rotation with minimal downtime. The host instance certificate can be rotated at any time by doing a deployment. In addition, the CA certificate that is used to verify trust in the host certificates can be rotated with minimal downtime by doing multiple deployments.
-	<br><br>
-	However, because all VMs typically share the same instance certificate, they will trust each other without relying upon the CA certificate. The CA certificate is not actually needed until the operator does a deployment to rotate the instance certificate(s). While that deployment is running, some of the VMs will have received a new instance certificate, while other VMs are still operating using the prior instance certificate. During this time, while the instance certificates are different, the validation of the peer instance certificate will rely upon the common CA certificate in order to establish trust in the counterparty.
-	<br><br>
-	If the CA certificate is malformed, or otherwise invalid, this problem will remain latent until the time when the instance certificate is being rotated. It is only during that deployment when the operator will discover that the CA certificate is not valid. Of course, as long as the CA certificate is valid, there is no problem.
-	<br><br>
-	It is recommended that operators use a tool such as OpenSSL to verify that the CA certificate they are choosing to configure is in fact valid, and contains the appropriate details for proper end-entity authentication of the VM in the deployment (such as subjectName, issuerName, and validity dates, etc).
-	<br><br>
-	Operators can use their favorite certificate management tool to confirm that their certificate matches what they expect. Using OpenSSL, one can issue the command:
-	<pre class="terminal">
-	$ openssl x509 -in myCA.crt -text
-	</pre>
-	If this command produces valid output, then the certificate will be OK when configured for IPsec.
-
-* **MTU Sizing**: Use 1354 on OpenStack. Keep the default on AWS and vSphere.
+* **MTU Sizing**: Use 1354 on OpenStack.
+  Keep the default on AWS and vSphere.

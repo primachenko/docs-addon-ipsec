@@ -5,11 +5,9 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This guide describes the IPsec Add-on for Pivotal Cloud Foundry (PCF), which secures data transmissions inside [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). Topics covered in this guide include IPsec Add-on for PCF installation and configuration, troubleshooting, and credential rotation.
+This guide describes the IPsec Add-on for PCF, which secures data transmissions inside [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). Topics covered in this guide include IPsec Add-on for PCF installation and configuration, troubleshooting, and certificate rotation.
 
 Your organization may require IPsec if you transmit sensitive data.
-
-<p class="note"><strong>Note</strong>: If you apply the IPsec add-on to your PCF deployment, you cannot remove IPsec without removing and reinstalling the entire deployment.</p>
 
 ## <a id="overview"></a> Overview
 
@@ -26,25 +24,32 @@ The following table provides version and version-support information about the I
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.7</td>
+        <td>v1.9.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td></td>
+        <td>Month XX, 2018</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
-        <td></td>
+        <td>v1.10.x, v1.11.x, and v1.12.x</td>
     </tr>
     <tr>
         <td>Compatible Elastic Runtime version(s)</td>
-        <td></td>
+        <td>v1.10.x, v1.11.x, and v1.12.x</td>
+    </tr>
+    <tr>
+        <td>Compatible Pivotal Application Service (PAS)<sup>*</sup> version(s)</td>
+        <td>v2.0.0</td>
     </tr>
     <tr>
         <td>IaaS support</td>
-        <td></td>
+        <td>vSphere, GCP, AWS, Azure, and Openstack</td>
     </tr>
 </table>
+
+\* As of PCF v2.0, _Elastic Runtime_ is renamed _Pivotal Application Service (PAS)_.
+[//]: # (For more information, see [Pivotal Application Service (PAS) Highlights](http://docs.pivotal.io/pivotalcf/2-0/installing/highlights.html#ert). )
 
 ## <a id="implementation"></a> IPsec Implementation Details
 The IPsec Add-on for PCF implements the following cryptographic suite:

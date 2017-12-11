@@ -4,11 +4,19 @@ This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-
 
 ## Branches 
 
-The branches for this repo need examination: v1.8 was built from v1.7, and is the current live version.
-Fixes were made to the master branch over the past few months that need to be cherry-picked into v1.8.
+* **master** — Used for doc in development. Was made the same as v1.8 on December 11, 2017.
+               Publishes to https://docs-pcf-staging.cfapps.io/addon-ipsec/1-9/ using the 
+               edge branch of the pivotal-cf/docs-book-ipsec book.
+               
+* **1.8** — Contains live docs for v1.8. Publishes to https://docs.pivotal.io/addon-ipsec/1-8/ using the 
+               master branch of the pivotal-cf/docs-book-ipsec book.
 
-Don't update v1.5 doc. It needs to be removed from the publishing pipeline.
+* **1.7** — Contains live doc for v1.7.
 
+* **1.6** — Contains live doc for v1.6.
+
+* **1.5** — Contains end-of-life docs, soon to be removed from production.
+            Don't update v1.5 doc. 
 
 ## Style Guide
 

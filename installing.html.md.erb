@@ -250,6 +250,7 @@ releases:
           <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
           <strong>log\_level</strong>: 1
           <strong>ike\_version</strong>: ike
+          <strong>optional\_warn\_interval</strong>: 1
   </pre>
 
 1. Replace the values listed in the template as follows:
@@ -298,6 +299,7 @@ releases:
   * <code>log\_level</code>: <a name="log\_level"></a> You can specify the IKE daemon numerical log level, ranging from -1 to 4.
   For more information, see [Logger Configuration](https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration) in the strongSwan documentation.
   * <code>ike\_version</code>: <a name="ike\_version"></a> By default, this value is set to `ike` (ike v2). <strong>This should to be set to `ikev1` if this linux vm needs to communicate with a windows vm.</strong>
+  * <code>optional\_warn\_interval</code>: <a name="optional\_warn\_interval"></a> The interval in hours of warning when `optional` property is set to true. It prints a warning message `{Date} - IPsec is set to "Optional"` in the file `/var/vcap/sys/log/ipsec/ipsec.stdout.log` for linux and `/var/vcap/sys/log/ipsec-win/ipsex-win.stdout.log` for windows.
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest
 

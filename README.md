@@ -14,9 +14,12 @@ This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-
 * **1.7** — Contains live doc for v1.7.
 
 * **1.6** — Contains live doc for v1.6.
+            We plan to end-of-life product and docs in January 2018.
+            No need to update this branch with cosmetic fixes.
 
 * **1.5** — Contains end-of-life docs, soon to be removed from production.
-            Don't update v1.5 doc. 
+            Don't update this v1.5 doc. 
+            However, don't delete the branch either.
 
 ## Style Guide
 

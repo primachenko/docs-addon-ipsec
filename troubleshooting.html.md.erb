@@ -90,9 +90,9 @@ This issue occurs when monit job priorities are asynchronous. Because the order 
 
 1. BOSH `ssh` into the stuck instance by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:** <br>
-  `bosh ssh VM_INDEX`
+  `bosh ssh VM-INDEX`
   * **For Ops Manager v1.11 or later:** 
-  `bosh2 -e BOSH_ENVIRONMENT -d DEPLOYMENT_NAME ssh VM_INDEX`
+  `bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh VM-INDEX`
 
 1. Authenticate as root and use the `sv stop agent` command to kill the BOSH Agent:
 
@@ -105,7 +105,7 @@ This issue occurs when monit job priorities are asynchronous. Because the order 
   * **For Ops Manager v1.10 or earlier:** <br>
   `bosh cloudcheck`
   * **For Ops Manager v1.11 or later:** 
-  `bosh2 -e ENVIRONMENT_NAME -d DEPLOYMENT_NAME cloud-check`
+  `bosh2 -e ENVIRONMENT-NAME -d DEPLOYMENT-NAME cloud-check`
    
     For example,
 

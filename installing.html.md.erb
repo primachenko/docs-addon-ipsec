@@ -633,13 +633,13 @@ After installing IPsec and deploying PAS (or Elastic Runtime), perform the follo
   * **For Ops Manager v1.10 or earlier:**<br>
   `bosh vms`
   * **For Ops Manager v1.11 or later:**<br>
-  `bosh2 -e BOSH_ENVIRONMENT vms`
+  `bosh2 -e BOSH-ENVIRONMENT vms`
 
 1. Open an SSH connection into the VM, using the job name and index of any VM found above, by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:**<br>
   `bosh ssh JOB-NAME/INDEX`
   * **For Ops Manager v1.11 or later:**
-  `bosh2 -e BOSH_ENVIRONMENT -d DEPLOYMENT_NAME ssh JOB-NAME/INDEX`
+  `bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh JOB-NAME/INDEX`
 
     <p class="note"><strong>Note</strong>: The exact VM does not matter, because installing the IPsec add-on loads IPsec on all VMs deployed by Ops Manager.</p>
 

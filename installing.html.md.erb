@@ -279,7 +279,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           For more information, see [Generate a Self-Signed Certificate](#self-signed) above.
   * <code><strong>instance\_private\_key</strong></code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the instance\_certificate above.
           This key must not use a pass phrase.
-  * <code><strong>ca\_certificates</strong></code>: Copy in CA certificates for the instance VM to trust during the validation process.
+  * <code><strong>ca\_certificates</strong></code>: <a name="ca-certs"></a> Copy in CA certificates for the instance VM to trust during the validation process.
           In most cases, you only need the CA certificate used to sign the instance certificate.
           During CA credential rotation, you need two CA certificates.
   * <code><strong>prestart\_timeout</strong></code>: You can modify the 30-second default prestart timeout value.

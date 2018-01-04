@@ -56,25 +56,14 @@ To renew expiring IPsec certificates, do the following:
               ExampleAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
               ...
               -----END CERTIFICATE-----
-            \- |
-              -----BEGIN CERTIFICATE-----
-              ExampleAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-              ...
-              -----END CERTIFICATE-----
     </pre>
 
-4. Change the release version.
-  <pre>
-releases:
-\- {name: ipsec, version: NEW\_VERSION}
-  </pre>
-
-5. Update the runtime config by running the following command:
+4. Update the runtime config by running the following command:
   <pre>
     bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG
   </pre>
 
-6. Navigate to your **Installation Dashboard** in Ops Manager.
-7. Click **Apply Changes**.
-8. Remove the `optional: true` set in step 3.
-9. Repeat steps 5 to 7.
+5. Navigate to your **Installation Dashboard** in Ops Manager.
+6. Click **Apply Changes**.
+7. Remove the `optional: true` set in step 3.
+8. Repeat steps 4 to 6.

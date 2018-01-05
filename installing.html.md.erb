@@ -30,7 +30,13 @@ To complete the IPsec installation, verify that you have satisfied the following
 * Set the MTU for your IaaS in the Elastic Runtime tile, under **Networking**. Pivotal recommends MTU values of 1354 on GCP, 1438 on Azure, and the default values on AWS and vSphere. For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider, or empirically test the correct MTU for your environment.
 
 ##<a id="bestpractices"></a>Best Practices
-  * IPsec may affect the functionality of other service tiles. As a result, Pivotal recommends deploying Elastic Runtime and each service tile to different isolated subnets. Alternatively, you can minimally deploy all service tiles to a single isolated subnet, apart from the Elastic Runtime subnet. Some service tiles may not support IPsec, and must be placed in a non-IPsec subnet. 
+  * IPsec may affect the functionality of other service tiles.
+    As a result, Pivotal recommends deploying Elastic Runtime
+    and each service tile to different isolated subnets.
+    Alternatively, you can minimally deploy all service tiles to a single isolated subnet,
+    apart from the Elastic Runtime subnet.
+    Some service tiles do not support IPsec
+    and must be placed in a non-IPsec subnet. 
   * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
   * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 

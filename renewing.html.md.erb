@@ -26,9 +26,9 @@ To renew expiring IPsec certificates, do the following:
 
 1. Retrieve the latest runtime config by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:** 
-    `bosh runtime-config > PATH_TO_SAVE_THE_RUNTIME_CONFIG`
+    `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT runtime-config > PATH_TO_SAVE_THE_RUNTIME_CONFIG`
+    `bosh2 -e BOSH-ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 2. Generate a new set of certificates. 
    For development or test environments, you can use self-signed certificates. 
@@ -61,9 +61,9 @@ To renew expiring IPsec certificates, do the following:
 
 4. Update the runtime config by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:**
-    `bosh update runtime-config PATH_TO_SAVE_THE_RUNTIME_CONFIG`
+    `bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT update-runtime-config PATH_TO_SAVE_THE_RUNTIME_CONFIG`<br>
+    `bosh2 -e BOSH-ENVIRONMENT update-runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`<br>
 
 5. Navigate to your **Installation Dashboard** in Ops Manager.
 6. Click **Apply Changes**.

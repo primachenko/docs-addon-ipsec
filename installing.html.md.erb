@@ -263,17 +263,19 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
           Encrypt any network that handles business-sensitive data.
-  * <code><strong>no\_ipsec\_subnets</strong></code>: <a name="no_ipsec_subnets"></a> List the IP address of your BOSH Director and Ops Manager VM,
-          along with any other IP addresses in your PCF deployment that you want to communicate without encryption.
+  * <code><strong>no\_ipsec\_subnets</strong></code>: <a name="no_ipsec_subnets"></a> 
+  List the IP address of your BOSH Director and Ops Manager VM,
+          along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
           Pivotal recommends that you list the subnets that are used for PCF managed services.
-          Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) must be listed under `no_ipsec_subnets`.
-  <p class="note warning"><strong>Warning</strong>: An external load balancer such as F5 should be added
-     to the <code><strong>no\_ipsec\_subnets</strong></code> property.
-     If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you need to configure it manually.</p>
-  <p class="note warning"><strong>Warning</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
+          Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) 
+          must be listed under `no_ipsec_subnets`.
+    <p class="note warning"><strong>Warning</strong>: If you have an external load balancer such as F5, add it to the <code><strong>no\_ipsec\_subnets</strong></code> property.
+     If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you must configure it manually.</p>
+    <p class="note warning"><strong>Warning</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
      you must add the IP address of the default router in your subnet to <code><strong>no\_ipsec\_subnets</strong></code>.
      For example, <code>10.0.0.1/32</code>.</p>
-  * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs.
+  * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> 
+  Copy in the signed certificate that will be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.
           For a development or test environment, you can use a self-signed certificate.
           For more information, see [Generate a Self-Signed Certificate](#self-signed).
@@ -316,9 +318,9 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest
 
-Perform the following steps to add IPsec to Windows VMs in your deployment:
+To add IPsec to Windows VMs in your deployment, follow these steps:
 
-1. In the `ipsec-addon.yml` created during the previous section, modify/add the following <strong>properties in bold</strong> under the `ipsec` key.
+1. Modify the `ipsec-addon.yml` created during the previous section to add the properties indicated <strong>in bold</strong> below under the `ipsec` key.
   <pre>
   \- name: ipsec-addon
       ...
@@ -387,7 +389,8 @@ Perform the following steps to add IPsec to Windows VMs in your deployment:
 
 ###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
 
-A default proposal set is already choosen for the `ipsec-addon.yml`. If you would like to use different proposals, consult the following table to modify the `ipsec-addon.yml`.
+A default proposal set is already choosen for the `ipsec-addon.yml`. 
+If you want to use different proposals, see the following table to modify the `ipsec-addon.yml`.
 
 * <code><strong>esp\_proposals</strong></code>: <a name="esp_proposals"></a> You can modify the ESP (Quick Mode) encryption and integrity algorithms.
 The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.

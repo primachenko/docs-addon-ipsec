@@ -34,7 +34,6 @@ To complete the IPsec installation, verify that you have satisfied the following
   * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
   * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 
-<hr>
 ##<a id="config-network"></a>Step 1: Configure Network Security
 
 Perform the steps in the appropriate section below to configure your IaaS network security.
@@ -189,7 +188,6 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
   </tr>
   </table>
 
-<hr>
 ##<a id="create-mfest"></a>Step 2: Create the IPsec Manifest
 
 To add IPsec to VMs in your deployment, you must create a manifest file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
@@ -451,7 +449,6 @@ Select the ecryption type and replace the properties from that row into `ipsec-a
   </tr>
 </table>
 
-<hr>
 ##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
 
 Perform the following steps to download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on:
@@ -573,7 +570,6 @@ $ cd PATH-TO-BINARY</pre>
 
 1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information.  When the deployment process is completed, be sure to remove any unneeded copies of these files from the local workstation. Pivotal recommends that any archival copies of manifest files to be retained should be appropriately secured via encryption and/or logical access controls.
 
-<hr>
 ##<a id="verify"></a> Step 4: Verify Your IPsec Installation
 
 After installing IPsec and deploying PAS (or Elastic Runtime), perform the following steps to verify your IPsec installation:

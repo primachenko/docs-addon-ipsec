@@ -290,13 +290,14 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           This value limits the number of seconds allowed for IPsec to start before failing the attempt.
   * <code><strong>log\_level</strong></code>: <a name="log\_level"></a> You can specify the IKE daemon numerical log level, ranging from -1 to 4.
   For more information, see [Logger Configuration](https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration) in the strongSwan documentation.
-  * <code><strong>optional\_warn\_interval</strong></code>: <a name="optional\_warn\_interval"></a> The interval in hours of warning when `optional` property is set to true. It prints the warning message `{Date} - IPsec is set to "Optional"` in the file `/var/vcap/sys/log/ipsec/ipsec.stdout.log` for Linux.
+  * <code><strong>optional\_warn\_interval</strong></code>: <a name="optional\_warn\_interval"></a> The interval, in hours, for warning when `optional` property is set to true. 
+  The warning message `DATE - IPsec is set to "Optional"` is printed in the file `/var/vcap/sys/log/ipsec/ipsec.stdout.log` for Linux.
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest
 
-Perform the following steps to add IPsec to Windows VMs in your deployment:
+To add IPsec to Windows VMs in your deployment, do the following:
 
-1. In the `ipsec-addon.yml` created during the previous section, modify/add the following <strong>properties in bold</strong> under the `ipsec` key.
+1. In the `ipsec-addon.yml` created during the previous section, modify/add the properties shown in <strong>bold</strong> below under the `ipsec` key.
   <pre>
   \- name: ipsec-addon
       ...
@@ -364,25 +365,11 @@ Perform the following steps to add IPsec to Windows VMs in your deployment:
 
 ###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
 
-A default proposal set is already choosen for the `ipsec-addon.yml`. If you would like to use different proposals, consult the following table to modify the `ipsec-addon.yml`.
+A default proposal set is already selected for the `ipsec-addon.yml`. 
+If you want to use different proposals, modify the `ipsec-addon.yml` using the following table:
 
-* <code><strong>esp\_proposals</strong></code>: <a name="esp_proposals"></a> You can modify the ESP (Quick Mode) encryption and integrity algorithms.
-The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-* <code><strong>ike\_proposals</strong></code>: <a name="ike_proposals"></a> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
-The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
-* <code><strong>quick\_mode\_proposals</strong></code>: This is an array of Quick Mode algorithms for encryption and integrity. This value must match the list specified in [esp_proposals](#esp_proposals) for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
-    <pre>
-    \- encryption: AESGCM128
-         hash: AESGMAC128
-    </pre>
-* <code><strong>main\_mode\_proposals</strong></code>: This is an array of Main Mode algorithms for encryption, integrity, and key exchange. This value must match the list specified in [ike_proposals](#ike_proposals) for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
-    <pre>
-    \- encryption: AES128
-         hash: SHA256
-         keyexchange: DH14
-    </pre>
-
-Select the ecryption type and replace the properties from that row into `ipsec-addon.yml` accordingly.
+1. Select the encryption type from the first row.
+2. Copy the properties from that row into `ipsec-addon.yml` accordingly. See the `ipsec-addon.yml` file example above.
 
 <table>
   <tr>
@@ -425,6 +412,23 @@ Select the ecryption type and replace the properties from that row into `ipsec-a
      </td>
   </tr>
 </table>
+<br>
+
+* <code><strong>ike\_proposals</strong></code>: You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
+The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
+* <code><strong>esp\_proposals</strong></code>: You can modify the ESP (Quick Mode) encryption and integrity algorithms.
+The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+* <code><strong>main\_mode\_proposals</strong></code>: This is an array of Main Mode algorithms for encryption, integrity, and key exchange. This value must match the list specified in **ike_proposals** for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
+    <pre>
+    \- encryption: AES128
+         hash: SHA256
+         keyexchange: DH14
+    </pre>
+* <code><strong>quick\_mode\_proposals</strong></code>: This is an array of Quick Mode algorithms for encryption and integrity. This value must match the list specified in **esp_proposals** for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
+    <pre>
+    \- encryption: AESGCM128
+         hash: AESGMAC128
+    </pre>
 
 ##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
 
@@ -615,13 +619,13 @@ ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
   1. Click **Connection Security Rules**. 
   1. Confirm that you see rules for each `ipsec` and `no-ipsec` subnet that you listed in your manifest. 
 
-##<a id="self-signed"></a>Generate a Self-Signed Certificate
+##<a id="self-signed"></a>Generate a Self-Signed Certificate with OpenSSL
 
-<p class="note warning"><strong>Warning</strong>: Use a self-signed certificate only for development or test environments. We recommend against using self-signed certificates for production deployments. The script below generate private keys in a <code>certs</code> subdirectory.</p>
+<p class="note warning"><strong>Warning</strong>: Use a self-signed certificate only for development or test environments. 
+  Pivotal recommends against using self-signed certificates for production deployments. 
+  The script below generates private keys in a <code>certs</code> subdirectory.</p>
 
-Follow the instructions to generate a self-signed certificate for your IPsec manifest.
-
-### Generate a Self-Signed Certificate with OpenSSL
+To generate a self-signed certificate for your IPsec manifest, do the following:
 
 1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
 1. Navigate to the directory where you downloaded the script:

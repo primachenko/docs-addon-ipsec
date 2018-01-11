@@ -271,9 +271,8 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           along with any other IP addresses in your PCF deployment that you want to communicate without encryption.
           Pivotal recommends that you list the subnets that are used for PCF managed services.
           Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) must be listed under `no_ipsec_subnets`.
-  <p class="note warning"><strong>Warning</strong>: An external load balancer such as F5 should be added
-     to the <code><strong>no\_ipsec\_subnets</strong></code> property.
-     If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you need to configure it manually.</p>
+  <p class="note warning"><strong>Warning</strong>: If you have an external load balancer such as F5, add it to the <code><strong>no\_ipsec\_subnets</strong></code> property.
+     If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you must configure it manually.</p>
   <p class="note warning"><strong>Warning</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
      you must add the IP address of the default router in your subnet to <code><strong>no\_ipsec\_subnets</strong></code>.
      For example, <code>10.0.0.1/32</code>.</p>

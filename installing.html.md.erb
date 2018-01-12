@@ -414,16 +414,22 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
 <br>
 
 * <code><strong>ike\_proposals</strong></code>: You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
-The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
+  The default, `aes128-sha256-modp2048!`, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman. 
 * <code><strong>esp\_proposals</strong></code>: You can modify the ESP (Quick Mode) encryption and integrity algorithms.
-The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
-* <code><strong>main\_mode\_proposals</strong></code>: This is an array of Main Mode algorithms for encryption, integrity, and key exchange. This value must match the list specified in **ike_proposals** for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
+  The default, `aes128gcm16!`, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.
+* <code><strong>main\_mode\_proposals</strong></code>: This is an array of Main Mode algorithms for encryption, integrity, and key exchange.
+  This value must match the list specified in **ike_proposals** for Linux.
+  See the table for proposal sets for both Linux and Windows.
+  The default entry that matches the Linux default is:
     <pre>
     \- encryption: AES128
          hash: SHA256
          keyexchange: DH14
     </pre>
-* <code><strong>quick\_mode\_proposals</strong></code>: This is an array of Quick Mode algorithms for encryption and integrity. This value must match the list specified in **esp_proposals** for Linux. Consult the following table for proposal sets for both Linux and Windows. The default entry that matches the Linux default is:
+* <code><strong>quick\_mode\_proposals</strong></code>: This is an array of Quick Mode algorithms for encryption and integrity.
+  This value must match the list specified in **esp_proposals** for Linux.
+  See the table for proposal sets for both Linux and Windows.
+  The default entry that matches the Linux default is:
     <pre>
     \- encryption: AESGCM128
          hash: AESGMAC128

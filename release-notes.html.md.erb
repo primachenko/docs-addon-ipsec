@@ -14,10 +14,10 @@ This topic contains release notes for the IPsec Add-on for PCF.
 **Features included in this release:**
 
 * An arbitrary length certificate chain is now supported for both Linux and Windows.
-* A warning message is generated in the IPsec stdout log file when the optional flag is set to true.
+* A warning message is generated in the IPsec stdout log file when the `optional` flag is set to true.
 * A new manifest property has been added, `optional_warn_interval`,
   to control the message interval for the optional-is-true warning.
-* The default log level is now set to -1 for Linux.
+* The default `log_level` is now set to -1 for Linux.
 * The golang dependency has been updated to v1.9.2
 * An error is reported if the host IP address is in neither the IPsec nor the no-IPsec subnet.
 * If, upon shutdown, the IPsec job is not the last monit job running, a warning is logged.

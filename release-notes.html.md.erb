@@ -23,10 +23,8 @@ This topic contains release notes for the IPsec Add-on for PCF.
 * If, upon shutdown, the IPsec job is not the last monit job running, a warning is logged.
 * A new manifest property has been added, `ike_version`.
   Accepted values are `ikev1` or `ike` (for IKEv2).
-
-**Fixed issues in this release:**
-
-* An error is reported if the supplied instance certificate and CA certificate are not properly related.
+* Additional certificate verification has been added so that an error is reported
+  if the supplied instance certificate and CA certificate are not related.
 
 **Known issues in this release:**
 

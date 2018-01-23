@@ -7,27 +7,24 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
-
-##  v1.8.12
+##<a id="1812"></a>  v1.8.12
 
 **Release Date:** January 19, 2018
 
 **Features included in this release:**
 
 * An arbitrary length certificate chain is now supported for both Linux and Windows.
-* A warning message is generated in the ipsec stdout log file when the optional flag is set to true.
+* A warning message is generated in the IPsec stdout log file when the `optional` flag is set to true.
 * A new manifest property has been added, `optional_warn_interval`,
-  enabling operator control over the interval of the optional true warning messages.
-* The default log level is now set to -1 for Linux.
-* The golang dependency has been updated to v1.9.2
+  to control the message interval for the optional-is-true warning.
+* The default `log_level` is now set to -1 for Linux.
+* The golang dependency has been updated to v1.9.2.
 * An error is reported if the host IP address is in neither the IPsec nor the no-IPsec subnet.
 * If, upon shutdown, the IPsec job is not the last monit job running, a warning is logged.
 * A new manifest property has been added, `ike_version`.
   Accepted values are `ikev1` or `ike` (for IKEv2).
-
-**Fixed issues in this release:**
-
-* An error is reported if the supplied instance certificate and CA certificate are not properly related.
+* Additional certificate verification has been added so that an error is reported
+  if the supplied instance certificate and CA certificate are not related.
 
 **Known issues in this release:**
 
@@ -35,7 +32,7 @@ This topic contains release notes for the IPsec Add-on for PCF.
 * Only use IKEv1 for deployments that require it: mixed environments containing both Linux and Windows VMs.
 
 
-## v1.8.3
+##<a id="183"></a> v1.8.3
 
 
 [//]: # (Use these old v1.8.3 as a template for developing the new v1.9.0 release notes. Delete this v1.8.3 section when v1.9.0 goes live)

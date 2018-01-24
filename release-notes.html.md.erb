@@ -7,6 +7,20 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
+##<a id="1814"></a>  v1.8.14
+
+**Release Date:** January 24, 2018
+
+**Features included in this release:**
+
+* A new manifest property named `dpdaction` has been added.
+  This property controls the IPsec response upon detecting a "dead" network peer.
+  The default value is `restart`.
+
+**Known issues in this release:**
+
+* When using IKEv1, Pivotal recommends that you set the manifest property `dpdaction` to `none`.
+
 ##<a id="1812"></a>  v1.8.12
 
 **Release Date:** January 19, 2018

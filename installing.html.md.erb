@@ -254,6 +254,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           <strong>log\_level</strong>: 1
           <strong>ike\_version</strong>: ike
           <strong>optional\_warn\_interval</strong>: 1
+          <strong>force\_udp\_encapsulation</strong>: false
   </pre>
 1. Replace the values listed in the template as follows:
   * <code><strong>releases: - version</strong></code>: Specify the version number of your IPsec download from Pivotal Network.
@@ -315,6 +316,9 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   * <code><strong>log\_level</strong></code>: <a name="log\_level"></a> You can specify the IKE daemon numerical log level, ranging from `-1` to `4`.
   For more information, see [Logger Configuration](https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration) in the strongSwan documentation.
   * <code><strong>optional\_warn\_interval</strong></code>: <a name="optional\_warn\_interval"></a> The interval in hours of warning when `optional` property is set to true. It prints the warning message `{Date} - IPsec is set to "Optional"` in the file `/var/vcap/sys/log/ipsec/ipsec.stdout.log` for Linux.
+  * <code><strong>force\_udp\_encapsulation</strong></code>: <a name="force\_udp\_encapsulation"></a> Forces UDP encapsulation for ESP packets if set to `true`.
+    <p class="note warning"><strong>WARNING</strong>: UDP encapsulation is available on linux-only deployments. This property should be set to `false` otherwise.</p>
+
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest
 

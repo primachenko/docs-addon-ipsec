@@ -317,11 +317,11 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   For more information, see [Logger Configuration](https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration) in the strongSwan documentation.
   * <code><strong>optional\_warn\_interval</strong></code>: <a name="optional\_warn\_interval"></a> The interval in hours of warning when `optional` property is set to true. It prints the warning message `{Date} - IPsec is set to "Optional"` in the file `/var/vcap/sys/log/ipsec/ipsec.stdout.log` for Linux.
   * <code><strong>force\_udp\_encapsulation</strong></code>: 
-  <a name="force\_udp\_encapsulation"></a> Available on linux-only deployments. 
+  <a name="force\_udp\_encapsulation"></a> Available on Linux-only deployments. 
   If set to `true` it forces UDP encapsulation for ESP packets.
     <p class="note warning"><strong>WARNING</strong>: Setting this property to `true` in 
       mixed deployments causes the deployment to fail. 
-      If you do not have a linux-only deployment, you must set `force_udp_encapsulation` to `false`. </p>
+      If you do not have a Linux-only deployment, you must set `force_udp_encapsulation` to `false`. </p>
 
 
 ### <a id="windows"></a> Add Windows VM Support to Your Manifest

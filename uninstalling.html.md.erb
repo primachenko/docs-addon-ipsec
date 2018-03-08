@@ -1,5 +1,5 @@
 ---
-title: Uninstalling the PCF IPsec Add-On
+title: Uninstalling the IPsec Add-on for PCF
 owner: Security Engineering
 ---
 
@@ -23,26 +23,29 @@ Uninstalling the IPsec add-on is only supported in <strong>v1.6.x</strong> and a
 
 ##<a id="uninstall"></a>Uninstall the IPsec Add-On
 
-1. Retrieve the latest runtime config.
-  <pre class="terminal">
-    $ bosh runtime-config > PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
-  </pre>
+1. Retrieve the latest runtime config by running one of the following commands:
+  * **For Ops Manager v1.10 or earlier:** 
+    `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+  * **For Ops Manager v1.11 or later:**
+    `bosh2 -e BOSH-ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 2. Set the `optional` flag to `true` under IPsec properties.
 
-3. Update the runtime config.
-  <pre class="terminal">
-    $ bosh update runtime-config PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
-  </pre>
+3. Update the runtime config by running one of the following commands:
+  * **For Ops Manager v1.10 or earlier:** 
+    `bosh update runtime-config PATH/YOUR-RUNTIME-CONFIG.yml`
+  * **For Ops Manager v1.11 or later:**
+    `bosh2 -e BOSH-ENVIRONMENT update-runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 4. Navigate to your **Installation Dashboard** in Ops Manager.
 5. Click **Apply Changes**.
 6. Wait for the installation to complete.
 7. Remove IPsec from the runtime config.
-3. Update the runtime config.
-  <pre class="terminal">
-    $ bosh update runtime-config PATH\_TO\_SAVE\_THE\_RUNTIME\_CONFIG
-  </pre>
-
+8. Update the runtime config by running one of the following commands:
+  * **For Ops Manager v1.10 or earlier:** 
+    `bosh update runtime-config PATH/YOUR-RUNTIME-CONFIG.yml`
+  * **For Ops Manager v1.11 or later:**
+    `bosh2 -e BOSH-ENVIRONMENT update-runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+  
 9. Navigate to your **Installation Dashboard** in Ops Manager. 
 10. Click **Apply Changes**.

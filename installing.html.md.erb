@@ -505,7 +505,7 @@ $ cd PATH-TO-BINARY</pre>
   * **For Ops Manager v1.10 or earlier:**
 <pre class="terminal">$ bosh update runtime-config PATH/bosh-manifest.yml</pre>
   * **For Ops Manager v1.11 or later:**
-<pre class="terminal">$ bosh2 -e my-env update-runtime-config PATH/bosh-manifest.yml</pre>
+<pre class="terminal">$ bosh2 -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
 
 1. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
   * **For Ops Manager v1.10 or earlier:**
@@ -543,7 +543,7 @@ $ cd PATH-TO-BINARY</pre>
       * **For Ops Manager v1.10 or earlier:**
       <pre class="terminal">$ bosh update runtime-config PATH/bosh-manifest.yml</pre>
       * **For Ops Manager v1.11 or later:**
-      <pre class="terminal">$ bosh2 -e my-env update-runtime-config PATH/bosh-manifest.yml</pre>
+      <pre class="terminal">$ bosh2 -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
 
   1. Navigate to your **Installation Dashboard**.
   1. Click **Apply Changes**.

@@ -1,21 +1,23 @@
 ---
-title: Securing Data in Transit with the PCF IPsec Add-On
+title: IPsec Add-on for PCF
 owner: Security Engineering
 ---
 
 <strong><%= modified_date %></strong>
 
-This guide describes the [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF) IPsec add-on. The topics included in this guide include installation and configuration, troubleshooting, and credential rotation. Your organization may require IPsec if you transmit sensitive data.
+This guide describes the IPsec Add-on for PCF, which secures data transmissions inside [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). Topics covered in this guide include IPsec Add-on for PCF installation and configuration, troubleshooting, and certificate rotation.
+
+Your organization may require IPsec if you transmit sensitive data.
 
 ## <a id="overview"></a> Overview
 
-The IPsec add-on for PCF provides security to the network layer of the OSI model with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. The IPsec add-on provides a strongSwan job to each BOSH-deployed virtual machine (VM).
+The IPsec Add-on for PCF provides security to the network layer of the OSI model with a [strongSwan](https://www.strongswan.org/) implementation of IPsec. The IPsec Add-on provides a strongSwan job to each BOSH-deployed virtual machine (VM).
 
-IPsec encrypts IP data flow between hosts, between security gateways, and between security gateways and hosts. The PCF IPsec add-on secures network traffic within a Cloud Foundry deployment and provides internal system protection if a malicious actor breaches your firewall.
+IPsec encrypts IP data flow between hosts, between security gateways, and between security gateways and hosts. The IPsec Add-on for PCF secures network traffic within a Cloud Foundry deployment and provides internal system protection if a malicious actor breaches your firewall.
 
 ## <a id='snapshot'></a> Product Snapshot
 
-The following table provides version and version-support information about MySQL for PCF.
+The following table provides version and version-support information about the IPsec Add-on for PCF.
 
 <table class="nice">
     <th>Element</th>
@@ -26,29 +28,30 @@ The following table provides version and version-support information about MySQL
     </tr>
     <tr>
         <td>Release date</td>
-        <td>Aug 24, 2017</td>
+        <td>August 24, 2017</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
-        <td>1.8 or later</td>
+        <td>v1.8.x, v1.9.x, v1.10.x, and v1.11.x</td>
     </tr>
     <tr>
         <td>Compatible Elastic Runtime version(s)</td>
-        <td>1.8 or later</td>
+        <td>v1.8.x, v1.9.x, v1.10.x, and v1.11.x</td>
     </tr>
     <tr>
         <td>IaaS support</td>
-        <td>vSphere, GCP, AWS, Azure, Openstack</td>
+        <td>vSphere, GCP, AWS, Azure, and Openstack</td>
     </tr>
 </table>
 
-## <a id="implementation"></a> PCF IPsec Implementation Details
+## <a id="implementation"></a> IPsec Implementation Details
 
-Refer to the following topics for more information about the IPsec add-on:
+Refer to the following topics for more information about the IPsec Add-on for PCF:
 
-* [Installing the PCF IPsec Add-On](./installing.html)
-* [Rotating IPsec Credentials](./credentials.html)
-* [Troubleshooting the PCF IPsec Add-On](./troubleshooting.html)
-* [Upgrading the PCF IPsec Add-On](./upgrading.html)
-* [Uninstalling the PCF IPsec Add-On](./uninstalling.html)
+* [Installing the IPsec Add-on for PCF](./installing.html)
+* [Rotating IPsec Certificates](./credentials.html)
+* [Renewing Expired IPsec Certificates](./renewing.html)
+* [Troubleshooting the IPsec Add-on for PCF](./troubleshooting.html)
+* [Upgrading the IPsec Add-on for PCF](./upgrading.html)
+* [Uninstalling the IPsec Add-on for PCF](./uninstalling.html)
 * [Release Notes](./release-notes.html)

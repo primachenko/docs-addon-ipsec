@@ -10,23 +10,29 @@ This topic describes how to upgrade the IPsec add-on.
 ##<a id="upgrading"></a>Upgrading the IPsec Add-On
 
 1. Retrieve the latest runtime config by running one of the following commands:
-  * **For Ops Manager v1.10 or earlier:** 
+  * **For Ops Manager v1.10 or earlier:**
     `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
     `bosh2 -e BOSH-ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
-2. Change the release version.
+2. Upload the latest IPsec Release:
+  * **For Ops Manager v1.10 or earlier:**
+    `bosh upload release PATH-TO-NEW-IPSEC-RELEASE`
+  * **For Ops Manager v1.11 or later:**
+    `bosh2 -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE`
+
+3. Change the release version.
   <pre>
 releases:
 \- {name: ipsec, version: NEW\_VERSION}
   </pre>
 
 
-3. Update the runtime config by running one of the following commands:
-  * **For Ops Manager v1.10 or earlier:** 
+4. Update the runtime config by running one of the following commands:
+  * **For Ops Manager v1.10 or earlier:**
     `bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
     `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
-  
-4. Navigate to your **Installation Dashboard** in Ops Manager.
-5. Click **Apply Changes**.
+
+5. Navigate to your **Installation Dashboard** in Ops Manager.
+6. Click **Apply Changes**.

@@ -3,17 +3,6 @@ title: Upgrading the IPsec Add-on for PCF
 owner: Security Engineering
 ---
 
-<style>
-    .note.warning {
-        background-color: #fdd;
-        border-color: #fbb
-    }
-
-    .note.warning:before {
-        color: #f99;
-     }
-</style>
-
 <strong><%= modified_date %></strong>
 
 This topic describes how to upgrade the IPsec add-on.
@@ -24,13 +13,13 @@ This topic describes how to upgrade the IPsec add-on.
   * **For Ops Manager v1.10 or earlier:**
     `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT runtime-config > PATH_TO_SAVE_THE_RUNTIME_CONFIG`
+    `bosh2 -e BOSH_ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 2. Upload the latest IPsec Release:
   * **For Ops Manager v1.10 or earlier:**
     `bosh upload release PATH-TO-NEW-IPSEC-RELEASE`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE`
+    `bosh2 -e BOSH_ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE`
 
 3. Change the release version.
   <pre>
@@ -42,7 +31,7 @@ releases:
   * **For Ops Manager v1.10 or earlier:**
     `bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+    `bosh2 -e BOSH_ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 5. Navigate to your **Installation Dashboard** in Ops Manager.
 6. Click **Apply Changes**.

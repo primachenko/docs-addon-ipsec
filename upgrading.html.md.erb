@@ -32,6 +32,11 @@ releases:
     `bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
     `bosh2 -e BOSH_ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+    <p class="note warning"><strong>WARNING</strong>: Remove references to IPsec from the default runtime-config, i.e. <br/>
+    <code>bosh2 -e BOSH-ENVIRONMENT runtime-config > /tmp/runtime-config</code><br/>
+    remove IPsec references from <code>/tmp/runtime-config</code> <br/>
+    <code>bosh2 -e BOSH-ENVIRONMENT update-runtime-config /tmp/runtime-config</code>
+    </p>
 
 5. Navigate to your **Installation Dashboard** in Ops Manager.
 6. Click **Apply Changes**.

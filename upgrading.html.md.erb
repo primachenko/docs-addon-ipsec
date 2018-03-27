@@ -27,16 +27,69 @@ releases:
 \- {name: ipsec, version: NEW\_VERSION}
   </pre>
 
-4. Update the runtime config by running one of the following commands:
-  * **For Ops Manager v1.10 or earlier:**
+4. **For Ops Manager v1.10 or earlier**, update the runtime config by running the following command:
     `bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG`
-  * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
-    <p class="note warning"><strong>WARNING</strong>: Remove references to IPsec from the default runtime-config, i.e. <br/>
-    <code>bosh2 -e BOSH-ENVIRONMENT runtime-config > /tmp/runtime-config</code><br/>
-    remove IPsec references from <code>/tmp/runtime-config</code> <br/>
-    <code>bosh2 -e BOSH-ENVIRONMENT update-runtime-config /tmp/runtime-config</code>
-    </p>
+
+5. **For Ops Manager v1.11 or later**, update the runtime config by doing the following:
+    1. Run: `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+
+    2. Run: `bosh2 -e BOSH-ENVIRONMENT runtime-config > /tmp/runtime-config`
+
+    3. Edit `/tmp/runtime-config` to remove IPsec references from the file.
+
+         Under releases, remove:
+       <pre>
+       \- name: ipsec
+    &nbsp; version: 1.X.X
+       </pre>
+         Under addons, find and remove the entire block that has the ipsec job:
+       <pre>
+       \- name: ipsec-addon
+          jobs:
+          \- name: ipsec
+            release: ipsec
+          include:
+            stemcell:
+            \- os: ubuntu-trusty
+          properties:
+            ipsec:
+              optional: false
+              ipsec_subnets:
+              \- 10.0.1.1/20
+              no_ipsec_subnets:
+              \- 10.0.1.10/32  # bosh director
+              \- 10.0.1.4/32 # ops manager
+              instance_certificate: |
+                \-----BEGIN CERTIFICATE-----
+                EXAMPLExINSTANCExCERTIFICATExEXAMPLExINSTANCExCERTIFICATExxxxxxx
+                ...
+                \-----END CERTIFICATE-----
+              instance_private_key: |
+                \-----BEGIN EXAMPLE RSA PRIVATE KEY-----
+                EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+                ...
+                \-----END EXAMPLE RSA PRIVATE KEY-----
+              ca_certificates:
+                \- |
+                  \-----BEGIN CERTIFICATE-----
+                  EXAMPLExCAxCERTIFICATExEXAMPLExCAxCERTIFICATExEXAMPLExCAxCERTIFI
+                  ...
+                  \-----END CERTIFICATE-----
+                \- |
+                  \-----BEGIN CERTIFICATE-----
+                  CAxCERTIFICATExEXAMPLExCAxCERTIFICATExEXAMPLExCAxCERTIFICATExEXA
+                  ...
+                  \-----END CERTIFICATE-----
+              prestart_timeout: 30
+              esp_proposals: aes128gcm16!
+              ike_proposals: aes128-sha256-modp2048!
+              log_level: 1
+              ike_version: ike
+              optional_warn_interval: 1
+              force_udp_encapsulation: false
+       </pre>
+
+    4. Run: `bosh2 -e BOSH-ENVIRONMENT update-runtime-config /tmp/runtime-config`
 
 5. Navigate to your **Installation Dashboard** in Ops Manager.
 6. Click **Apply Changes**.

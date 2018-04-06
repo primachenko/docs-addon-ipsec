@@ -5,7 +5,44 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
+<<<<<<< HEAD
 This topic describes how to upgrade the IPsec add-on.
+=======
+This topic describes how to upgrade the IPsec Add-on for PCF.
+
+##<a id="assume"></a>Assumption about Ops Manager Versions
+
+This topic assumes the following about your Ops Manager, BOSH CLI, and runtime configuration files.
+
+<table>
+  <tr>
+    <th>Ops Manager Version</th>
+    <th>BOSH CLI Version</th>
+    <th>Runtime Config</th>
+    <th>More information</th>
+  </tr>
+  <tr>
+    <td>1.10 and earlier</td>
+    <td>CLI v1</td>
+    <td>single, default, runtime config file</td>
+    <td> <li><a href="https://bosh.io/docs/sysadmin-commands.html">BOSH CLI v1</a></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td>1.11 and later</td>
+    <td>CLI v2+</td>
+    <td>runtime config in multiple, named files, so that <code>ipsec</code>can be managed separately</td>
+    <td><ul>
+        <li><a href="https://bosh.io/docs/cli-v2.html">BOSH&nbsp;CLI&nbsp;v2</a></li>
+        <li><a href="https://bosh.io/docs/configs.html">Configs&nbsp;-&nbsp;bosh</a></li>
+        </ul></td>
+  </tr>
+</table>
+
+##<a id="upgrade"></a>Upgrade IPsec Add-on</a>
+
+To upgrade the IPsec add-on to a later version, do the following:
+>>>>>>> 1bec25b... start on[#156358761]
 
 1. Retrieve the latest runtime config by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:**

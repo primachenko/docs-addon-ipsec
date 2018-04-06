@@ -465,7 +465,34 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
 
 ##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
 
-To download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on, do the following:
+To download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on, follow the procedure below.
+
+This procedure assumes the following about your Ops Manager, BOSH CLI, and runtime configuration files.
+
+<table>
+  <tr>
+    <th>Ops Manager Version</th>
+    <th>BOSH CLI Version</th>
+    <th>Runtime Config</th>
+    <th>More information</th>
+  </tr>
+  <tr>
+    <td>1.10 and earlier</td>
+    <td>CLI v1</td>
+    <td>single, default, runtime config file</td>
+    <td> <li><a href="https://bosh.io/docs/sysadmin-commands.html">BOSH CLI v1</a></li>
+</ul></td>
+  </tr>
+  <tr>
+    <td>1.11 and later</td>
+    <td>CLI v2+</td>
+    <td>runtime config in multiple, named files, so that <code>ipsec</code>can be managed separately</td>
+    <td><ul>
+        <li><a href="https://bosh.io/docs/cli-v2.html">BOSH&nbsp;CLI&nbsp;v2</a></li>
+        <li><a href="https://bosh.io/docs/configs.html">Configs&nbsp;-&nbsp;bosh</a></li>
+        </ul></td>
+  </tr>
+</table>
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
@@ -527,7 +554,9 @@ $ cd PATH-TO-BINARY</pre>
   * **For Ops Manager v1.11 or later:**
 <pre class="terminal">$ bosh2 -e my-env runtime-config > bosh-manifest.yml</pre>
 
-1. Append the contents of your IPsec manifest `ipsec-addon.yml` to `bosh-manifest.yml`.
+1. **For Ops Manager v1.10 or earlier:**
+
+    Append the contents of your IPsec manifest `ipsec-addon.yml` to `bosh-manifest.yml`.
 
 1. Update your runtime configuration to include the IPsec add-on.
   * **For Ops Manager v1.10 or earlier:**

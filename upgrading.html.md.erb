@@ -43,17 +43,19 @@ To upgrade the IPsec add-on to a later version, do the following:
 1. Download the IPsec add-on software binary
    from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
+1. SSH into the Ops Manager VM. For instructions, see [SSH into Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
+
 1. Retrieve the latest runtime config by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:**
     `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+    `bosh2 -e BOSH-ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 2. Upload the latest IPsec Release:
   * **For Ops Manager v1.10 or earlier:**
     `bosh upload release PATH-TO-NEW-IPSEC-RELEASE`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH_ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE`
+    `bosh2 -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE`
 
 3. Change the release version.
   <pre>

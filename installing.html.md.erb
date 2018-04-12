@@ -5,7 +5,7 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment.
+This topic describes how to prepare your network for IPsec, create an IPsec runtime config, and add IPsec to your deployment.
 ##<a id="prereqs"></a>Prerequisites
 
 To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
@@ -189,9 +189,9 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 ##<a id="create-mfest"></a>Step 2: Create the IPsec Manifest
 
-To add IPsec to VMs in your deployment, you must create a manifest file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
+To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
 
-1. Create an IPsec manifest file `ipsec-addon.yml`, with the code below as a template.
+1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
 <pre>releases:
 \- name: ipsec
 &nbsp; version: 1.X.X
@@ -201,7 +201,7 @@ addons:
 
 <p class="note"><strong>Note</strong>: Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after you install <a href="https://docs.pivotal.io/pivotalcf/windows/index.html">PCF Runtime for Windows</a> tile.</p>
 
-### <a id="linux"></a> Add Linux VM Support to Your Manifest
+### <a id="linux"></a> Add Linux VM Support to Your Runtime Config
 
 Perform the following steps to add IPsec to Linux VMs in your deployment:
 
@@ -320,7 +320,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
       If you do not have a Linux-only deployment, you must set `force_udp_encapsulation` to `false`. </p>
 
 
-### <a id="windows"></a> Add Windows VM Support to Your Manifest
+### <a id="windows"></a> Add Windows VM Support to Your Runtime Config
 
 To add IPsec to Windows VMs in your deployment, do the following:
 
@@ -465,12 +465,12 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
 
 ##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
 
-To download the IPsec binary, add your IPsec manifest to your BOSH manifest, and deploy the IPsec add-on,
+To download the IPsec binary, add your IPsec runtime config to your BOSH manifest, and deploy the IPsec add-on,
 follow the [procedure](#procedure) below.
 
 ###<a id="assume"></a>Assumption about Ops Manager Versions
 
-The procedure below assumes the following about your Ops Manager, BOSH CLI, and runtime configuration files.
+The procedure below assumes the following about your Ops Manager, BOSH CLI, and runtime config.
 
 <table>
   <tr>
@@ -504,7 +504,7 @@ The procedure below assumes the following about your Ops Manager, BOSH CLI, and 
 1. Copy the software binary to your Ops Manager instance. 
 <pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-1. Copy the IPsec manifest file to your Ops Manager instance.
+1. Copy the IPsec runtime config file to your Ops Manager instance.
 <pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
 1. SSH into Ops Manager.

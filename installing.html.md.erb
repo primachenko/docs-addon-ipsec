@@ -497,6 +497,12 @@ The procedure below assumes the following about your Ops Manager, BOSH CLI, and 
   </tr>
 </table>
 
+<p class="note breaking"><strong>Breaking Change: </strong> If you are using PCF v1.11 or later,
+   you must use named runtime configs.
+   If you have not already split your runtime config into multiple named files,
+   do so before upgrading the IPsec Add-on for PCF.
+   For general information about named runtime config files, see <a href="https://bosh.io/docs/configs.html">Configs</a>.</p>
+
 ###<a id="procedure"></a>Procedure
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.

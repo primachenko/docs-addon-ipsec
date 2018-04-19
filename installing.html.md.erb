@@ -6,6 +6,7 @@ owner: Security Engineering
 <strong><%= modified_date %></strong>
 
 This topic describes how to prepare your network for IPsec, create an IPsec runtime config, and add IPsec to your deployment.
+
 ##<a id="prereqs"></a>Prerequisites
 
 To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
@@ -192,14 +193,16 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
 
 1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
+
 <pre>releases:
 \- name: ipsec
 &nbsp; version: 1.X.X
 addons:
 </pre>
-2. Add properties to the `ipsec-addon.yml` file as described below for [Linux VMs](#linux) and [Windows VMs](#windows).
 
-<p class="note"><strong>Note</strong>: Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after you install <a href="https://docs.pivotal.io/pivotalcf/windows/index.html">PCF Runtime for Windows</a> tile.</p>
+1. Add properties to the `ipsec-addon.yml` file as described below for [Linux VMs](#linux) and [Windows VMs](#windows).
+
+<p class="note"><strong>Note</strong>: Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after installing the <a href="https://docs.pivotal.io/pivotalcf/windows/index.html">PCF Runtime for Windows</a> tile.</p>
 
 ### <a id="linux"></a> Add Linux VM Support to Your Runtime Config
 
@@ -264,24 +267,28 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
           Encrypt any network that handles business-sensitive data.
-  * <code><strong>no\_ipsec\_subnets</strong></code>: <a name="no_ipsec_subnets"></a> List the IP address of your BOSH Director and Ops Manager VM,
-          along with any other IP addresses in your PCF deployment that you want to communicate without encryption.
+  * <code><strong>no\_ipsec\_subnets</strong></code>: <a name="no_ipsec_subnets"></a> 
+  List the IP address of your BOSH Director and Ops Manager VM,
+          along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
           Pivotal recommends that you list the subnets that are used for PCF managed services.
-          <strong>Subnets for PCF managed services that do not support IPsec, such as Pivotal Ops Manager, must be listed under `no_ipsec_subnets`</strong>.
-  <p class="note warning"><strong>WARNING</strong>: If you have an external load balancer such as F5, add it to the <code><strong>no\_ipsec\_subnets</strong></code> property.
+          Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) 
+          must be listed under `no_ipsec_subnets`.
+    <p class="note warning"><strong>WARNING</strong>: If you have an external load balancer such as F5, add it to the <code><strong>no\_ipsec\_subnets</strong></code> property.
      If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you must configure it manually.</p>
-  <p class="note warning"><strong>WARNING</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
+    <p class="note warning"><strong>WARNING</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
      you must add the IP address of the default router in your subnet to <code><strong>no\_ipsec\_subnets</strong></code>.
      For example, <code>10.0.0.1/32</code>.</p>
-  * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> Copy in the signed certificate that will be used by all your instance VMs.
+  * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> 
+  Copy in the signed certificate that will be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.
           For a development or test environment, you can use a self-signed certificate.
-          For more information, see [Generate a Self-Signed Certificate](#self-signed) above.
-  * <code><strong>instance\_private\_key</strong></code>: <a name="instance_private_key"></a> Copy in the private key that corresponds to the <code>instance\_certificate</code> above.
+          For more information, see [Generate a Self-Signed Certificate](#self-signed).
+  * <code><strong>instance\_private\_key</strong></code>: <a name="instance_private_key"></a>
+          Copy in the private key that corresponds to the <code>instance\_certificate</code> above.
           This key must not use a pass phrase.
-  * <code><strong>ca\_certificates</strong></code>: <a name="ca-certs"></a> Copy in CA certificates for the instance VM to trust during the validation process.
-          In most cases, you only need the CA certificate used to sign the instance certificate.
-          During CA credential rotation, you need two CA certificates.
+  * <code><strong>ca\_certificates</strong></code>: <a name="ca-certs"></a>
+          Copy in CA certificates for the instance VM to trust during the validation process.
+          In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
   <br><br>
   IPsec <strong>v1.8.12</strong> and later supports the CA certificate chain.
   Concatenate the contents of the root and the intermediate certificates
@@ -322,9 +329,10 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 
 ### <a id="windows"></a> Add Windows VM Support to Your Runtime Config
 
-To add IPsec to Windows VMs in your deployment, do the following:
+To add IPsec to Windows VMs in your deployment, follow these steps:
 
-1. In the `ipsec-addon.yml` created during the previous section, modify/add the following <strong>properties in bold</strong> under the `ipsec` key.
+1. Modify the `ipsec-addon.yml` created during the previous section to add the properties indicated <strong>in bold</strong> below under the `ipsec` key.
+
   <pre>
   \- name: ipsec-addon
       ...
@@ -337,7 +345,9 @@ To add IPsec to Windows VMs in your deployment, do the following:
           <strong>dpdaction</strong>: none
   </pre>
 
-1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file. Add it under the `ipsec-addon` section for Linux, if you included one [above](#linux).
+1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file.
+   Add it under the `ipsec-addon` section for Linux, if you included one [above](#linux).
+
   <pre>
   \- name: ipsec-windows-addon
       jobs:
@@ -383,12 +393,12 @@ To add IPsec to Windows VMs in your deployment, do the following:
               hash: SHA256
               keyexchange: DH14</pre>
 1. Replace the values listed in the template as follows:
-  * <code><strong>ipsec\_subnets</strong></code>: Copy and paste the value from **ipsec\_subnets** for Linux.
-  * <code><strong>no\_ipsec\_subnets</strong></code>: Copy and paste the value from **no\_ipsec\_subnets** for Linux.
-  * <code><strong>instance\_certificate</strong></code>: Copy and paste the value from **instance\_certificate** for Linux.
-  * <code><strong>instance\_private\_key</strong></code>: Copy and paste the value from **instance\_private\_key** for Linux.
-  * <code><strong>ca\_certificates</strong></code>: Copy and paste the value from **ca\_certificates** for Linux.
-  * <code><strong>optional</strong></code>: Copy and paste the value from **optional** for Linux.
+  * <code><strong>ipsec\_subnets</strong></code>: Copy and paste the value from [ipsec\_subnets](#ipsec_subnets) for Linux.
+  * <code><strong>no\_ipsec\_subnets</strong></code>: Copy and paste the value from [no\_ipsec\_subnets](#no_ipsec_subnets) for Linux.
+  * <code><strong>instance\_certificate</strong></code>: Copy and paste the value from [instance\_certificate](#instance_certificate) for Linux.
+  * <code><strong>instance\_private\_key</strong></code>: Copy and paste the value from [instance\_private\_key](#instance_private_key) for Linux.
+  * <code><strong>ca\_certificates</strong></code>: Copy and paste the value from [ca\_certificates](#ca-certs) for Linux.
+  * <code><strong>optional</strong></code>: Copy and paste the value from [optional](#optional) for Linux.
 
 ###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
 
@@ -462,6 +472,8 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
     \- encryption: AESGCM128
          hash: AESGMAC128
     </pre>
+
+
 
 ##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
 
@@ -624,7 +636,6 @@ $ cd PATH-TO-BINARY</pre>
 
 1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information.  When the deployment process is completed, be sure to remove any unneeded copies of these files from the local workstation. Pivotal recommends that any archival copies of manifest files to be retained should be appropriately secured via encryption and/or logical access controls.
 
-<hr>
 ##<a id="verify"></a> Step 4: Verify Your IPsec Installation
 
 After installing IPsec and deploying PAS (or Elastic Runtime), perform the following steps to verify your IPsec installation:

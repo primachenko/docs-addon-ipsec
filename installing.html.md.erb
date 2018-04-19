@@ -5,12 +5,8 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-<<<<<<< HEAD
-This topic describes how to prepare your network for IPsec, create an IPsec manifest, and add IPsec to your deployment.
-
-=======
 This topic describes how to prepare your network for IPsec, create an IPsec runtime config, and add IPsec to your deployment.
->>>>>>> 918b2f9... wip[156358761]
+
 ##<a id="prereqs"></a>Prerequisites
 
 To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
@@ -196,11 +192,8 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
 
-<<<<<<< HEAD
-1. Create an IPsec manifest file named `ipsec-addon.yml`, with the code below as a template.
-=======
 1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
->>>>>>> 918b2f9... wip[156358761]
+
 <pre>releases:
 \- name: ipsec
 &nbsp; version: 1.X.X

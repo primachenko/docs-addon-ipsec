@@ -64,7 +64,8 @@ To upgrade the IPsec add-on to a later version, do the following:
    For how to do this, see [SSH into Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
 
 4. Retrieve the latest runtime config by running one of the following commands:
-  * **For Ops Manager v1.10 or earlier:**
+    <br>
+    **For Ops Manager v1.10 or earlier:**
 
         ```
       bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG
@@ -73,8 +74,8 @@ To upgrade the IPsec add-on to a later version, do the following:
         For example:
 
         <pre class="terminal">bosh runtime-config > /tmp/ipsec.yml</pre>
-
-    * **For Ops Manager v1.11 or later:**
+    <br>
+    **For Ops Manager v1.11 or later:**
 
         ```
       bosh2 -e BOSH-ENVIRONMENT runtime-config  --name ipsec > PATH-TO-SAVE-THE-RUNTIME-CONFIG
@@ -85,7 +86,8 @@ To upgrade the IPsec add-on to a later version, do the following:
         <pre class="terminal">bosh2 -e my-env runtime-config  --name ipsec > /tmp/ipsec.yml</pre>
 
 5. Upload the latest IPsec release:
-  * **For Ops Manager v1.10 or earlier:**
+    <br>
+    **For Ops Manager v1.10 or earlier:**
 
         ```
       bosh upload release PATH-TO-NEW-IPSEC-RELEASE
@@ -94,8 +96,8 @@ To upgrade the IPsec add-on to a later version, do the following:
         For example:
 
         <pre class="terminal">bosh upload release ~/ipsec-1.8.14.tgz</pre>
-
-    * **For Ops Manager v1.11 or later:**
+    <br>
+    **For Ops Manager v1.11 or later:**
 
         ```
       bosh2 -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE
@@ -113,7 +115,8 @@ To upgrade the IPsec add-on to a later version, do the following:
      \- {name: ipsec, version: <strong>1.8.14</strong>} </pre>
 
 7. Update the runtime config: 
-  * **For Ops Manager v1.10 or earlier:**
+    <br>
+    **For Ops Manager v1.10 or earlier:**
 
         ```
       bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG
@@ -122,8 +125,8 @@ To upgrade the IPsec add-on to a later version, do the following:
         For example:
 
         <pre class="terminal">bosh update runtime-config /tmp/ipsec.yml</pre>
-
-    * **For Ops Manager v1.11 or later:**
+      <br>
+      **For Ops Manager v1.11 or later:**
 
         ```
       bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG

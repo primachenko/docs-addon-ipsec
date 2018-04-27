@@ -17,7 +17,7 @@ This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-
             Don't update this v1.6 doc.
             However, don't delete the branch either.
 
-* **1.5** — Contains end-of-life docs, removed from production.
+* **1.5** — Contains end-of-life docs, removed from production. Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.5.pdf
             Don't update this v1.5 doc. 
             However, don't delete the branch either.
 

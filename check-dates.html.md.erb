@@ -21,7 +21,7 @@ Follow the steps below to determine the expiration dates of your IPsec certifica
   * **For Ops Manager v1.10 or earlier:** 
     `bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   * **For Ops Manager v1.11 or later:**
-    `bosh2 -e BOSH-ENVIRONMENT runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
+    `bosh2 -e BOSH-ENVIRONMENT runtime-config --name=ipsec > PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
     For example, 
     <pre class='terminal'>bosh2 runtime-config > /tmp/my-runtime-config.yml</pre>

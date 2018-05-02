@@ -34,6 +34,11 @@ To complete the IPsec installation, verify that you have satisfied the following
   * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
   * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 
+<p class="note"><strong>Note</strong>: Adding IPsec to an Existing PAS/ERT Installation
+When adding IPsec to an existing PAS/ERT deployment, you must ensure the `optional` flag in the runtime config file is initially set to `true`. 
+Once IPsec is installed successfully, set this flag back to `false` and re-deploy.
+</p>
+
 ##<a id="config-network"></a>Step 1: Configure Network Security
 
 Perform the steps in the appropriate section below to configure your IaaS network security.
@@ -260,7 +265,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 1. Replace the values listed in the template as follows:
   * <code><strong>releases: - version</strong></code>: Specify the version number of your IPsec download from Pivotal Network.
   * <code><strong>optional</strong></code>: <a name="optional"></a> This value makes IPsec enforcement optional.
-          To add IPsec, set this flag to `true`.
+          To add IPsec to an existing PAS/ERT deployment, set this flag to `true`.
           After IPsec has been successfully installed, set this flag back to `false` and redeploy.
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
@@ -587,12 +592,12 @@ $ cd PATH-TO-BINARY</pre>
   * **For Ops Manager v1.10 or earlier:**
 <pre class="terminal"> $ bosh runtime-config</pre>
   * **For Ops Manager v1.11 or later:**
-<pre class="terminal"> $ bosh2 -e my-env runtime-config</pre>
+<pre class="terminal"> $ bosh2 -e my-env runtime-config --name=ipsec</pre>
 
     For example:
 
     <pre class="terminal">
-    $ bosh2 -e my-env runtime-config
+    $ bosh2 -e my-env runtime-config --name=ipsec
     Acting as user 'admin' on 'micro'
 
     releases:
@@ -718,5 +723,10 @@ Follow these steps to generate a self-signed certificate for your IPsec manifest
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
+1. This will generate 4 files in a new `certs` directory where the script is run:
+   * **pcf-ipsec-ca-cert.pem** - this value can be used as the CA Cert in the `ca_certificates` manifest field.
+   * **pcf-ipsec-ca-key.pem** - the key used to sign the generated CA Cert.
+   * **pcf-ipsec-peer-key.pem** - this value can be used as the instance private key in the `instance_private_key` manifest field.
+   * **pcf-ipsec-peer-cert.pem** - this value can be used as the instance certificate in the `instance_certificate` manifest field.
 1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
    For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).

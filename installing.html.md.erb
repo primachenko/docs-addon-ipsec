@@ -31,13 +31,12 @@ To complete the IPsec installation, verify that you have satisfied the following
     apart from the PAS (or Elastic Runtime) subnet.
     Some service tiles do not support IPsec
     and must be placed in a non-IPsec subnet. 
-  * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS. These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>. If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>, see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
-  * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP, or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
-
-<p class="note"><strong>Note</strong>: Adding IPsec to an Existing PAS/ERT Installation
-When adding IPsec to an existing PAS/ERT deployment, you must ensure the `optional` flag in the runtime config file is initially set to `true`. 
-Once IPsec is installed successfully, set this flag back to `false` and re-deploy.
-</p>
+  * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS.
+    These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>.
+    If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>,
+    see the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic to adjust MTU values.
+  * For IPsec on Windows VMs, Pivotal recommends the Windows stemcells for AWS, GCP,
+    or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.  
 
 ##<a id="config-network"></a>Step 1: Configure Network Security
 
@@ -195,7 +194,9 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 ##<a id="create-mfest"></a>Step 2: Create the IPsec Manifest
 
-To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml` that configures IPsec add-on properties for Linux VMs, Windows VMs, or both. Perform the following steps:
+To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`
+that configures IPsec add-on properties for Linux VMs, Windows VMs, or both.
+Perform the following steps:
 
 1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
 
@@ -265,7 +266,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 1. Replace the values listed in the template as follows:
   * <code><strong>releases: - version</strong></code>: Specify the version number of your IPsec download from Pivotal Network.
   * <code><strong>optional</strong></code>: <a name="optional"></a> This value makes IPsec enforcement optional.
-          To add IPsec to an existing PAS/ERT deployment, set this flag to `true`.
+          To add IPsec to an existing PAS (or Elastic Runtime) deployment, set this flag to `true`.
           After IPsec has been successfully installed, set this flag back to `false` and redeploy.
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
@@ -723,10 +724,10 @@ Follow these steps to generate a self-signed certificate for your IPsec manifest
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
-1. This will generate 4 files in a new `certs` directory where the script is run:
-   * **pcf-ipsec-ca-cert.pem** - this value can be used as the CA Cert in the `ca_certificates` manifest field.
-   * **pcf-ipsec-ca-key.pem** - the key used to sign the generated CA Cert.
-   * **pcf-ipsec-peer-key.pem** - this value can be used as the instance private key in the `instance_private_key` manifest field.
-   * **pcf-ipsec-peer-cert.pem** - this value can be used as the instance certificate in the `instance_certificate` manifest field.
+1. This generates four files in a new `certs` directory where the script is run:
+   * **pcf-ipsec-ca-cert.pem** --- this value can be used as the CA Cert in the `ca_certificates` manifest field.
+   * **pcf-ipsec-ca-key.pem** --- the key used to sign the generated CA Cert.
+   * **pcf-ipsec-peer-key.pem** --- this value can be used as the instance private key in the `instance_private_key` manifest field.
+   * **pcf-ipsec-peer-cert.pem** --- this value can be used as the instance certificate in the `instance_certificate` manifest field.
 1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
    For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).

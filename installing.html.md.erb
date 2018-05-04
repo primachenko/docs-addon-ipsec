@@ -272,7 +272,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           After IPsec has been successfully installed, set this flag back to `false` and redeploy.
           <p class="note warning"><strong> WARNING</strong>: Communication between existing components fails
           if you try to add IPsec to an existing deployment
-          without setting <code>optional</code> to <code>true</code>.
+          without setting <code>optional</code> to <code>true</code>.</p>
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
           Encrypt any network that handles business-sensitive data.
@@ -370,6 +370,9 @@ To add IPsec to Windows VMs in your deployment, do the following:
   * <code><strong>instance\_private\_key</strong></code>: Copy and paste the value from [instance\_private\_key](#instance_private_key) for Linux.
   * <code><strong>ca\_certificates</strong></code>: Copy and paste the value from [ca\_certificates](#ca-certs) for Linux.
   * <code><strong>optional</strong></code>: Copy and paste the value from [optional](#optional) for Linux.
+     <p class="note warning"><strong> WARNING</strong>: Communication between existing components fails
+     if you try to add IPsec to an existing deployment
+     without setting <code>optional</code> to <code>true</code>.</p>
 
 ###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
 

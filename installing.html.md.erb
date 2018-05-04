@@ -272,6 +272,9 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   * <code><strong>optional</strong></code>: <a name="optional"></a> This value makes IPsec enforcement optional.
           To add IPsec to an existing PAS (or Elastic Runtime) deployment, set this flag to `true`.
           After IPsec has been successfully installed, set this flag back to `false` and redeploy.
+          <p class="note warning"><strong> WARNING</strong>: Communication between existing components fails
+          if you try to add IPsec to an existing deployment
+          without setting <code>optional</code> to <code>true</code>.
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
           You can include the entire deployment or a portion of the network.
           Encrypt any network that handles business-sensitive data.

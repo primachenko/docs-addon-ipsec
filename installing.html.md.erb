@@ -336,10 +336,18 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
     <p class="note warning"><strong>WARNING</strong>: Setting this property to `true` in 
       mixed deployments causes the deployment to fail. 
       If you do not have a Linux-only deployment, you must set `force_udp_encapsulation` to `false`. </p>
-  * <code><strong>instance\_certificate\_info\_period</strong></code>: If the instance certificate expires during the set period (in days) the ipsec release writes an [INFO] message in the logs
-  * <code><strong>instance\_certificate\_warn\_period</strong></code>: If the instance certificate expires during the set period (in days) the ipsec release writes a [WARN] message in the logs
-  * <code><strong>instance\_certificate\_error\_period</strong></code>: If the instance certificate expires during the set period (in days) the ipsec release writes an [ERROR] message in the logs
-  * <code><strong>instance\_certificate\_critical\_period</strong></code>: If the instance certificate expires during the set period (in days) the ipsec release writes a [CRITICAL] message in the logs
+  * <code><strong>instance\_certificate\_info\_period</strong></code>: 
+  If the instance certificate expires during the set period in days, the IPsec 
+  release writes an `[INFO]` message in the logs. 
+  * <code><strong>instance\_certificate\_warn\_period</strong></code>: 
+  If the instance certificate expires during the set period in days, the IPsec 
+  release writes a `[WARN]` message in the logs.
+  * <code><strong>instance\_certificate\_error\_period</strong></code>: 
+  If the instance certificate expires during the set period in days, the IPsec 
+  release writes an `[ERROR]` message in the logs.
+  * <code><strong>instance\_certificate\_critical\_period</strong></code>: 
+  If the instance certificate expires during the set period in days, the IPsec 
+  release writes a `[CRITICAL]` message in the logs.
 
 
 ### <a id="windows"></a> Add Windows VM Support to Your Runtime Config

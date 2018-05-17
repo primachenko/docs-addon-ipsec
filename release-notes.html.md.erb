@@ -7,6 +7,19 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
+
+##<a id="191"></a>  v1.9.1
+
+**Release Date:** May 21, 2018
+
+**Features included in this release:**
+
+* Starting with BOSH director v265.1.0, the BOSH job lifecycle now includes a new `post-stop` phase. 
+  This release of the IPsec Add-on takes advantage of this new BOSH feature, and 
+  the charon IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle phase. 
+  Previously, the charon daemon was stopped in the BOSH `stop` lifecycle phase. The `stop` phase is now a no-op.  
+  This change ensures that the network remains available and secure while all other BOSH jobs perform their stop processing.
+
 ##<a id="1831"></a>  v1.8.31
 
 **Release Date:** April 27, 2018

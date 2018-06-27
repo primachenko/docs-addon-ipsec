@@ -8,9 +8,9 @@ owner: Security Engineering
 This topic contains release notes for the IPsec Add-on for PCF.
 
 
-##<a id="191"></a>  v1.9.1
+##<a id="194"></a>  v1.9.4
 
-**Release Date:** May 21, 2018
+**Release Date:** June 28, 2018
 
 **Features included in this release:**
 
@@ -18,6 +18,10 @@ This topic contains release notes for the IPsec Add-on for PCF.
   This release of the IPsec Add-on takes advantage of this new BOSH feature, and 
   the `charon` IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle phase. 
   Previously, the `charon` daemon was stopped in the BOSH `stop` lifecycle phase. The `stop` phase is now a no-op. <br><br>This change ensures that the network remains available and secure while all other BOSH jobs perform their stop processing.
+
+* Updated smoke tests to check connectivity using TCP protocol requests on port 22, rather issuing an ICMP ping request to the remote host.  
+  This ensures that the smoke test will produce an accurate result, even when ICMP is not enabled.  In addition, the smoke test has been 
+  updated to skip the connectivity check on localhost, as strongswan does not create a xfrm when the source and destination addresses are equal.
 
 ##<a id="1831"></a>  v1.8.31
 

@@ -23,6 +23,11 @@ This topic contains release notes for the IPsec Add-on for PCF.
   This ensures that the smoke test will produce an accurate result, even when ICMP is not enabled.  In addition, the smoke test has been 
   updated to skip the connectivity check on localhost, as strongswan does not create a xfrm when the source and destination addresses are equal.
 
+
+**Known issues in this release:**
+
+* Due to a known issue with container networking, the IPsec Add-on is not supported on Pivotal Application Service for Windows using Windows Server stemcell version 1709.
+
 ##<a id="1831"></a>  v1.8.31
 
 **Release Date:** April 27, 2018

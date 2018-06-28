@@ -7,7 +7,6 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
-
 ##<a id="194"></a>  v1.9.4
 
 **Release Date:** June 28, 2018
@@ -30,103 +29,10 @@ does not create an xfrm when the source and destination addresses are equal.
 
 **Known issues in this release:**
 
-* Due to a known issue with container networking, the IPsec Add-on is not supported on Pivotal Application Service for Windows using Windows Server stemcell version 1709.
+* Due to a known issue with container networking, the IPsec Add-on is not supported 
+on Pivotal Application Service for Windows using Windows Server stemcell v1709.
 
-##<a id="1831"></a>  v1.8.31
+## <a id="view"></a> View Release Notes for Another Version
 
-**Release Date:** April 27, 2018
-
-**Features included in this release:**
-
-* Options to configure syslog messages that warn about upcoming IPsec certificates expiry.
-
-**Fixed issues in this release:**
-
-* When the host VM has more than one network interface available, the `leftsubnet` will always be configured with the internal IP address.
-  Previously, the `leftsubnet` would have been configured with the first available interface, which may or may not have been the internal address.
-
-##<a id="1814"></a>  v1.8.14
-
-**Release Date:** January 24, 2018
-
-**Features included in this release:**
-
-* A new manifest property named `dpdaction` has been added.
-  This property controls the IPsec response upon detecting a "dead" network peer.
-  The default value is `restart`.
-
-**Known issues in this release:**
-
-* When using IKEv1, Pivotal recommends that you set the manifest property `dpdaction` to `none`.
-
-##<a id="1812"></a>  v1.8.12
-
-**Release Date:** January 19, 2018
-
-**Features included in this release:**
-
-* An arbitrary length certificate chain is now supported for both Linux and Windows.
-* A warning message is generated in the IPsec stdout log file when the `optional` flag is set to true.
-* A new manifest property has been added, `optional_warn_interval`,
-  to control the message interval for the optional-is-true warning.
-* The default `log_level` is now set to -1 for Linux.
-* The golang dependency has been updated to v1.9.2.
-* An error is reported if the host IP address is in neither the IPsec nor the no-IPsec subnet.
-* If, upon shutdown, the IPsec job is not the last monit job running, a warning is logged.
-* A new manifest property has been added, `ike_version`.
-  Accepted values are `ikev1` or `ike` (for IKEv2).
-* Additional certificate verification has been added so that an error is reported
-  if the supplied instance certificate and CA certificate are not related.
-
-**Known issues in this release:**
-
-* Pivotal does not recommend using IKEv1 because of security and performance limitations.
-* Only use IKEv1 for deployments that require it: mixed environments containing both Linux and Windows VMs.
-
-
-##<a id="183"></a> v1.8.3
-
-
-[//]: # (Use these old v1.8.3 as a template for developing the new v1.9.0 release notes. Delete this v1.8.3 section when v1.9.0 goes live)
-
-**Features included in this release:**
-
-* Updates strongSwan to 5.6.0
-* Updates OpenSSL to 1.0.2l
-* Updates OpenSSL FIPS to 2.0.16
-* Log level is now configurable.
-* Key exchange is now configurable.
-* Instance certificate is validated with the CA certificate on start.
-
-**Fixed issues in this release:**
-
-* Stop script timeout is configurable.
-
-**Known issues in this release:**
-
-* **IKEv1 on Windows**: Windows uses IKEv1 for Key exchange.
-  IKEv2 does not support multiple root certificates, and therefore does not support certificate rotation.
-  An issue has been filed with Microsoft. 
-
-* **Spurious Configuration Warning**: As part of the upgrade to StrongSwan v5.4.0,
-  this version of the IPsec add-on may emit a sequence of spurious configuration warning messages.
-  The messages are similar to the following:
-
-	```
-	!! Your strongswan.conf contains manual plugin load options for charon.
-	!! This is recommended for experts only, see
-	!! http://wiki.strongswan.org/projects/strongswan/wiki/PluginLoad
-	```
-
-	These messages are both expected and harmless.
-        As a caution to end users, the StrongSwan software now emits a warning message
-        when it detects that the installation includes a manually configured set of plugins.
-        As a matter of security hygiene best practices, the IPsec add-on has always used a manual (explicit) configuration
-        and loads a restricted set of StrongSwan plugins.
-        Any unused plugins are not loaded.
-        The newest version of StrongSwan now issues this warning message when it detects that situation.
-        The actual list of plugins in use has been determined to be appropriate for use of StrongSwan in the PCF environment.
-        This warning is expected and should be ignored.
-
-* **MTU Sizing**: Use 1354 on OpenStack.
-  Keep the default on AWS and vSphere.
+To view the release notes for another product version, select the version from 
+the dropdown at the top of this page.

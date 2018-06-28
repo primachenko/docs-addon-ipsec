@@ -14,15 +14,19 @@ This topic contains release notes for the IPsec Add-on for PCF.
 
 **Features included in this release:**
 
-* Starting with BOSH Director v265.1.0, the BOSH job lifecycle now includes a new `post-stop` phase. 
-  This release of the IPsec Add-on takes advantage of this new BOSH feature, and 
-  the `charon` IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle phase. 
-  Previously, the `charon` daemon was stopped in the BOSH `stop` lifecycle phase. The `stop` phase is now a no-op. <br><br>This change ensures that the network remains available and secure while all other BOSH jobs perform their stop processing.
+* Starting with BOSH Director v265.1.0, the BOSH job lifecycle includes a `post-stop` phase. 
+  The `charon` IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle 
+  phase instead of the BOSH `stop` lifecycle phase. 
+  The `stop` phase is now a no-op.
+  This ensures that the network remains available and secure while all other 
+  BOSH jobs perform their stop processing.
 
-* Updated smoke tests to check connectivity using TCP protocol requests on port 22, rather issuing an ICMP ping request to the remote host.  
-  This ensures that the smoke test will produce an accurate result, even when ICMP is not enabled.  In addition, the smoke test has been 
-  updated to skip the connectivity check on localhost, as strongswan does not create a xfrm when the source and destination addresses are equal.
+* Updates smoke tests to check connectivity using TCP protocol requests on port 22, 
+rather than issuing an ICMP ping request to the remote host.  
+  This ensures that the smoke test produces an accurate result, even when ICMP is not enabled. 
 
+* Updates smoke tests to skip the connectivity check on localhost, as strongSwan 
+does not create an xfrm when the source and destination addresses are equal.
 
 **Known issues in this release:**
 

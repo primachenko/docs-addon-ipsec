@@ -11,7 +11,9 @@ This topic contains release notes for the IPsec Add-on for PCF.
 
 **Release Date:** June 28, 2018
 
-**Features included in this release:**
+### Features
+
+Features included in this release:
 
 * Starting with BOSH Director v265.1.0, the BOSH job lifecycle includes a `post-stop` phase. 
   The `charon` IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle 
@@ -27,7 +29,9 @@ rather than issuing an ICMP ping request to the remote host.
 * Updates smoke tests to skip the connectivity check on localhost, as strongSwan 
 does not create an xfrm when the source and destination addresses are equal.
 
-**Known issues in this release:**
+### Known Issues
+
+Known issues in this release:
 
 * Due to a known issue with container networking, the IPsec Add-on is not supported 
 on Pivotal Application Service for Windows using Windows Server stemcell v1709.

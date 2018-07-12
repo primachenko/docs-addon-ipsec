@@ -50,12 +50,8 @@ The following table provides version and version-support information about the I
 
 ## <a id="implementation"></a> IPsec Implementation Details
 
-Refer to the following topics for more information about the IPsec Add-on for PCF:
+## <a id='limitations'></a> Limitation
 
-* [Installing the IPsec Add-on for PCF](./installing.html)
-* [Rotating IPsec Certificates](./credentials.html)
-* [Renewing Expired IPsec Certificates](./renewing.html)
-* [Troubleshooting the IPsec Add-on for PCF](./troubleshooting.html)
-* [Upgrading the IPsec Add-on for PCF](./upgrading.html)
-* [Uninstalling the IPsec Add-on for PCF](./uninstalling.html)
-* [Release Notes](./release-notes.html)
+IPsec Add-on for PCF has the following limitation:
+
+* Due to a [known issue](https://github.com/Microsoft/hcsshim/issues/244) in Windows Server OS, applications hosted on PAS for Windows cannot route traffic when deployed with the IPsec add-on for PCF.

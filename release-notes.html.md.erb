@@ -7,7 +7,6 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
-<<<<<<< HEAD
 ##  v1.7.1
 * IPsec support for Windows 2012R2 cells (versions 1200.x)
 * For ESP proposals, Windows default is AES128-GCM
@@ -42,31 +41,3 @@ This topic contains release notes for the IPsec Add-on for PCF.
 	If this command produces valid output, then the certificate will be OK when configured for IPsec.
 
 * **MTU Sizing**: Use 1354 on OpenStack. Keep the default on AWS and vSphere.
-=======
-##<a id="194"></a>  v1.9.4
-
-**Release Date:** June 28, 2018
-
-### Features
-
-New features and changes in this release:
-
-* Starting with BOSH Director v265.1.0, the BOSH job lifecycle includes a `post-stop` phase. 
-  The `charon` IPsec daemon job is now stopped in the BOSH `post-stop` lifecycle 
-  phase instead of the BOSH `stop` lifecycle phase. 
-  The `stop` phase is now a no-op.
-  This ensures that the network remains available and secure while all other 
-  BOSH jobs perform their stop processing.
-
-* Updates smoke tests to check connectivity using TCP protocol requests on port 22, 
-rather than issuing an ICMP ping request to the remote host.  
-  This ensures that the smoke test produces an accurate result, even when ICMP is not enabled. 
-
-* Updates smoke tests to skip the connectivity check on localhost, because strongSwan 
-does not create a transform when the source and destination addresses are equal.
-
-## <a id="view"></a> View Release Notes for Another Version
-
-To view the release notes for another product version, select the version from 
-the dropdown at the top of this page.
->>>>>>> 5f2310a... clarify Windows2012R2 for IPSec

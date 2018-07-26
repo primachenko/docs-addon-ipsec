@@ -85,3 +85,5 @@ The IPsec Add-on for PCF implements the following cryptographic suite:
 IPsec Add-on for PCF has the following limitation:
 
 * Due to a [known issue](https://github.com/Microsoft/hcsshim/issues/244) in Windows Server OS, applications hosted on PAS for Windows cannot route traffic when deployed with the IPsec add-on for PCF.
+
+* For the CA certificate used by IPsec, it is recommended **not** to use a certificate signed by a public or 3rd party CA. A self-signed certificate should be used instead to sign all the instance certs.

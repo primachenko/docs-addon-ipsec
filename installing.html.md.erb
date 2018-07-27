@@ -745,7 +745,6 @@ Follow these steps to generate a self-signed certificate for your IPsec manifest
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
-   The script generates private keys in a <code>certs</code> subdirectory
 1. This generates four files in a new `certs` directory where the script is run:
    * **pcf-ipsec-ca-cert.pem** --- this value can be used as the CA Cert in the `ca_certificates` manifest field.
    * **pcf-ipsec-ca-key.pem** --- the key used to sign the generated CA Cert.

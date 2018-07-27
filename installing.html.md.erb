@@ -292,7 +292,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> 
   Copy in the signed certificate that will be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.
-          For a development or test environment, you can use a self-signed certificate.
+          Pivotal recommends that you use a self-signed certificate.
           For more information, see [Generate a Self-Signed Certificate](#self-signed).
   * <code><strong>instance\_private\_key</strong></code>: <a name="instance_private_key"></a>
           Copy in the private key that corresponds to the <code>instance\_certificate</code> above.
@@ -732,11 +732,7 @@ ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
 
 ##<a id="self-signed"></a>Generate a Self-Signed Certificate with OpenSSL
 
-<p class="note warning"><strong>WARNING</strong>: Use a self-signed certificate only for development or test environments. 
-  Pivotal recommends against using self-signed certificates for production deployments. 
-  The script below generates private keys in a <code>certs</code> subdirectory.</p>
-
-Follow these steps to generate a self-signed certificate for your IPsec manifest:
+Follow these steps to generate a self-signed certificate for your IPsec manifest.
 
 
 1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
@@ -746,6 +742,7 @@ Follow these steps to generate a self-signed certificate for your IPsec manifest
   <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
 1. Run the script:
   <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
+   The script generates private keys in a <code>certs</code> subdirectory
 1. This generates four files in a new `certs` directory where the script is run:
    * **pcf-ipsec-ca-cert.pem** --- this value can be used as the CA Cert in the `ca_certificates` manifest field.
    * **pcf-ipsec-ca-key.pem** --- the key used to sign the generated CA Cert.

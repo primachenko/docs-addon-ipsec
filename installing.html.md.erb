@@ -226,6 +226,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
       include:
         stemcell:
         - <strong>os</strong>: ubuntu-trusty
+        - <strong>os</strong>: ubuntu-xenial
       properties:
         ipsec:
           <strong>optional</strong>: false
@@ -422,7 +423,7 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, follow these steps
   * <code><strong>optional</strong></code>: Copy and paste the value from [optional](#optional) for Linux.
      <p class="note warning"><strong> WARNING</strong>: Communication between existing components fails
      if you try to add IPsec to an existing deployment
-     without setting <code>optional</code> to <code>true</code>.</p>
+     without setting <code>optional</code> to <code>true</code> for both Linux and Windows.</p>
 
 ###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
 

@@ -9,8 +9,7 @@ Pivotal Cloud Foundry (PCF) products and tiles that are released after July 2018
 Ubuntu Xenial stemcells instead of Ubuntu Trusty stemcells. 
 You need to verify that your IPsec Add-on for PCF deployment is configured correctly to support PCF products running on Xenial.
 
-This topic describes how to determine if your existing deployment of
-IPsec Add-on can protect VMs that run on Xenial.
+This topic describes how to determine if your existing deployment of IPsec Add-on can be deployed to VMs that run on Xenial.
 This topic also explains how to update your IPsec Add-on if it does not support Xenial.
 
 Follow the instructions on this page if you use IPsec Add-on with any PCF products or tiles 
@@ -46,7 +45,7 @@ stemcell:
 </table>
 
 If you use IPsec Add-on without adding the `ubuntu-xenial` property to the runtime config, 
-the VMs running on Xenial are not scanned for viruses.
+the VMs running on Xenial are not able to communicate with the rest of the system.
 
 ## <a id="which"></a> Product Tiles that Use Xenial Stemcells
 

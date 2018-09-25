@@ -66,6 +66,9 @@ To renew expired IPsec certificates, do the following:
     `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`<br>
 
 5. Navigate to your **Installation Dashboard** in Ops Manager.
-6. Click **Apply Changes**.
-7. Remove the `optional: true` set in step 3.
-8. Repeat steps 4 to 6.
+6. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
+   For more information about this Ops Manager page, 
+   see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
+7. Click **Apply Changes**.
+8. Remove the `optional: true` set in step 3.
+9. Repeat steps 4 to 7.

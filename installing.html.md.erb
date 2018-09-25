@@ -199,12 +199,11 @@ that configures IPsec add-on properties for Linux VMs, Windows VMs, or both.
 Perform the following steps:
 
 1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
-
-<pre>releases:
-  - name: ipsec
-&nbsp; version: 1.x.x
-addons:
-</pre>
+  <pre>releases:
+  \- name: ipsec
+      version: 1.x.x
+  addons:
+  </pre>
 1. Add properties to the `ipsec-addon.yml` file as described below for [Linux VMs](#linux) and [Windows VMs](#windows).
 
 <p class="note"><strong>Note</strong>: Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after installing the <a href="https://docs.pivotal.io/pivotalcf/windows2012r2/index.html">PAS for Windows 2012R2</a> tile.</p>
@@ -641,6 +640,9 @@ $ cd PATH-TO-BINARY</pre>
 1. If you have already deployed PAS (or Elastic Runtime) or are adding IPsec to an existing deployment:
   1. Set the `optional` flag to `true`.
   1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
+  For more information about this Ops Manager page, 
+  see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
   1. Click **Apply Changes**
   1. Wait for the installation to complete.
   1. Set the `optional` flag to `false`.
@@ -651,10 +653,12 @@ $ cd PATH-TO-BINARY</pre>
       <pre class="terminal">$ bosh2 -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
 
   1. Navigate to your **Installation Dashboard**.
+  1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
   1. Click **Apply Changes**.
 
 1. If the PAS (or Elastic Runtime) tile is not yet installed:
   1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
   1. Click **Apply Changes**
   1. Deploy PAS (or Elastic Runtime) by following the installation instructions for your IaaS.
      For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html).

@@ -38,14 +38,18 @@ Uninstalling the IPsec add-on is only supported in <strong>v1.6.x</strong> and a
     `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
 
 4. Navigate to your **Installation Dashboard** in Ops Manager.
-5. Click **Apply Changes**.
-6. Wait for the installation to complete.
-7. Remove IPsec from the runtime config.
-8. Update the runtime config by running one of the following commands:
+5. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
+   For more information about this Ops Manager page, 
+   see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
+6. Click **Apply Changes**.
+7. Wait for the installation to complete.
+8. Remove IPsec from the runtime config.
+9. Update the runtime config by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:** 
     `bosh update runtime-config PATH/YOUR-RUNTIME-CONFIG.yml`
   * **For Ops Manager v1.11 or later:**
     `bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG`
   
-9. Navigate to your **Installation Dashboard** in Ops Manager. 
-10. Click **Apply Changes**.
+10. Navigate to your **Installation Dashboard** in Ops Manager. 
+11. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
+12. Click **Apply Changes**.

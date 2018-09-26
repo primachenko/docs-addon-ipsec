@@ -17,7 +17,7 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 * BOSH deployed through Ops Manager v1.8 or later
 
-* Set the MTU for your IaaS in the Pivotal Application Service (PAS) or Elastic Runtime tile, under **Networking**.
+* Set the MTU for your IaaS in the Pivotal Application Service (PAS) tile, under **Networking**.
   Pivotal recommends MTU values of 1354 on GCP, 1438 on Azure,
   and the default values on AWS and vSphere.
   For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider,
@@ -26,9 +26,9 @@ To complete the IPsec installation, verify that you have satisfied the following
 ##<a id="bestpractices"></a>Best Practices
   * IPsec may affect the functionality of other service tiles.
     As a result, Pivotal recommends deploying PAS
-    (or Elastic Runtime) and each service tile to different isolated subnets.
+    and each service tile to different isolated subnets.
     Alternatively, you can minimally deploy all service tiles to a single isolated subnet, 
-    apart from the PAS (or Elastic Runtime) subnet.
+    apart from the PAS subnet.
     Some service tiles do not support IPsec
     and must be placed in a non-IPsec subnet. 
   * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS.
@@ -270,7 +270,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 1. Replace the values listed in the template as follows:
   * <code><strong>releases: - version</strong></code>: Specify the version number of your IPsec download from Pivotal Network.
   * <code><strong>optional</strong></code>: <a name="optional"></a> This value makes IPsec enforcement optional.
-          To add IPsec to an existing PAS (or Elastic Runtime) deployment, set this flag to `true`.
+          To add IPsec to an existing PAS deployment, set this flag to `true`.
           After IPsec has been successfully installed, set this flag back to `false` and redeploy.
           <p class="note warning"><strong> WARNING</strong>: Communication between existing components fails
           if you try to add IPsec to an existing deployment
@@ -637,7 +637,7 @@ $ cd PATH-TO-BINARY</pre>
         ...
     </pre>
 
-1. If you have already deployed PAS (or Elastic Runtime) or are adding IPsec to an existing deployment:
+1. If you have already deployed PAS or are adding IPsec to an existing deployment:
   1. Set the `optional` flag to `true`.
   1. Navigate to your **Installation Dashboard** in Ops Manager.
   1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
@@ -656,18 +656,18 @@ $ cd PATH-TO-BINARY</pre>
   1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
   1. Click **Apply Changes**.
 
-1. If the PAS (or Elastic Runtime) tile is not yet installed:
+1. If the PAS tile is not yet installed:
   1. Navigate to your **Installation Dashboard** in Ops Manager.
   1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**. 
   1. Click **Apply Changes**
-  1. Deploy PAS (or Elastic Runtime) by following the installation instructions for your IaaS.
+  1. Deploy PAS by following the installation instructions for your IaaS.
      For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html).
 
 1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information.  When the deployment process is completed, be sure to remove any unneeded copies of these files from the local workstation. Pivotal recommends that any archival copies of manifest files to be retained should be appropriately secured via encryption and/or logical access controls.
 
 ##<a id="verify"></a> Step 4: Verify Your IPsec Installation
 
-After installing IPsec and deploying PAS (or Elastic Runtime), perform the following steps to verify your IPsec installation:
+After installing IPsec and deploying PAS, perform the following steps to verify your IPsec installation:
 
 1. List the job VMs in your deployment by running one of the following commands:
   * **For Ops Manager v1.10 or earlier:**<br>

@@ -37,13 +37,19 @@ If you encounter issues with installing IPsec, refer to the [Troubleshooting IPs
 Unresponsive applications or incomplete responses, particularly for large payloads
 
 #### Explanation: Packet Loss
-IPsec packet encryption increases the size of packet payloads on host VMs. If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM, packet loss may occur when the VM forwards those packets.
+IPsec packet encryption increases the size of packet payloads on host VMs.
+If the size of the larger packets exceeds the maximum transmission unit (MTU) size of the host VM,
+packet loss may occur when the VM forwards those packets.
 
-If your VMs were created with an Amazon PV stemcell, the default MTU value is 1500 for both host VMs and the application containers. If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001. Garden containers default to 1500 MTU.
+If your VMs were created with an Amazon PV stemcell,
+the default MTU value is 1500 for both host VMs and the application containers.
+If your VMs were created with Amazon HVM stemcells, the default MTU value is 9001.
+Garden containers default to 1500 MTU.
 
 #### Solution
 
-Either decrease the MTU of the application containers or increase the MTU of the application container VMs. The MTU of the application containers must be at least 100 MTU lower than the MTU of the application container VMs. 
+Either decrease the MTU of the application containers or increase the MTU of the application container VMs.
+The MTU of the application containers must be at least 100 MTU lower than the MTU of the application container VMs. 
 
 Do one of the following:
 

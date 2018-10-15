@@ -113,11 +113,8 @@ This issue occurs when monit job priorities are asynchronous. Because the order 
 
 #### Solution
 
-1. BOSH `ssh` into the stuck instance by running one of the following commands:
-  * **For Ops Manager v1.10 or earlier:** <br>
-  `bosh ssh VM-INDEX`
-  * **For Ops Manager v1.11 or later:** 
-  `bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh VM-INDEX`
+1. BOSH `ssh` into the stuck instance by running the following commands:
+  `bosh -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh VM-INDEX`
 
 1. Authenticate as root and use the `sv stop agent` command to kill the BOSH Agent:
 
@@ -127,10 +124,7 @@ This issue occurs when monit job priorities are asynchronous. Because the order 
     </pre>
 
 1. Run the following command to detect the missing monit job VM.
-  * **For Ops Manager v1.10 or earlier:** <br>
-  `bosh cloudcheck`
-  * **For Ops Manager v1.11 or later:** 
-  `bosh2 -e ENVIRONMENT-NAME -d DEPLOYMENT-NAME cloud-check`
+  `bosh -e ENVIRONMENT-NAME -d DEPLOYMENT-NAME cloud-check`
    
     For example,
 
@@ -255,7 +249,7 @@ Check the deployment descriptor YAML syntax for the CA certificates entry:
 
 <pre class="terminal">
 releases:
-- {name: ipsec, version: 1.0.0}
+- {name: ipsec, version: 1.9.9}
 
 addons:
 - name: ipsec-addon

@@ -75,7 +75,7 @@ existing `ipsec-addon.yml` and redeploy.  Follow these steps:
 
     For example:
 
-    <pre class="terminal">$ bosh2 -e my-env runtime-config –name ipsec-addon > /tmp/ipsec-addon.yml </pre> 
+    <pre class="terminal">$ bosh -e my-env runtime-config –name ipsec-addon > /tmp/ipsec-addon.yml </pre> 
 
 
 3. Edit the `ipsec-addon.yml` file to add `- os: ubuntu-xenial` under 
@@ -98,12 +98,12 @@ existing `ipsec-addon.yml` and redeploy.  Follow these steps:
 4. To update the runtime config, run the following command:
 
     ```
-    bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec /tmp/ipsec-addon.yml
+    bosh -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec /tmp/ipsec-addon.yml
     ```
 
     For example:
 
-    <pre class="terminal">bosh2 -e my-env update-runtime-config --name=ipsec-addon /tmp/ipsec-addon.yml</pre> 
+    <pre class="terminal">bosh -e my-env update-runtime-config --name=ipsec-addon /tmp/ipsec-addon.yml</pre> 
 
 5. Navigate to the Installation Dashboard in Ops Manager.
 
@@ -112,4 +112,3 @@ existing `ipsec-addon.yml` and redeploy.  Follow these steps:
    see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
 
 7. Click **Apply Changes**.
-

@@ -19,14 +19,7 @@ This topic assumes the following about your Ops Manager, BOSH CLI, and runtime c
     <th>More information</th>
   </tr>
   <tr>
-    <td>1.10 and earlier</td>
-    <td>CLI v1</td>
-    <td>single, default, runtime config file</td>
-    <td> <li><a href="https://bosh.io/docs/sysadmin-commands.html">BOSH CLI v1</a></li>
-</ul></td>
-  </tr>
-  <tr>
-    <td>1.11 and later</td>
+    <td>1.12 and later</td>
     <td>CLI v2+</td>
     <td>runtime config in multiple, named files, so that <code>ipsec</code>can be managed separately</td>
     <td><ul>
@@ -37,7 +30,7 @@ This topic assumes the following about your Ops Manager, BOSH CLI, and runtime c
 </table>
 
 
-<p class="note breaking"><strong>Breaking Change: </strong> If you are using PCF v1.11 or later,
+<p class="note breaking"><strong>Breaking Change: </strong> If you are using PCF v1.12 or later,
    you must use named runtime configs.
    If you have not already split your runtime config into multiple named files,
    do so before upgrading the IPsec Add-on for PCF.
@@ -63,49 +56,25 @@ To upgrade the IPsec add-on to a later version, do the following:
 3. SSH into the Ops Manager VM.
    For how to do this, see [SSH into Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
 
-4. Retrieve the latest runtime config by running one of the following commands:
-    <br><br>
-    **For Ops Manager v1.10 or earlier:**
+4. Retrieve the latest runtime config by running the following command:
 
     ```
-    bosh runtime-config > PATH-TO-SAVE-THE-RUNTIME-CONFIG
+    bosh -e BOSH-ENVIRONMENT runtime-config  --name ipsec > PATH-TO-SAVE-THE-RUNTIME-CONFIG
     ```
 
     For example:
 
-    <pre class="terminal">bosh runtime-config > /tmp/ipsec.yml</pre>
-    <br>
-    **For Ops Manager v1.11 or later:**
-
-    ```
-    bosh2 -e BOSH-ENVIRONMENT runtime-config  --name ipsec > PATH-TO-SAVE-THE-RUNTIME-CONFIG
-    ```
-
-    For example:
-
-    <pre class="terminal">bosh2 -e my-env runtime-config  --name ipsec > /tmp/ipsec.yml</pre>
+    <pre class="terminal">bosh -e my-env runtime-config  --name ipsec > /tmp/ipsec.yml</pre>
 
 5. Upload the latest IPsec release:
-    <br><br>
-    **For Ops Manager v1.10 or earlier:**
-
+  
     ```
-    bosh upload release PATH-TO-NEW-IPSEC-RELEASE
+    bosh -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE
     ```
 
     For example:
 
-    <pre class="terminal">bosh upload release ~/ipsec-1.8.14.tgz</pre>
-    <br>
-    **For Ops Manager v1.11 or later:**
-
-    ```
-    bosh2 -e BOSH-ENVIRONMENT upload-release PATH-TO-NEW-IPSEC-RELEASE
-    ```
-
-    For example:
-
-    <pre class="terminal">bosh2 -e my-env upload-release ~/ipsec-1.8.14.tgz</pre>
+    <pre class="terminal">bosh -e my-env upload-release ~/ipsec-1.8.14.tgz</pre>
 
 6. Edit the ipsec runtime config to set the new release version.
 
@@ -115,26 +84,13 @@ To upgrade the IPsec add-on to a later version, do the following:
      \- {name: ipsec, version: <strong>1.8.14</strong>} </pre>
 
 7. Update the runtime config: 
-    <br>
-    **For Ops Manager v1.10 or earlier:**
-
     ```
-    bosh update runtime-config PATH-TO-SAVE-THE-RUNTIME-CONFIG
+    bosh -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG
     ```
 
     For example:
 
-    <pre class="terminal">bosh update runtime-config /tmp/ipsec.yml</pre>
-    <br>
-    **For Ops Manager v1.11 or later:**
-
-    ```
-    bosh2 -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG
-    ```
-
-    For example:
-
-    <pre class="terminal">bosh2 -e my-env update-runtime-config --name=ipsec /tmp/ipsec.yml </pre>
+    <pre class="terminal">bosh -e my-env update-runtime-config --name=ipsec /tmp/ipsec.yml </pre>
 
 8. Navigate to your **Installation Dashboard** in Ops Manager.
 

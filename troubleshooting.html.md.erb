@@ -87,63 +87,6 @@ Scale your deployment by allocating more processing power to your VM CPU or GPUs
 ### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 
 #### Symptom
-Errors relating to IPsec, including symptoms of network partition. You may receive an error indicating that IPsec has stopped working.
-
-For example, this error shows a symptom of IPsec failure, a failed `clock_global-partition`:
-
-<pre class="terminal">
-Failed updating job clock_global-partition-abf4378108ba40fd9a43 > clock_global-partition-abf4378108ba40fd9a43/0
-(ddb1fbfa-71b1-4114-a82c-fd75867d54fc)
-(canary): 	Action Failed
-get_task: 	Task 044424f7-c5f2-4382-5d81-57bacefbc238
-result: 	Stopping Monitored Services: Stopping service
-ipsec: 		Sending stop request to Monit: Request failed,
-response: 	Response{ StatusCode: 503, Status: '503 Service Unavailable' } (00:05:22)..
-</pre>
-
-#### Explanation: Asynchronous `monit` Job Priorities
-
-When a monit stop command is issued to the NFS mounter job, it hangs, preventing a shutdown of the PCF cluster.
-
-This is not a problem with the IPsec add-on release itself. Rather, it is a known issue with the NFS mounter job and the monit stop script that can manifest itself after IPsec is deployed with PCF v1.7.
-
-This issue occurs when monit job priorities are asynchronous. Because the order of job shutdown is arbitrary, it is possible that the IPsec job will be stopped first. After this happens, the network connectivity for that VM goes away, and the NFS mounter job loses visibility to the associated storage. This causes the NFS mounter job to hang, and it blocks the monit stop from completing. See the [Monit job Github details](https://github.com/cloudfoundry/cf-release/blob/v231/jobs/nfs_mounter/monit) for further information.
-
-<p class="note"><strong>Note</strong>: This issue affects deployments using CF v231 or earlier, but in CF v232 the release uses an nginx blobstore instead of the NFS blobstore. The error does not exist for PCF deployments using CF releases greater than CF v231. The error also does not apply to PCF deployments that use WebDAV as their Cloud Controller blobstore.</p>
-
-#### Solution
-
-1. BOSH `ssh` into the stuck instance by running the following commands:
-  `bosh -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh VM-INDEX`
-
-1. Authenticate as root and use the `sv stop agent` command to kill the BOSH Agent:
-
-    <pre class="terminal">
-    $ sudo su
-    # sv stop agent
-    </pre>
-
-1. Run the following command to detect the missing monit job VM.
-  `bosh -e ENVIRONMENT-NAME -d DEPLOYMENT-NAME cloud-check`
-   
-    For example,
-
-    <pre class="terminal">
-    # bosh cloudcheck
-      VM with cloud ID `vm-3e37133c-bc33-450e-98b1-f86d5b63502a' missing:
-      <br>
-      <span>-</span> Ignore problem
-      <span>-</span> Recreate VM using last known apply spec
-      <span>-</span> Delete VM reference (DANGEROUS!)
-    </pre>
-
-1. Choose `Recreate VM using last known apply spec`.
-
-1. Continue with your deploy procedure.
-
-<hr>
-
-#### Symptom
 * App fails to start with the following message:
 <pre class="terminal">FAILED
 Server error,

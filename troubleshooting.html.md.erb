@@ -86,35 +86,32 @@ Scale your deployment by allocating more processing power to your VM CPU or GPUs
 
 <hr>
 #### Symptom
+
 IPsec fails to deploy with one of the following errors:
 
-* IPsec detected that the CA certificate and instance certificate have the same serial. Please ensure that the serials are not the same and redeploy.
+* `IPsec detected that the CA certificate and instance certificate have the same serial number.
+  Please ensure that the serials are not the same and redeploy.`
 
-* IPsec detected that the CA certificate and instance certificate have the same subject. Please ensure that the subjects are not the same and redeploy.
+* `IPsec detected that the CA certificate and instance certificate have the same subject.
+   Please ensure that the subjects are not the same and redeploy.`
 
-* Invalid CA/instance certificate. This may be caused by a duplicate subject or serial number."
+* `Invalid CA/instance certificate.
+   This may be caused by a duplicate subject or serial number.`
 
-#### Explanation: Same Serial Number/Subject Name
-The valid certificate chain does not allow root CA certificates, intermediate CA certificates or instance certificates to have the same serial number/subject name. Please ensure none of the certificates in the certificate chain have a duplicate serial number/subject name with each other.
+#### Explanation: Same Serial Number/Common Name
+
+Every certificate in the certificate chain must have a unique serial number and common name, 
+also called the subjectName.
+
+For example, a root certificate cannot have the same common name as an intermediate certificate;
+an instance certificate cannot have the same serial number as an intermediate certificate.
 
 #### Solution
 
-Follow these steps to replace the old certificate chain:
+Follow the steps in [Procedure 1: Rotate the Instance Certificate and Instance Private Key](./credentials.html#rotate-cert)
+to generate a new chain of certificates and replace the old chain.
 
-1. Generate a new set of certificates and ensure no certificates have a duplicate serial/subject.
-
-1. Replace the old certificate in your `ipsec-addon.yml`.
-
-1. Update the runtime config by running the following command:
-    ```bosh -e BOSH-ENVIRONMENT update-runtime-config --name=ipsec PATH-TO-SAVE-THE-RUNTIME-CONFIG```
-
-1. Navigate to your Ops Manager interface in a browser
-
-1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
-   For more information about this Ops Manager page,
-   see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
-
-1. Click **Apply Changes**.
+When you generate the new certificates, ensure no certificates have a duplicate serial numbers or common names.
 
 ### <a id="ipsec-runtime-issues"></a>IPsec Runtime Issues
 

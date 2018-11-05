@@ -24,6 +24,10 @@ This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-
             Don't update this v1.5 doc. 
             However, don't delete the branch either.
 
+## Book Repo
+
+The book repo for this product is [docs-book-ipsec](https://github.com/pivotal-cf/docs-book-identity).
+
 ## Style Guide
 
 Product name is IPsec Add-on for PCF. Notice that the "s" is lowercase.

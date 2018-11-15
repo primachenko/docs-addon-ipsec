@@ -7,6 +7,23 @@ owner: Security Engineering
 
 This topic contains release notes for the IPsec Add-on for PCF.
 
+##<a id="1913"></a>  v1.9.13
+
+**Release Date:** November 19, 2018
+
+### Features
+
+New features and changes in this release:
+
+* Updates strongSwan to 5.7.1.
+  For release notes, see the [strongSwan documentation](https://www.strongswan.org/blog/2018/10/01/strongswan-5.7.1-released.html).
+
+### Fixed Issues
+
+This release fixes the following issues:
+
+* Deployment of IPsec now fails if the instance cert and the CA cert have the same common name and/or serial number. This is to mediate the IPsec Windows job failing as a result of the same common name and/or serial number. 
+
 ##<a id="199"></a>  v1.9.9
 
 **Release Date:** August 23, 2018

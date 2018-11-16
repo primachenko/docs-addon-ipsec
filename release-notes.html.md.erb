@@ -22,9 +22,11 @@ New features and changes in this release:
 
 This release fixes the following issues:
 
-* Deployment of IPsec now fails if the instance certificate and the CA certificate have the
- same common name or serial number.
- This is to mitigate the IPsec Windows job failing as a result of the same common name or serial number.
+* The IPsec Windows job failed if the instance certificate and CA certificate had
+the same common name or serial number.
+Now, the deployment of IPsec fails if there are duplicate common names or serial
+numbers in the certificate chain.
+For more information, see [Symptom](./troubleshooting.html#duplicates]
 
 ### Known Issues
 

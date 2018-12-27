@@ -276,3 +276,16 @@ set a calendar reminder to rotate the certificates before they expire.
 
 For how to renew certificates, see [Renewing Expired IPsec Certificates](./renewing.html).
 For how to rotate them, see [Rotating IPsec Certificates](./credentials.html).
+
+<hr>
+
+#### Symptom
+Bosh shows a VM in a failing state, and on the failing VM, `monit summary` shows `ipsec` with a status of `Does not exist`.
+
+#### Explanation: IPsec stopped/crashed and monit cannot automatically bring it back up.
+IPsec is required to be the first process to start and the last process to stop. As a result, the start and stop scripts are located in `pre-start` and `post-stop`, which is a concept to Bosh but not to monit.
+Monit will not be able to bring IPsec back up automatically because it does not know what pre-start is. However, it will be able to detect IPsec as healthy after starting it manually.
+
+#### Solution
+1. From the failing VM, run the following command as root: `/var/vcap/jobs/ipsec/bin/pre-start`
+1. Run `monit summary`, which should show `ipsec` with a status of `Running`.

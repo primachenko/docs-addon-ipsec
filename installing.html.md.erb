@@ -291,6 +291,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
     <p class="note warning"><strong>WARNING</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
      you must add the IP address of the default router in your subnet to <code><strong>no\_ipsec\_subnets</strong></code>.
      For example, <code>10.0.0.1/32</code>.</p>
+    <p class="note warning"><strong>WARNING</strong>: IPs that are neither in <code><strong>ipsec_subnets</strong></code> nor <code><strong>no\_ipsec\_subnets</strong></code> will have no default behaviour and will not be able to communicate with other internal VMs. It is required that internal IPs are specified in either <code><strong>ipsec_subnets</strong></code> or <code><strong>no\_ipsec\_subnets</strong></code>.</p>
   * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> 
   Copy in the signed certificate that will be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.

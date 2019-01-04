@@ -284,12 +284,16 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           Pivotal recommends that you list the subnets that are used for PCF managed services.
           Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) 
           must be listed under `no_ipsec_subnets`.
-    <p class="note warning"><strong>WARNING</strong>: If you have an external load balancer such as F5, add it to the <code><strong>no\_ipsec\_subnets</strong></code> property.
-     If you want to include it in the <code><strong>ipsec_subnet</strong></code>, you must configure it manually.</p>
+
+    <p class="note"><strong>Note: </strong>If you have an external load balancer such as F5, add it to the <code>no_ipsec_subnets</code> property.
+     If you want to include it in the <code>ipsec_subnet</code>, you must configure it manually.</p>
+
+    <p class="note warning"><strong>WARNING</strong>: IPs that are not in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> have no default behavior and cannot communicate with other internal VMs. You must specify internal IPs in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code>.</p>
+
     <p class="note warning"><strong>WARNING</strong>: In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
-     you must add the IP address of the default router in your subnet to <code><strong>no\_ipsec\_subnets</strong></code>.
+     you must add the IP address of the default router in your subnet to <code>no_ipsec_subnets</code>.
      For example, <code>10.0.0.1/32</code>.</p>
-    <p class="note warning"><strong>WARNING</strong>: IPs that are neither in <code><strong>ipsec_subnets</strong></code> nor <code><strong>no\_ipsec\_subnets</strong></code> will have no default behaviour and will not be able to communicate with other internal VMs. It is required that internal IPs are specified in either <code><strong>ipsec_subnets</strong></code> or <code><strong>no\_ipsec\_subnets</strong></code>.</p>
+
   * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a> 
   Copy in the signed certificate that will be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.

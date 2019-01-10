@@ -7,11 +7,13 @@ owner: Security Engineering
 
 This topic describes how to uninstall the IPsec Add-on for PCF from your deployment, and how to verify the uninstallation.
 
+
 ##<a id="uninstall"></a>Uninstall IPsec Add-on
 To uninstall the IPsec Add-on, follow the steps below:
 
-###<a id="uninstall"></a>(Optional) Set Optional Flag to True
-When uninstalling IPsec, the `optional` flag must be set to `true` in the runtime config before properties are removed.
+
+###<a id="uninstall-flag"></a>(Optional) Set Optional Flag to True
+When uninstalling IPsec, the `optional` flag must be set to `true` in the runtime config of the current deployment before properties are removed.
 If your flag is already set this way, you can continue with the uninstallation with the procedure outlined in [Remove IPsec Properties](#uninstall-properties) below.
 
 To continue and set the `optional` flag to `true`, do the following:
@@ -94,10 +96,7 @@ To do this, follow the steps below:
 1. Click **Apply Changes**.
 
 
-
-
-
-## <a id='verify-uninstall'></a>Verify the Uninstallation
+## <a id='uninstall-verify'></a>Verify the Uninstallation
 To verify the uninstallation of the IPsec Add-on is successful, follow the steps below:
 
 1. Use `bosh ssh` to SSH into one of the VMs in your deployment.

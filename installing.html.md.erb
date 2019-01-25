@@ -276,14 +276,14 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
           if you try to add IPsec to an existing deployment
           without setting <code>optional</code> to <code>true</code>.</p>
   * <code><strong>ipsec\_subnets</strong></code>: <a name="ipsec_subnets"></a> List the subnets that you want to be encrypted.
-          You can include the entire deployment or a portion of the network.
+          You can include the entire deployment to encrypt all traffic or a portion of the network.
           Encrypt any network that handles business-sensitive data.
   * <code><strong>no\_ipsec\_subnets</strong></code>: <a name="no_ipsec_subnets"></a> 
   List the IP address of your BOSH Director and Ops Manager VM,
           along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
           Pivotal recommends that you list the subnets that are used for PCF managed services.
-          Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager) 
-          must be listed under `no_ipsec_subnets`.
+          Subnets for PCF managed services that do not support IPsec (such as an Pivotal Ops Manager or service tiles) 
+          must be listed under `no_ipsec_subnets` and installed in a separate network.
 
     <p class="note"><strong>Note: </strong>If you have an external load balancer such as F5, add it to the <code>no_ipsec_subnets</code> property.
      If you want to include it in the <code>ipsec_subnet</code>, you must configure it manually.</p>

@@ -2,27 +2,17 @@
 
 This repo contains the source materials for the Pivotal Cloud Foundry IPsec Add-on documentation.
 
-## Branches 
+## Branches
 
-* **master** — Used for doc in development. 
-               Publishes to https://docs-pcf-staging.cfapps.io/addon-ipsec/1-10/ using the 
-               edge branch of the pivotal-cf/docs-book-ipsec book.
-               
-* **1.9** — Contains live docs for v1.9. Publishes to https://docs.pivotal.io/addon-ipsec/1-9/ using the 
-               master branch of the pivotal-cf/docs-book-ipsec book.
+| Branch name | Use for… |
+|-------------| ------|
+| master      | doc in development, publishes to https://docs-pcf-staging.cfapps.io/addon-ipsec/1-10/ using the edge branch of the pivotal-cf/docs-book-ipsec book.|
+| 1.9         | live docs for v1.9, publishes to https://docs.pivotal.io/addon-ipsec/1-9/ using the master branch of the pivotal-cf/docs-book-ipsec book.|
+| 1.8         | live docs for v1.8, publishes to https://docs.pivotal.io/addon-ipsec/1-8/ using the master branch of the pivotal-cf/docs-book-ipsec book.|
+| 1.7         | NOT IN USE (Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.7.pdf) |  
+| 1.6         | NOT IN USE (Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.6.pdf) |
+| 1.5         | NOT IN USE (Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.5.pdf) |
 
-* **1.8** — Contains live docs for v1.8. Publishes to https://docs.pivotal.io/addon-ipsec/1-8/ using the 
-               master branch of the pivotal-cf/docs-book-ipsec book.
-
-* **1.7** — Contains live doc for v1.7.
-
-* **1.6** — Contains end-of-life docs, removed from production. Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.6.pdf.
-            Don't update this v1.6 doc.
-            However, don't delete the branch either.
-
-* **1.5** — Contains end-of-life docs, removed from production. Published as PDF at https://docs.pivotal.io/archives/addon-ipsec-1.5.pdf
-            Don't update this v1.5 doc. 
-            However, don't delete the branch either.
 
 ## Book Repo
 

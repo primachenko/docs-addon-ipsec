@@ -294,3 +294,23 @@ After you run the `pre-start` manually, then Monit is able to detect IPsec as he
 1. From the failing VM, run the following command as root: `/var/vcap/jobs/ipsec/bin/pre-start`
 1. Run `monit summary`.
 If the restart is successful, Monit shows `ipsec` with a status of `Running`.
+
+### <a id="ipsec-load-balancer-issues"></a>IPsec Load Balancer Issues
+
+#### Symptom
+Smoke test errand fails with error ______.
+
+#### Explanation: Clock global is trying to call an API of an app hosted in PCF. This
+API call will be routed through your external load balancer to gorouter, which will fail
+if you are using Network Load Balancers (NLB). The reason is because NLBs will
+manipulate the packet such that the source IP in the IP header will be clock global's IP
+instead of the load balancer's IP. When clock global communicates with the NLB it will
+not use IPsec since the NLB's IP is outside the ipsec_subnet. However, when gorouter
+sees that the source IP of the packet is clock global, it will expect the packet to
+be encrypted with IPsec. It will drop the packet because it's not encrypted with IPsec,
+resulting in a timeout.
+
+#### Solution
+Do not use Network Load Balancers as your external load balancer in your IaaS. Use
+another type of load balancer (ex: application load balancer in AWS, HTTP load balancer
+in GCP).

@@ -24,7 +24,7 @@ To complete the IPsec installation, verify that you have satisfied the following
   or empirically test the correct MTU for your environment.
 
 ##<a id="bestpractices"></a>Best Practices
-  * IPsec may affect the functionality of other service tiles.
+  * IPsec might affect the functionality of other service tiles.
     As a result, Pivotal recommends deploying PAS
     and each service tile to different isolated subnets.
     Alternatively, you can minimally deploy all service tiles to a single isolated subnet,
@@ -57,6 +57,8 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, perform the
 1. Adjust the MTU value to `1354` by performing the procedure in the <a href="./troubleshooting.html#ipsec-installation-issues">Packet Loss</a> section of the Troubleshooting the IPsec Add-on for PCF topic.
 
 ###<a id="vsphere"></a>vSphere
+
+<p class="note"><strong>Note:</strong> IPsec is not supported on VMware NSX-T.</p>
 
 Confirm that your network allows the protocols listed in the table below.
 
@@ -295,10 +297,10 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
      For example, <code>10.0.0.1/32</code>.</p>
 
   * <code><strong>instance\_certificate</strong></code>: <a name="instance_certificate"></a>
-  Copy in the signed certificate that will be used by all your instance VMs.
+  Copy in the signed certificate to be used by all your instance VMs.
           You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.
           Pivotal recommends that you use a self-signed certificate.
-          For more information, see [Generate a Self-Signed Certificate](#self-signed).
+          For more information, see [Generate a Self-Signed Certificate](#self-signed) below.
   * <code><strong>instance\_private\_key</strong></code>: <a name="instance_private_key"></a>
           Copy in the private key that corresponds to the <code>instance\_certificate</code> above.
           This key must not use a pass phrase.
@@ -373,7 +375,7 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, follow these steps
   </pre>
 
 1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file.
-   Add it under the `ipsec-addon` section for Linux, if you included one [above](#linux).
+   Add it under the `ipsec-addon` section for Linux, if you included one when following the steps in the [Add Linux VM Support to Your Runtime Config](#linux) section above.
   <pre>
   \- name: ipsec-windows-addon
       jobs:
@@ -513,7 +515,7 @@ follow the steps below.
    you must use named runtime configs.
    If you have not already split your runtime config into multiple named files,
    do so before upgrading the IPsec Add-on for PCF.
-   For general information about named runtime config files, see <a href="https://bosh.io/docs/configs.html">Configs</a>.</p>
+   For general information about named runtime config files, see <a href="https://bosh.io/docs/configs.html">Generic Configs</a> in the BOSH documentation.</p>
 
 1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
@@ -601,7 +603,7 @@ $ cd PATH-TO-BINARY</pre>
   1. Deploy PAS by following the installation instructions for your IaaS.
      For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html).
 
-1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information.  When the deployment process is completed, be sure to remove any unneeded copies of these files from the local workstation. Pivotal recommends that any archival copies of manifest files to be retained should be appropriately secured via encryption and/or logical access controls.
+1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information. When the deployment process is completed, remove any unneeded copies of these files from the local workstation. Pivotal recommends that you use encryption or logical access controls to secure any archival copies of manifest files you want to retain.
 
 ##<a id="verify"></a> Step 4: Verify Your IPsec Installation
 

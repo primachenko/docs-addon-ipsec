@@ -89,5 +89,7 @@ IPsec Add-on for PCF has the following limitations:
 * Due to a [known issue](https://github.com/Microsoft/hcsshim/issues/244) in Windows Server OS,
   apps hosted on PAS for Windows cannot route traffic when deployed with the IPsec add-on for PCF.
 
+* IPsec is not suppoerted on VMware NSX-T.
+
 * Pivotal recommends configuring IPsec to use a self-signed certificate to sign instance certs.
   Using a certificate signed by a public or third-party CA is not recommended.

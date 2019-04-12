@@ -7,7 +7,7 @@ owner: Security Engineering
 
 This guide describes the IPsec Add-on for PCF, which secures data transmissions inside [Pivotal Cloud Foundry](https://network.pivotal.io/products/pivotal-cf) (PCF). Topics covered in this guide include IPsec Add-on for PCF installation and configuration, troubleshooting, and certificate rotation.
 
-Your organization may require IPsec if you transmit sensitive data.
+Your organization might require IPsec if you transmit sensitive data.
 
 ## <a id="overview"></a> Overview
 
@@ -86,10 +86,9 @@ The IPsec Add-on for PCF implements the following cryptographic suite:
 
 IPsec Add-on for PCF has the following limitations:
 
-* Due to a [known issue](https://github.com/Microsoft/hcsshim/issues/244) in Windows Server OS,
-  apps hosted on PAS for Windows cannot route traffic when deployed with the IPsec add-on for PCF.
+* Due to an issue in Windows Server OS, apps hosted on PAS for Windows cannot route traffic when deployed with the IPsec Add-on for PCF. For more information on the issue, see [hcsshim](https://github.com/Microsoft/hcsshim/issues/244) in GitHub.
 
-* IPsec is not suppoerted on VMware NSX-T.
+* IPsec is not supported on VMware NSX-T.
 
-* Pivotal recommends configuring IPsec to use a self-signed certificate to sign instance certs.
-  Using a certificate signed by a public or third-party CA is not recommended.
+* Pivotal recommends configuring IPsec to use a self-signed certificate to sign instance certificates.
+  Pivotal does not recommend using a certificate signed by a public or third-party CA.

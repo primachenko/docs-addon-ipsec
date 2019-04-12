@@ -11,7 +11,7 @@ Your organization may require IPsec if you transmit sensitive data.
 
 ## <a id="overview"></a> Overview
 
-The IPsec Add-on for PCF provides security to the network layer of the OSI model with a 
+The IPsec Add-on for PCF provides security to the network layer of the OSI model with a
 [strongSwan](https://www.strongswan.org/) implementation of IPsec.
 The IPsec Add-on provides a strongSwan job in FIPS mode to each BOSH-deployed VM.
 
@@ -41,6 +41,10 @@ The following table provides version and version-support information about the I
     <tr>
         <td>Compatible Pivotal Application Service (PAS) versions</td>
         <td>2.2, 2.3, 2.4, and 2.5</td>
+    </tr>
+    <tr>
+        <td>Compatible BOSH stemcells</td>
+        <td>Ubuntu Xenial and Trusty</td>
     </tr>
     <tr>
         <td>IaaS support</td>
@@ -86,4 +90,4 @@ IPsec Add-on for PCF has the following limitations:
   apps hosted on PAS for Windows cannot route traffic when deployed with the IPsec add-on for PCF.
 
 * Pivotal recommends configuring IPsec to use a self-signed certificate to sign instance certs.
-  Using a certificate signed by a public or third-party CA is not recommended. 
+  Using a certificate signed by a public or third-party CA is not recommended.

@@ -328,6 +328,10 @@ be encrypted with IPsec. It then drops the packet because it is not encrypted wi
 resulting in a timeout.
 
 #### Solution
-Do not use Network Load Balancers as your external load balancer in your IaaS. Use
-another type of load balancer, such as the application load balancer in AWS or the HTTP load balancer
-in Google Cloud Platform (GCP).
+Do not use Network Load Balancers as your external load balancer in your IaaS. Use Level 7 balancers. To set up one, please look at the following based on your IAAS.
+
+* On AWS, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html">Setup an application load balancer</a>
+
+* On GCP, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">Setup a HTTP load balancer</a>
+
+* On Azure, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">Setup an application gateway</a>

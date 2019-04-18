@@ -5,7 +5,7 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic provides instructions to verify that strongSwan-based IPsec works with your Pivotal Cloud Foundry (PCF) deployment and general recommendations for troubleshooting IPsec.
+This topic provides instructions to verify that strongSwan-based IPsec works with your Pivotal Cloud Foundry (PCF) deployment and also general recommendations for troubleshooting IPsec.
 
 ## <a id='verify-ipsec'></a>Verify that IPsec Works with PCF
 To verify that IPsec works between two hosts, you can check that traffic is encrypted in the deployment with `tcpdump`, perform the ping test, and check the logs with the steps below.
@@ -27,7 +27,7 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 
 If you experience symptoms that IPsec does not establish a secure connection, return to the [Installing the IPsec Add-on for PCF](./installing.html) topic and review your installation.
 
-If you encounter issues with installing IPsec, refer to the [Troubleshooting IPsec](#troubleshoot-ipsec) section of this topic.
+If you encounter issues with installing IPsec, refer to the [Troubleshoot IPsec](#troubleshoot-ipsec) section of this topic below.
 
 ## <a id='troubleshoot-ipsec'></a>Troubleshoot IPsec
 
@@ -79,10 +79,10 @@ Do one of the following:
 Unresponsive applications or incomplete responses, particularly for large payloads
 
 #### Explanation: Network Degradation
-IPsec data encryption increases the size of packet payloads. If the number of requests and the size of your files are large, the network may degrade.
+IPsec data encryption increases the size of packet payloads. If the number of requests and the size of your files are large, the network might degrade.
 
 #### Solution
-Scale your deployment by allocating more processing power to your VM CPU or GPUs, which, additionally, decreases the packet encryption time. One way to increase network performance is to compress the data prior to encryption. This approach increases performance by reducing the amount of data transferred.
+Scale your deployment by allocating more processing power to your VM CPU or GPUs, which, additionally, decreases the packet encryption time. One way to increase network performance is to compress the data before encryption. This approach increases performance by reducing the amount of data transferred.
 
 <hr>
 ####<a name='duplicate'></a> Symptom
@@ -90,13 +90,13 @@ Scale your deployment by allocating more processing power to your VM CPU or GPUs
 IPsec fails to deploy with one of the following errors:
 
 * `IPsec detected that the CA certificate and instance certificate have the same serial number.
-  Please ensure that the serials are not the same and redeploy.`
+  Ensure that the serial numbers are not the same and redeploy.`
 
 * `IPsec detected that the CA certificate and instance certificate have the same subject.
-   Please ensure that the subjects are not the same and redeploy.`
+   Ensure that the subjects are not the same and redeploy.`
 
 * `Invalid CA/instance certificate.
-   This may be caused by a duplicate subject or serial number.`
+   This might be caused by a duplicate subject or serial number.`
 
 #### Explanation: Same Serial Number/Common Name
 
@@ -135,12 +135,12 @@ diego_database-partition-620982d595434269a96a/0 (a643c6c0-bc43-411b-b011-58f49fb
 This error indicates a “split brain” issue with Consul.
 
 #### Solution
-Confirm this diagnosis by checking the `peers.json` file from /var/vcap/store/consul\_agent/raft. If it is null, then there may be a split brain. To fix this problem, follow these steps:
+Confirm this diagnosis by checking the `peers.json` file from /var/vcap/store/consul\_agent/raft. If it is null, then there might be a split brain. To fix this problem, follow these steps:
 
 1. Run `monit stop` on all Consul servers:
 1. Run `rm -rf /var/vcap/store/consul_agent/` on all Consul servers.
 1. Run `monit start consul_agent` on all Consul servers one at a time.
-1. Restart the consul\_agent process on the Cloud Controller VM. You may need to restart consul\_agent on other VMs, as well.
+1. Restart the consul\_agent process on the Cloud Controller VM. You might need to restart consul\_agent on other VMs, as well.
 
 <hr>
 #### Symptom
@@ -180,7 +180,7 @@ Set up a networking restriction on host VMs to only allow IPsec protocol and blo
 </tr>
 </table>
 
-<p class="note"><strong>Note</strong>: When configuring a network security group, IPsec adds an additional layer to the original communication protocol. If a certain connection is targeting a port number, for example port 8080 with TCP, it actually uses IP protocol 50/51 instead. Due to this detail, traffic targeted at a blocked port may be able to go through.</p>
+<p class="note"><strong>Note</strong>: When configuring a network security group, IPsec adds an additional layer to the original communication protocol. If a certain connection is targeting a port number, for example port 8080 with TCP, it actually uses IP protocol 50/51 instead. Due to this detail, traffic targeted at a blocked port might be able to go through.</p>
 
 <hr>
 
@@ -320,18 +320,13 @@ Clock global is trying to call an API of an app hosted in PCF. This
 API call is routed through your external load balancer to Gorouter, which fails
 if you are using Network Load Balancers (NLB).
 
-This is because NLBs manipulate the packet so that the source IP in the IP header is clock global's IP
-instead of the load balancer's IP. When clock global communicates with the NLB it will
-not use IPsec because the NLB's IP is outside the IPsec subnet. However, when Gorouter
-sees that the source IP of the packet is clock global, it expects the packet to
-be encrypted with IPsec. It then drops the packet because it is not encrypted with IPsec,
-resulting in a timeout.
+This is because NLBs manipulate the packet so that the source IP in the IP header is clock global's IP instead of the load balancer's IP. When clock global communicates with the NLB it does not use IPsec because the NLB's IP is outside the IPsec subnet. However, when Gorouter sees that the source IP of the packet is clock global, it expects the packet to be encrypted with IPsec. It then drops the packet because it is not encrypted with IPsec, resulting in a timeout.
 
 #### Solution
-Do not use Network Load Balancers as your external load balancer in your IaaS. Use Level 7 balancers. To set up one, please look at the following based on your IAAS.
+Do not use Network Load Balancers as your external load balancer in your IaaS. Use Level 7 balancers. To set one up, follow the steps in the guide for your IaaS below.
 
-* On AWS, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html">Setup an application load balancer</a>
+* For AWS, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html">the AWS documentation</a>.
 
-* On GCP, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">Setup a HTTP load balancer</a>
+* For GCP, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">the Google Cloud documentation</a>.
 
-* On Azure, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">Setup an application gateway</a>
+* For Azure, see <a href="https://cloud.google.com/load-balancing/docs/https/setting-up-https">Setup an application gateway</a>

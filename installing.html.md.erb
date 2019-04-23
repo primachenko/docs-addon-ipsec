@@ -13,6 +13,8 @@ To complete the IPsec installation, verify that you have satisfied the following
 
 * Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS), or OpenStack as your IaaS
 
+* IPsec does not work with Network Load Balancers (NLB). Make sure that your external load balancers are not NLBs in your IaaS. For more information, see <a href="./troubleshooting.html#ipsec-load-balancer-issues">IPsec Load Balancer Issues</a>.
+
 * Pivotal Cloud Foundry (PCF) operator administration rights
 
 * BOSH deployed through Ops Manager v1.8 or later

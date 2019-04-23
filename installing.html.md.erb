@@ -5,34 +5,49 @@ owner: Security Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to prepare your network for IPsec, create an IPsec runtime config, and add IPsec to your deployment.
+This topic describes how to prepare your network for the IPsec Add-on for PCF,
+create an IPsec runtime config, and add IPsec to your deployment.
 
 ##<a id="prereqs"></a>Prerequisites
 
-To complete the IPsec installation, verify that you have satisfied the following prerequisites before you begin:
+To install IPsec, you must have the following:
 
-* Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS), or OpenStack as your IaaS
+* Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS), or OpenStack as your IaaS.
 
+<<<<<<< HEAD
 * IPsec does not work with Network Load Balancers (NLB). Make sure that your external load balancers are not NLBs in your IaaS. For more information, see <a href="./troubleshooting.html#ipsec-load-balancer-issues">IPsec Load Balancer Issues</a>.
 
 * Pivotal Cloud Foundry (PCF) operator administration rights
+=======
+* Pivotal Cloud Foundry (PCF) operator administration rights.
+>>>>>>> Preliminary edits and cleanup [#154248281]
 
-* BOSH deployed through Ops Manager v1.8 or later
+* BOSH deployed through Ops Manager v1.8 or later.
 
-* Set the MTU for your IaaS in the Pivotal Application Service (PAS) tile, under **Networking**.
-  Pivotal recommends MTU values of 1354 on GCP, 1438 on Azure,
-  and the default values on AWS and vSphere.
-  For OpenStack, follow the recommendations of your [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2) plugin provider,
+* Set the Maximum Transmission Unit (MTU) for your IaaS in the Pivotal Application Service (PAS) tile, under **Networking**.
+  Pivotal recommends the following MTU values:
+  * GCP: `1354`
+  * Azure: `1438`
+  * AWS: Default value
+  * vSphere: Default value
+  * OpenStack: Follow the recommendations of your Neutron ML2 plugin provider,
   or empirically test the correct MTU for your environment.
+  For more information about the ML2 plugin, see
+  [Neutron/ML2](https://wiki.openstack.org/wiki/Neutron/ML2)
+  in the OpenStack documentation.
 
 ##<a id="bestpractices"></a>Best Practices
+<<<<<<< HEAD
   * IPsec might affect the functionality of other service tiles.
     As a result, Pivotal recommends deploying PAS
     and each service tile to different isolated subnets.
+=======
+  * Pivotal recommends deploying PAS and each service tile to different isolated subnets.
+    This is because IPsec may affect the functionality of other service tiles.
+>>>>>>> Preliminary edits and cleanup [#154248281]
     Alternatively, you can minimally deploy all service tiles to a single isolated subnet,
     apart from the PAS subnet.
-    Some service tiles do not support IPsec
-    and must be placed in a non-IPsec subnet.
+    Some service tiles do not support IPsec and must be placed in a non-IPsec subnet.
   * For IPsec on Linux VMs, Pivotal recommends any Ubuntu stemcells for vSphere, OpenStack, and HVM stemcells for AWS.
     These stemcells are available on <a href="https://network.pivotal.io/products/stemcells">Pivotal Network</a>.
     If you use PV stemcells obtained from <a href="https://bosh.io">bosh.io</a>,

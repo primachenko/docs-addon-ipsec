@@ -316,18 +316,21 @@ Failure [15.073 seconds]
 </pre>
 
 #### Explanation
+
 Clock global is trying to call an API of an app hosted in PCF.
 This API call is routed through your external load balancer to Gorouter, which
 fails if you are using Network Load Balancers (NLB).
 
-This is because of how NLBs manipulate the packet. They make the source IP in the IP header the clock global's IP instead of the load balancer's IP.<br><br>
-When clock global communicates with the NLB, it does not use IPsec because the NLB's IP is outside the IPsec subnet.<br><br>
-However, when Gorouter sees that the source IP of the packet is clock global, it expects the packet to be encrypted with IPsec.<br><br>
+This is because of how NLBs manipulate the packet.
+They make the source IP in the IP header the clock global's IP instead of the load balancer's IP.
+When clock global communicates with the NLB, it does not use IPsec because the NLB's IP is outside the IPsec subnet.
+However, when Gorouter sees that the source IP of the packet is clock global, it expects the packet to be encrypted with IPsec.
 It then drops the packet because it is not encrypted with IPsec, resulting in a timeout.
 
 #### Solution
-Do not use Network Load Balancers as your external load balancer in your IaaS.<br>
-Use Level 7 load balancers.<br>
+
+Do not use Network Load Balancers as your external load balancer in your IaaS.
+Use Level 7 load balancers.
 To set one up, follow the steps in the guide for your IaaS below.
 
 * For AWS, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html">the AWS documentation</a>.

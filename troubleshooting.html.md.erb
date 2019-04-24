@@ -19,7 +19,7 @@ To verify that IPsec works between two hosts, you can check that traffic is encr
 	<pre class="terminal">$ ssh IP-ADDRESS-2</pre>
 	1. On the second host, run the following:
 	<pre class="terminal">$ ping IP-ADDRESS-1</pre>
-	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` will look similar to the following:
+	1. Verify that the packet type is ESP. If the traffic shows `ESP` as the packet type, traffic is successfully encrypted. The output from `tcpdump` looks similar to the following:
 	<pre class="terminal">03:01:15.242731 IP IP-ADDRESS-2 > IP-ADDRESS-1: ESP(spi=0xcfdbb261,seq=0x3), length 100</pre>
 1. Open the `/var/log/daemon.log` file to obtain a detailed report, including information pertaining to the type of certificates you use, and to verify an established connection exists.
 1. Navigate to your Installation Dashboard, and click **Recent Install Logs** to view information regarding your most recent deployment. Search for "ipsec" and the status of the IPsec job.
@@ -300,8 +300,8 @@ If the restart is successful, Monit shows `ipsec` with a status of `Running`.
 #### Symptom
 Smoke test errand fails with error:
 <pre class="terminal">
-Setting api endpoint to https<span>:</span>//api.sys.&lt;YOUR_DOMAIN&gt;...
-Request error: Get https://api.sys.&lt;YOUR_DOMAIN&gt;/v2/info: dial tcp https://api.sys.&lt;YOUR_DOMAIN&gt;:443: i/o timeout
+Setting api endpoint to https<span>:</span>//api.sys.&lt;YOUR-DOMAIN&gt;...
+Request error: Get https://api.sys.&lt;YOUR-DOMAIN&gt;/v2/info: dial tcp https://api.sys.&lt;YOUR-DOMAIN&gt;:443: i/o timeout
 TIP: If you are behind a firewall and require an HTTP proxy, verify the https_proxy environment variable is correctly set. Else, check your network connection.
 FAILED
 
@@ -312,18 +312,23 @@ Failure [15.073 seconds]
 
   No future change is possible.  Bailing out early after 0.001s.
 
-  >>> [ cf api https://api.sys.&lt;YOUR_DOMAIN&gt; --skip-ssl-validation ] exited with an error
+  >>> [ cf api https://api.sys.&lt;YOUR-DOMAIN&gt; --skip-ssl-validation ] exited with an error
 </pre>
 
 #### Explanation
-Clock global is trying to call an API of an app hosted in PCF. This
-API call is routed through your external load balancer to Gorouter, which fails
-if you are using Network Load Balancers (NLB).
+Clock global is trying to call an API of an app hosted in PCF.
+This API call is routed through your external load balancer to Gorouter, which
+fails if you are using Network Load Balancers (NLB).
 
-This is because NLBs manipulate the packet so that the source IP in the IP header is clock global's IP instead of the load balancer's IP. When clock global communicates with the NLB it does not use IPsec because the NLB's IP is outside the IPsec subnet. However, when Gorouter sees that the source IP of the packet is clock global, it expects the packet to be encrypted with IPsec. It then drops the packet because it is not encrypted with IPsec, resulting in a timeout.
+This is because of how NLBs manipulate the packet. They make the source IP in the IP header the clock global's IP instead of the load balancer's IP.
+When clock global communicates with the NLB, it does not use IPsec because the NLB's IP is outside the IPsec subnet.
+However, when Gorouter sees that the source IP of the packet is clock global, it expects the packet to be encrypted with IPsec.
+It then drops the packet because it is not encrypted with IPsec, resulting in a timeout.
 
 #### Solution
-Do not use Network Load Balancers as your external load balancer in your IaaS. Use Level 7 balancers. To set one up, follow the steps in the guide for your IaaS below.
+Do not use Network Load Balancers as your external load balancer in your IaaS.
+Use Level 7 load balancers.
+To set one up, follow the steps in the guide for your IaaS below.
 
 * For AWS, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancer-getting-started.html">the AWS documentation</a>.
 

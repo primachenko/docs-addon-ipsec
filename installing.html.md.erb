@@ -12,15 +12,14 @@ create an IPsec runtime config, and add IPsec to your deployment.
 
 To install IPsec, you must have the following:
 
-* Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS), or OpenStack as your IaaS.
+* Google Cloud Platform (GCP), vSphere, Azure, Amazon Web Services (AWS),
+or OpenStack as your IaaS.
 
-<<<<<<< HEAD
-* IPsec does not work with Network Load Balancers (NLB). Make sure that your external load balancers are not NLBs in your IaaS. For more information, see <a href="./troubleshooting.html#ipsec-load-balancer-issues">IPsec Load Balancer Issues</a>.
+* IPsec does not work with Network Load Balancers (NLB).
+Make sure that your external load balancers are not NLBs in your IaaS.
+For more information, see [IPsec Load Balancer Issues](./troubleshooting.html#ipsec-load-balancer-issues).
 
 * Pivotal Cloud Foundry (PCF) operator administration rights
-=======
-* Pivotal Cloud Foundry (PCF) operator administration rights.
->>>>>>> Preliminary edits and cleanup [#154248281]
 
 * BOSH deployed through Ops Manager v1.8 or later.
 
@@ -37,14 +36,9 @@ To install IPsec, you must have the following:
   in the OpenStack documentation.
 
 ##<a id="bestpractices"></a>Best Practices
-<<<<<<< HEAD
   * IPsec might affect the functionality of other service tiles.
     As a result, Pivotal recommends deploying PAS
     and each service tile to different isolated subnets.
-=======
-  * Pivotal recommends deploying PAS and each service tile to different isolated subnets.
-    This is because IPsec may affect the functionality of other service tiles.
->>>>>>> Preliminary edits and cleanup [#154248281]
     Alternatively, you can minimally deploy all service tiles to a single isolated subnet,
     apart from the PAS subnet.
     Some service tiles do not support IPsec and must be placed in a non-IPsec subnet.
@@ -55,7 +49,16 @@ To install IPsec, you must have the following:
   * For IPsec on Windows VMs, Pivotal recommends the Windows 2012R2 stemcells for AWS, GCP,
     or Azure available on <a href="https://network.pivotal.io/products/stemcells-windows-server">Pivotal Network</a>.
 
-##<a id="config-network"></a>Step 1: Configure Network Security
+
+##<a id="install"></a>Install IPsec
+To install IPsec, you must complete the following:
+
+1. [Configure Network Security](#config-network)
+1. [Create the IPsec Manifest](#create-mfest)
+1. [Download and Deploy the IPsec Add-on](#download-deploy)
+1. [Verify Your IPsec Installation](#verify)
+
+##<a id="config-network"></a>Configure Network Security
 
 Perform the steps in the appropriate section below to configure your IaaS network security.
 
@@ -211,7 +214,7 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
   </tr>
   </table>
 
-##<a id="create-mfest"></a>Step 2: Create the IPsec Manifest
+##<a id="create-mfest"></a>Create the IPsec Manifest
 
 To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`
 that configures IPsec add-on properties for Linux VMs, Windows VMs, or both.
@@ -448,7 +451,7 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, follow these steps
      if you try to add IPsec to an existing deployment
      without setting <code>optional</code> to <code>true</code> for both Linux and Windows.</p>
 
-###<a id="proposals"></a> Optional: Custom Linux/Windows Mixed Deployment Proposals
+###<a id="proposals"></a>(Optional): Custom Linux/Windows Mixed Deployment Proposals
 
 A default proposal set is already selected for the `ipsec-addon.yml`.
 If you want to use different proposals, modify the `ipsec-addon.yml` using the following table:
@@ -523,7 +526,7 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
 
 
 
-##<a id="download-deploy"></a> Step 3: Download and Deploy the IPsec Add-on
+##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
 To download the IPsec binary, add your IPsec runtime config to your BOSH manifest, and deploy the IPsec add-on,
 follow the steps below.
@@ -622,7 +625,7 @@ $ cd PATH-TO-BINARY</pre>
 
 1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information. When the deployment process is completed, remove any unneeded copies of these files from the local workstation. Pivotal recommends that you use encryption or logical access controls to secure any archival copies of manifest files you want to retain.
 
-##<a id="verify"></a> Step 4: Verify Your IPsec Installation
+##<a id="verify"></a>Verify Your IPsec Installation
 
 After installing IPsec and deploying PAS, perform the following steps to verify your IPsec installation:
 

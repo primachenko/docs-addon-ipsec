@@ -27,14 +27,14 @@ or OpenStack as your IaaS.
 
 * In your IaaS, external load balancers that are not Network Load Balancers (NLB).
 IPsec does not work with NLBs.
-For more information, see [IPsec Load Balancer Issues](./troubleshooting.html#ipsec-load-balancer-issues). 
+For more information, see [IPsec Load Balancer Issues](./troubleshooting.html#ipsec-load-balancer-issues).
 
 * Pivotal Cloud Foundry (PCF) operator administration rights
 
 * BOSH deployed through Ops Manager v1.8 or later.
 
-* The Maximum Transmission Unit (MTU) for your IaaS set in the Pivotal Application Service (PAS) tile. 
-You can find the **Applications Network Maximum Transmission Unit (MTU) (in bytes)** setting 
+* The Maximum Transmission Unit (MTU) for your IaaS set in the Pivotal Application Service (PAS) tile.
+You can find the **Applications Network Maximum Transmission Unit (MTU) (in bytes)** setting
 by navigating to **PCF Ops Manager** > **Pivotal Application Service** > **Networking**. <br><br>
   Pivotal recommends the following MTU values:
   * GCP: `1354`
@@ -91,7 +91,7 @@ To configure your Google Cloud Platform (GCP) environment for IPsec, do the foll
 
 <p class="note"><strong>Note:</strong> IPsec is not supported on VMware NSX-T.</p>
 
-To configure your vSphere environment for IPsec, confirm that your network allows 
+To configure your vSphere environment for IPsec, confirm that your network allows
 the protocols listed in the table below:
 
 <table>
@@ -242,7 +242,7 @@ To add IPsec to VMs in your deployment, do the following:
   addons:
   </pre>
 1. Add properties to the `ipsec-addon.yml` file as described below:
-  + [Add Linux VM Support to Your Runtime Config](#linux) 
+  + [Add Linux VM Support to Your Runtime Config](#linux)
   + [Add Windows VM Support to Your Runtime Config](#windows)
   + [(Optional) Custom Linux/Windows Mixed Deployment Proposals](#proposals)
 
@@ -314,12 +314,12 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
     <th width="35%">Property</th>
     <th>Instructions</th>
   </tr>
-  
+
   <tr>
     <td><code><strong>version</strong></code><a name="version"></a></td>
     <td>Specify the version number of your IPsec download from Pivotal Network.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>optional</strong></code><a name="optional"></a></td>
     <td>This value makes IPsec enforcement optional.
@@ -330,7 +330,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
               without setting <code>optional</code> to <code>true</code>.</p>
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>ipsec_subnets</strong></code> <a name="ipsec_subnets"></a></td>
     <td>List the subnets that you want to be encrypted.
@@ -338,7 +338,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
             Encrypt any network that handles business-sensitive data.
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>no_ipsec_subnets</strong></code> <a name="no_ipsec_subnets"></a></td>
     <td>  List the IP address of your BOSH Director and Ops Manager VM,
@@ -357,23 +357,23 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
          For example, <code>10.0.0.1/32</code>.</p>
     </td>
   </tr>
-  
+
   <tr>
     <td> <code><strong>instance_certificate</strong></code> <a name="instance_certificate"></a></td>
     <td>Copy in the signed certificate to be used by all your instance VMs.
             You must use one of the CAs in the <code>ca_certificates</code> property to sign this certificate.
             Pivotal recommends that you use a self-signed certificate.
-            For more information, see 
+            For more information, see
             <a href="#self-signed">Generate a Self-Signed Certificate</a> below.
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance_private_key</strong></code><a name="instance_private_key"></a></td>
     <td>Copy in the private key that corresponds to the <code>instance_certificate</code> above.
       This key must not use a pass phrase.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>ca_certificates</strong></code> <a name="ca-certs"></a></td>
     <td>          Copy in CA certificates for the instance VM to trust during the validation process.
@@ -389,11 +389,11 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
      ... <strong>&#60;ROOT&#62;</strong>
      -----END CERTIFICATE-----
      -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;INTERMEDIATE 1 ISSUED BY 
+     ... <strong>&#60;INTERMEDIATE 1 ISSUED BY
      THE ROOT CERT ABOVE&#62;</strong>
      -----END CERTIFICATE-----
      -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;INTERMEDIATE 2 ISSUED BY 
+     ... <strong>&#60;INTERMEDIATE 2 ISSUED BY
      THE INTERMEDIATE 1 ABOVE
      ... AND SIGNS THE INSTANCE CERT&#62;</strong>
      -----END CERTIFICATE-----
@@ -406,25 +406,25 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
          The root <b>must</b> be the first certificate of the chain.</p>
        </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>prestart_timeout</strong></code></td>
     <td>You can modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>log_level</strong></code> <a name="log\_level"></a></td>
     <td> You can specify the IKE daemon numerical log level, ranging from <code>-1</code> to <code>4</code>.
     For more information, see <a href="https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration">Logger Configuration</a> in the strongSwan documentation.
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>optional_warn_interval</strong></code><a name="optional\_warn\_interval"></a></td>
     <td>The interval in hours of warning when <code>optional</code> property is set to true. It prints the warning message <code>{Date} - IPsec is set to "Optional"</code> in the file <code>/var/vcap/sys/log/ipsec/ipsec.stdout.log</code> for Linux.
     </td>
   </tr>
-  
+
   <tr>
     <td> <code><strong>force_udp_encapsulation</strong></code>
     <a name="force_udp_encapsulation"></a></td>
@@ -436,26 +436,26 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
          to <code>false</code>. </p>
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance_certificate_info_period</strong></code></td>
     <td>If the instance certificate expires during the set period in days, the IPsec
     release writes an <code>[INFO]</code> message in the logs.
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance_certificate_warn_period</strong></code></td>
     <td>If the instance certificate expires during the set period in days, the IPsec
     release writes a <code>[WARN]</code> message in the logs.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance_certificate<br>_error_period</strong></code></td>
     <td>  If the instance certificate expires during the set period in days, the IPsec
       release writes an <code>[ERROR]</code> message in the logs.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance_certificate<br>_critical_period</strong></code></td>
     <td>If the instance certificate expires during the set period in days, the IPsec
@@ -532,32 +532,32 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
     <th>Property</th>
     <th>Instructions</th>
   </tr>
-  
+
   <tr>
     <td><code><strong>ipsec\_subnets</strong></code></td>
     <td>Copy and paste the value from <a href="#ipsec_subnets">ipsec\_subnets</a> for Linux.</td>
   </tr>
-    
+
   <tr>
     <td><code><strong>no\_ipsec\_subnets</strong></code></td>
     <td>Copy and paste the value from <a href="#no_ipsec_subnets">no\_ipsec\_subnets</a> for Linux.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance\_certificate</strong></code></td>
     <td>Copy and paste the value from <a href="#instance_certificate">instance\_certificate</a> for Linux.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>instance\_private\_key</strong></code></td>
     <td>Copy and paste the value from <a href="#instance_private_key">instance\_private\_key</a> for Linux.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>ca\_certificates</strong></code></td>
     <td>Copy and paste the value from <a href="#ca-certs">ca\_certificates</a> for Linux.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>optional</strong></code></td>
     <td>Copy and paste the value from <a href="#optional">optional</a> for Linux.</td>
@@ -620,20 +620,20 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
     <th width="35%">Property</th>
     <th>Instructions</th>
   </tr>
-  
+
   <tr>
     <td><code><strong>ike\_proposals</strong></code></td>
     <td> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
       The default, <code>aes128-sha256-modp2048!</code>, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>esp\_proposals</strong></code></td>
     <td>You can modify the ESP (Quick Mode) encryption and integrity algorithms.
       The default, <code>aes128gcm16!</code>, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.</td>
   </tr>
-  
+
   <tr>
     <td><code><strong>main\_mode\_proposals</strong></code></td>
     <td>This is an array of Main Mode algorithms for encryption, integrity, and key exchange.
@@ -647,7 +647,7 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
         </pre>
     </td>
   </tr>
-  
+
   <tr>
     <td><code><strong>quick\_mode\_proposals</strong></code></td>
     <td>his is an array of Quick Mode algorithms for encryption and integrity.
@@ -660,9 +660,9 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
         </pre>
     </td>
   <tr>
-  
+
 </table>
-    
+
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 

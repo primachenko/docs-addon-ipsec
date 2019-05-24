@@ -329,159 +329,159 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
 
   1. Replace the values listed in the template above as follows:
 
-    <table>
-      <tr>
-        <th width="35%">Property</th>
-        <th>Instructions</th>
-      </tr>
+<table>
+  <tr>
+    <th width="35%">Property</th>
+    <th>Instructions</th>
+  </tr>
 
-      <tr>
-        <td><code><strong>version</strong></code><a name="version"></a></td>
-        <td>Specify the version number of your IPsec download from Pivotal Network.</td>
-      </tr>
+  <tr>
+    <td><code><strong>version</strong></code><a name="version"></a></td>
+    <td>Specify the version number of your IPsec download from Pivotal Network.</td>
+  </tr>
 
-      <tr>
-        <td><code><strong>optional</strong></code><a name="optional"></a></td>
-        <td>This value makes IPsec enforcement optional.
-                  To add IPsec to an existing PAS deployment, set this flag to <code>true</code>.
-                  After IPsec has been successfully installed, set this flag back to <code>false</code> and redeploy.
-                  <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
-                  if you try to add IPsec to an existing deployment
-                  without setting <code>optional</code> to <code>true</code>.</p>
-        </td>
-      </tr>
+  <tr>
+    <td><code><strong>optional</strong></code><a name="optional"></a></td>
+    <td>This value makes IPsec enforcement optional.
+              To add IPsec to an existing PAS deployment, set this flag to <code>true</code>.
+              After IPsec has been successfully installed, set this flag back to <code>false</code> and redeploy.
+              <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
+              if you try to add IPsec to an existing deployment
+              without setting <code>optional</code> to <code>true</code>.</p>
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>ipsec_subnets</strong></code> <a name="ipsec_subnets"></a></td>
-        <td>List the subnets that you want to be encrypted.
-                You can include the entire deployment to encrypt all traffic or a portion of the network.
-                Encrypt any network that handles business-sensitive data.
-        </td>
-      </tr>
+  <tr>
+    <td><code><strong>ipsec_subnets</strong></code> <a name="ipsec_subnets"></a></td>
+    <td>List the subnets that you want to be encrypted.
+            You can include the entire deployment to encrypt all traffic or a portion of the network.
+            Encrypt any network that handles business-sensitive data.
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>no_ipsec_subnets</strong></code> <a name="no_ipsec_subnets"></a></td>
-        <td>  List the IP address of your BOSH Director and Ops Manager VM,
-                  along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
-                  Pivotal recommends that you list the subnets that are used for PCF managed services.
-                  Subnets for PCF managed services that do not support IPsec, such as an Pivotal Ops Manager or service tiles,
-                  must be listed under <code>no_ipsec_subnets</code> and installed in a separate network.
+  <tr>
+    <td><code><strong>no_ipsec_subnets</strong></code> <a name="no_ipsec_subnets"></a></td>
+    <td>  List the IP address of your BOSH Director and Ops Manager VM,
+              along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
+              Pivotal recommends that you list the subnets that are used for PCF managed services.
+              Subnets for PCF managed services that do not support IPsec, such as an Pivotal Ops Manager or service tiles,
+              must be listed under <code>no_ipsec_subnets</code> and installed in a separate network.
 
-            <p class="note"><strong>Note: </strong>If you have an external load balancer such as F5, add it to the <code>no_ipsec_subnets</code> property.
-             If you want to include it in the <code>ipsec_subnet</code>, you must configure it manually.</p>
+        <p class="note"><strong>Note: </strong>If you have an external load balancer such as F5, add it to the <code>no_ipsec_subnets</code> property.
+         If you want to include it in the <code>ipsec_subnet</code>, you must configure it manually.</p>
 
-            <p class="note warning"><strong>Warning:</strong> IPs that are not in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> have no default behavior and cannot communicate with other internal VMs. You must specify internal IPs in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code>.</p>
+        <p class="note warning"><strong>Warning:</strong> IPs that are not in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> have no default behavior and cannot communicate with other internal VMs. You must specify internal IPs in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code>.</p>
 
-            <p class="note warning"><strong>Warning:</strong> In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
-             you must add the IP address of the default router in your subnet to <code>no_ipsec_subnets</code>.
-             For example, <code>10.0.0.1/32</code>.</p>
-        </td>
-      </tr>
+        <p class="note warning"><strong>Warning:</strong> In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
+         you must add the IP address of the default router in your subnet to <code>no_ipsec_subnets</code>.
+         For example, <code>10.0.0.1/32</code>.</p>
+    </td>
+  </tr>
 
-      <tr>
-        <td> <code><strong>instance_certificate</strong></code> <a name="instance_certificate"></a></td>
-        <td>Copy in the signed certificate to be used by all your instance VMs.
-                You must use one of the CAs in the <code>ca_certificates</code> property to sign this certificate.
-                Pivotal recommends that you use a self-signed certificate.
-                For more information, see
-                <a href="#self-signed">Generate a Self-Signed Certificate</a> below.
-        </td>
-      </tr>
+  <tr>
+    <td> <code><strong>instance_certificate</strong></code> <a name="instance_certificate"></a></td>
+    <td>Copy in the signed certificate to be used by all your instance VMs.
+            You must use one of the CAs in the <code>ca_certificates</code> property to sign this certificate.
+            Pivotal recommends that you use a self-signed certificate.
+            For more information, see
+            <a href="#self-signed">Generate a Self-Signed Certificate</a> below.
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>instance_private_key</strong></code><a name="instance_private_key"></a></td>
-        <td>Copy in the private key that corresponds to the <code>instance_certificate</code> above.
-          This key must not use a pass phrase.</td>
-      </tr>
+  <tr>
+    <td><code><strong>instance_private_key</strong></code><a name="instance_private_key"></a></td>
+    <td>Copy in the private key that corresponds to the <code>instance_certificate</code> above.
+      This key must not use a pass phrase.</td>
+  </tr>
 
-      <tr>
-        <td><code><strong>ca_certificates</strong></code> <a name="ca-certs"></a></td>
-        <td>          Copy in CA certificates for the instance VM to trust during the validation process.
-                  In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
-          <br><br>
-          IPsec <strong>v1.8.12</strong> and later supports the CA certificate chain.
-          Concatenate the contents of the root and the intermediate certificates
-          as one of the list items in <strong>ca_certificates</strong>,
-          with the root CA at the top:
-    <pre><strong>ca_certificates</strong>:
-       - |
-         -----BEGIN CERTIFICATE-----
-         ... <strong>&#60;ROOT&#62;</strong>
-         -----END CERTIFICATE-----
-         -----BEGIN CERTIFICATE-----
-         ... <strong>&#60;INTERMEDIATE 1 ISSUED BY
-         THE ROOT CERT ABOVE&#62;</strong>
-         -----END CERTIFICATE-----
-         -----BEGIN CERTIFICATE-----
-         ... <strong>&#60;INTERMEDIATE 2 ISSUED BY
-         THE INTERMEDIATE 1 ABOVE
-         ... AND SIGNS THE INSTANCE CERT&#62;</strong>
-         -----END CERTIFICATE-----
-       - |
-         -----BEGIN CERTIFICATE-----
-         ... <strong>&#60;SECOND ROOT&#62;</strong>
-         -----END CERTIFICATE-----</pre>
-          <p class="note"><strong>Note:</strong> The root and the intermediate certificates cannot have the same subjectName,
-             also called the common name and set with <code>CN=</code>.
-             The root <b>must</b> be the first certificate of the chain.</p>
-           </td>
-      </tr>
+  <tr>
+    <td><code><strong>ca_certificates</strong></code> <a name="ca-certs"></a></td>
+    <td>          Copy in CA certificates for the instance VM to trust during the validation process.
+              In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+      <br><br>
+      IPsec <strong>v1.8.12</strong> and later supports the CA certificate chain.
+      Concatenate the contents of the root and the intermediate certificates
+      as one of the list items in <strong>ca_certificates</strong>,
+      with the root CA at the top:
+<pre><strong>ca_certificates</strong>:
+   - |
+     -----BEGIN CERTIFICATE-----
+     ... <strong>&#60;ROOT&#62;</strong>
+     -----END CERTIFICATE-----
+     -----BEGIN CERTIFICATE-----
+     ... <strong>&#60;INTERMEDIATE 1 ISSUED BY
+     THE ROOT CERT ABOVE&#62;</strong>
+     -----END CERTIFICATE-----
+     -----BEGIN CERTIFICATE-----
+     ... <strong>&#60;INTERMEDIATE 2 ISSUED BY
+     THE INTERMEDIATE 1 ABOVE
+     ... AND SIGNS THE INSTANCE CERT&#62;</strong>
+     -----END CERTIFICATE-----
+   - |
+     -----BEGIN CERTIFICATE-----
+     ... <strong>&#60;SECOND ROOT&#62;</strong>
+     -----END CERTIFICATE-----</pre>
+      <p class="note"><strong>Note:</strong> The root and the intermediate certificates cannot have the same subjectName,
+         also called the common name and set with <code>CN=</code>.
+         The root <b>must</b> be the first certificate of the chain.</p>
+       </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>prestart_timeout</strong></code></td>
-        <td>You can modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
-      </tr>
+  <tr>
+    <td><code><strong>prestart_timeout</strong></code></td>
+    <td>You can modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
+  </tr>
 
-      <tr>
-        <td><code><strong>log_level</strong></code> <a name="log\_level"></a></td>
-        <td> You can specify the IKE daemon numerical log level, ranging from <code>-1</code> to <code>4</code>.
-        For more information, see <a href="https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration">Logger Configuration</a> in the strongSwan documentation.
-        </td>
-      </tr>
+  <tr>
+    <td><code><strong>log_level</strong></code> <a name="log\_level"></a></td>
+    <td> You can specify the IKE daemon numerical log level, ranging from <code>-1</code> to <code>4</code>.
+    For more information, see <a href="https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration">Logger Configuration</a> in the strongSwan documentation.
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>optional_warn_interval</strong></code><a name="optional\_warn\_interval"></a></td>
-        <td>The interval in hours of warning when <code>optional</code> property is set to true. It prints the warning message <code>{Date} - IPsec is set to "Optional"</code> in the file <code>/var/vcap/sys/log/ipsec/ipsec.stdout.log</code> for Linux.
-        </td>
-      </tr>
+  <tr>
+    <td><code><strong>optional_warn_interval</strong></code><a name="optional\_warn\_interval"></a></td>
+    <td>The interval in hours of warning when <code>optional</code> property is set to true. It prints the warning message <code>{Date} - IPsec is set to "Optional"</code> in the file <code>/var/vcap/sys/log/ipsec/ipsec.stdout.log</code> for Linux.
+    </td>
+  </tr>
 
-      <tr>
-        <td> <code><strong>force_udp_encapsulation</strong></code>
-        <a name="force_udp_encapsulation"></a></td>
-        <td>Available on Linux-only deployments.
-        If set to <code>true</code> it forces UDP encapsulation for ESP packets.
-          <p class="note warning"><strong>Warning:</strong> Setting this property to <code>true</code> in
-            mixed deployments causes the deployment to fail.
-            If you do not have a Linux-only deployment, you must set <code>force_udp_encapsulation</code>
-             to <code>false</code>. </p>
-        </td>
-      </tr>
+  <tr>
+    <td> <code><strong>force_udp_encapsulation</strong></code>
+    <a name="force_udp_encapsulation"></a></td>
+    <td>Available on Linux-only deployments.
+    If set to <code>true</code> it forces UDP encapsulation for ESP packets.
+      <p class="note warning"><strong>Warning:</strong> Setting this property to <code>true</code> in
+        mixed deployments causes the deployment to fail.
+        If you do not have a Linux-only deployment, you must set <code>force_udp_encapsulation</code>
+         to <code>false</code>. </p>
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>instance_certificate_info_period</strong></code></td>
-        <td>If the instance certificate expires during the set period in days, the IPsec
-        release writes an <code>[INFO]</code> message in the logs.
-        </td>
-      </tr>
+  <tr>
+    <td><code><strong>instance_certificate_info_period</strong></code></td>
+    <td>If the instance certificate expires during the set period in days, the IPsec
+    release writes an <code>[INFO]</code> message in the logs.
+    </td>
+  </tr>
 
-      <tr>
-        <td><code><strong>instance_certificate_warn_period</strong></code></td>
-        <td>If the instance certificate expires during the set period in days, the IPsec
-        release writes a <code>[WARN]</code> message in the logs.</td>
-      </tr>
+  <tr>
+    <td><code><strong>instance_certificate_warn_period</strong></code></td>
+    <td>If the instance certificate expires during the set period in days, the IPsec
+    release writes a <code>[WARN]</code> message in the logs.</td>
+  </tr>
 
-      <tr>
-        <td><code><strong>instance_certificate<br>_error_period</strong></code></td>
-        <td>  If the instance certificate expires during the set period in days, the IPsec
-          release writes an <code>[ERROR]</code> message in the logs.</td>
-      </tr>
+  <tr>
+    <td><code><strong>instance_certificate<br>_error_period</strong></code></td>
+    <td>  If the instance certificate expires during the set period in days, the IPsec
+      release writes an <code>[ERROR]</code> message in the logs.</td>
+  </tr>
 
-      <tr>
-        <td><code><strong>instance_certificate<br>_critical_period</strong></code></td>
-        <td>If the instance certificate expires during the set period in days, the IPsec
-        release writes a <code>[CRITICAL]</code> message in the logs.</td>
-      </tr>
-    </table>
+  <tr>
+    <td><code><strong>instance_certificate<br>_critical_period</strong></code></td>
+    <td>If the instance certificate expires during the set period in days, the IPsec
+    release writes a <code>[CRITICAL]</code> message in the logs.</td>
+  </tr>
+</table>
 
 ### <a id="windows"></a> Add Windows VM Support to Your Runtime Config
 

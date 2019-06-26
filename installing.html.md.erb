@@ -315,6 +315,7 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
               ...
               -----END CERTIFICATE-----
           <strong>prestart\_timeout</strong>: 30
+          <strong>stop\_timeout</strong>: 30
           <strong>esp\_proposals</strong>: aes128gcm16!
           <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
           <strong>log\_level</strong>: 1
@@ -430,6 +431,11 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   <tr>
     <td><code><strong>prestart_timeout</strong></code></td>
     <td>You can modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
+  </tr>
+
+  <tr>
+    <td><code><strong>stop_timeout</strong></code></td>
+    <td>When IPsec stops, communication between VMs will not be encrypted and may cause errors. By default, IPsec will wait 30 seconds for all other running jobs to stop before stopping itself. You can modify the 30-second default post stop timeout value.</td>
   </tr>
 
   <tr>

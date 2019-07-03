@@ -281,51 +281,51 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
       <strong>jobs</strong>:
       \- <strong>name</strong>: ipsec
         release: ipsec
+        properties:
+          ipsec:
+            <strong>optional</strong>: false
+            <strong>ipsec\_subnets</strong>:
+            \- 10.0.1.1/20
+            <strong>no\_ipsec\_subnets</strong>:
+            \- 10.0.1.10/32  # bosh director
+            \- 10.0.1.4/32 # ops managers
+            <strong>instance\_certificate</strong>: |
+              -----BEGIN CERTIFICATE-----
+              MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+              ...
+              -----END CERTIFICATE-----
+            <strong>instance\_private\_key</strong>: |
+              -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+              EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+              ...
+              -----END EXAMPLE RSA PRIVATE KEY-----
+            <strong>ca\_certificates</strong>:
+              \- |
+                -----BEGIN CERTIFICATE-----
+                MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+                ...
+                -----END CERTIFICATE-----
+              \- |
+                -----BEGIN CERTIFICATE-----
+                MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+                ...
+                -----END CERTIFICATE-----
+            <strong>prestart\_timeout</strong>: 30
+            <strong>stop\_timeout</strong>: 30
+            <strong>esp\_proposals</strong>: aes128gcm16!
+            <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
+            <strong>log\_level</strong>: 1
+            <strong>ike\_version</strong>: ike
+            <strong>optional\_warn\_interval</strong>: 1
+            <strong>force\_udp\_encapsulation</strong>: false
+            <strong>instance\_certificate\_info\_period</strong>: 30
+            <strong>instance\_certificate\_warn\_period</strong>: 14
+            <strong>instance\_certificate\_error\_period</strong>: 7
+            <strong>instance\_certificate\_critical\_period</strong>: 3
       include:
         stemcell:
         - <strong>os</strong>: ubuntu-trusty
         - <strong>os</strong>: ubuntu-xenial
-      properties:
-        ipsec:
-          <strong>optional</strong>: false
-          <strong>ipsec\_subnets</strong>:
-          \- 10.0.1.1/20
-          <strong>no\_ipsec\_subnets</strong>:
-          \- 10.0.1.10/32  # bosh director
-          \- 10.0.1.4/32 # ops managers
-          <strong>instance\_certificate</strong>: |
-            -----BEGIN CERTIFICATE-----
-            MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-            ...
-            -----END CERTIFICATE-----
-          <strong>instance\_private\_key</strong>: |
-            -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-            ...
-            -----END EXAMPLE RSA PRIVATE KEY-----
-          <strong>ca\_certificates</strong>:
-            \- |
-              -----BEGIN CERTIFICATE-----
-              MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-              ...
-              -----END CERTIFICATE-----
-            \- |
-              -----BEGIN CERTIFICATE-----
-              MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-              ...
-              -----END CERTIFICATE-----
-          <strong>prestart\_timeout</strong>: 30
-          <strong>stop\_timeout</strong>: 30
-          <strong>esp\_proposals</strong>: aes128gcm16!
-          <strong>ike\_proposals</strong>: aes128-sha256-modp2048!
-          <strong>log\_level</strong>: 1
-          <strong>ike\_version</strong>: ike
-          <strong>optional\_warn\_interval</strong>: 1
-          <strong>force\_udp\_encapsulation</strong>: false
-          <strong>instance\_certificate\_info\_period</strong>: 30
-          <strong>instance\_certificate\_warn\_period</strong>: 14
-          <strong>instance\_certificate\_error\_period</strong>: 7
-          <strong>instance\_certificate\_critical\_period</strong>: 3
   </pre>
 
   1. Replace the values listed in the template above as follows:
@@ -515,45 +515,45 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
       jobs:
       \- <strong>name</strong>: ipsec-win
         release: ipsec
+        properties:
+          ipsec:
+            <strong>optional</strong>: false
+            <strong>ipsec\_subnets</strong>:
+            \- 10.0.1.1/20
+            <strong>no\_ipsec\_subnets</strong>:
+            \- 10.0.1.10/32  # bosh director
+            \- 10.0.1.4/32 # ops manager
+            <strong>instance\_certificate</strong>: |
+              -----BEGIN CERTIFICATE-----
+              MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+              ...
+              -----END CERTIFICATE-----
+            <strong>instance\_private\_key</strong>: |
+              -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+              EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+              ...
+              -----END EXAMPLE RSA PRIVATE KEY-----
+            <strong>ca\_certificates</strong>:
+              \- |
+                -----BEGIN CERTIFICATE-----
+                MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
+                ...
+                -----END CERTIFICATE-----
+              \- |
+                -----BEGIN CERTIFICATE-----
+                MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
+                ...
+                -----END CERTIFICATE-----
+            <strong>quick\_mode\_proposals</strong>:
+              \- encryption: AESGCM128
+                hash: AESGMAC128
+            <strong>main\_mode\_proposals</strong>:
+              \- encryption: AES128
+                hash: SHA256
+                keyexchange: DH14
       include:
         stemcell:
           \- <strong>os</strong>: windows2012R2
-      properties:
-        ipsec:
-          <strong>optional</strong>: false
-          <strong>ipsec\_subnets</strong>:
-          \- 10.0.1.1/20
-          <strong>no\_ipsec\_subnets</strong>:
-          \- 10.0.1.10/32  # bosh director
-          \- 10.0.1.4/32 # ops manager
-          <strong>instance\_certificate</strong>: |
-            -----BEGIN CERTIFICATE-----
-            MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
-            ...
-            -----END CERTIFICATE-----
-          <strong>instance\_private\_key</strong>: |
-            -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-            ...
-            -----END EXAMPLE RSA PRIVATE KEY-----
-          <strong>ca\_certificates</strong>:
-            \- |
-              -----BEGIN CERTIFICATE-----
-              MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-              ...
-              -----END CERTIFICATE-----
-            \- |
-              -----BEGIN CERTIFICATE-----
-              MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-              ...
-              -----END CERTIFICATE-----
-          <strong>quick\_mode\_proposals</strong>:
-            \- encryption: AESGCM128
-              hash: AESGMAC128
-          <strong>main\_mode\_proposals</strong>:
-            \- encryption: AES128
-              hash: SHA256
-              keyexchange: DH14
   </pre>
 
   1. Replace the values listed in the template as follows:

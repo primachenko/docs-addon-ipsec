@@ -38,25 +38,25 @@ Follow the steps below to determine the expiration dates of your IPsec certifica
       jobs:
       - name: ipsec
         release: ipsec
+        properties:
+          ipsec:
+            ca_certificates:
+            - |
+              -----BEGIN CERTIFICATE-----
+              MIIE/TCCAuWgAwIBAgIBATANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDEwNjYTEw
+               HhcNMTYwNTI2MjI1MDMzWhcNMjYwNTI2MjI1MDQyWjAOMQwwCgYDVQQDEwNjYTEw
+               ...     
+               Axu2pbEoT1PrMd3HlAZ3AH8ZrMR3ScJKCW3wQFRX/Plj
+              -----END CERTIFICATE-----
+            instance_certificate: |
+              -----BEGIN CERTIFICATE-----
+              MIIEGTCCAgGgAwIBAgIQDlqK1V54BEknnblVPXu5lzANBgkqhkiG9w0BAQsFADAO
+              MQwwCgYDVQQDEwNjYTEwHhcNMTYwNTI2MjI1MTAzWhcNMTgwNTI2MjI1MTAzWjAQ
+              MQ4wDAYDVQQDEwVjZXJ0MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+              ... 
+              4Q6P/cDn9QvW2QbbWkApP2uuMk04jWJV7p79CfX4pipPqiSofjFyFqsjjvir
+              -----END CERTIFICATE-----
       name: ipsec
-      properties:
-        ipsec:
-          ca_certificates:
-          - |
-            -----BEGIN CERTIFICATE-----
-            MIIE/TCCAuWgAwIBAgIBATANBgkqhkiG9w0BAQsFADAOMQwwCgYDVQQDEwNjYTEw
-             HhcNMTYwNTI2MjI1MDMzWhcNMjYwNTI2MjI1MDQyWjAOMQwwCgYDVQQDEwNjYTEw
-             ...     
-             Axu2pbEoT1PrMd3HlAZ3AH8ZrMR3ScJKCW3wQFRX/Plj
-            -----END CERTIFICATE-----
-          instance_certificate: |
-            -----BEGIN CERTIFICATE-----
-            MIIEGTCCAgGgAwIBAgIQDlqK1V54BEknnblVPXu5lzANBgkqhkiG9w0BAQsFADAO
-            MQwwCgYDVQQDEwNjYTEwHhcNMTYwNTI2MjI1MTAzWhcNMTgwNTI2MjI1MTAzWjAQ
-            MQ4wDAYDVQQDEwVjZXJ0MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
-            ... 
-            4Q6P/cDn9QvW2QbbWkApP2uuMk04jWJV7p79CfX4pipPqiSofjFyFqsjjvir
-            -----END CERTIFICATE-----
     ```
 
 5. Copy the ca_certificate into a text file.

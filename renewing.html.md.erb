@@ -36,24 +36,24 @@ To renew expired IPsec certificates, do the following:
    see the field descriptions under [Create the IPsec Manifest](./installing.html#create-mfest).
     <pre>
     properties:
-        ipsec:
-          <strong>optional</strong>: true
-          <strong>instance\_certificate</strong>: |
+      ipsec:
+        <strong>optional</strong>: true
+        <strong>instance\_certificate</strong>: |
+          -----BEGIN CERTIFICATE-----
+          EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+          ...
+          -----END CERTIFICATE-----
+        <strong>instance\_private\_key</strong>: |
+          -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+          EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+          ...
+          -----END EXAMPLE RSA PRIVATE KEY-----
+        <strong>ca\_certificates</strong>:
+          \- |
             -----BEGIN CERTIFICATE-----
-            EXAMPLEAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+            ExampleAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
             ...
             -----END CERTIFICATE-----
-          <strong>instance\_private\_key</strong>: |
-            -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
-            ...
-            -----END EXAMPLE RSA PRIVATE KEY-----
-          <strong>ca\_certificates</strong>:
-            \- |
-              -----BEGIN CERTIFICATE-----
-              ExampleAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-              ...
-              -----END CERTIFICATE-----
     </pre>
 
 4. Update the runtime config by running the following command:

@@ -491,7 +491,14 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
   </tr>
 </table>
 
-### <a id="windows"></a> Add Windows VM Support to Your Runtime Config
+### <a id="windows"></a> Windows Compatibility
+
+Because PAS Windows VMs connect to linux VMs there are two options when configuring IPsec:
+
+1. Include the Windows VMs in the IPsec mesh (Windows 2012 only)
+2. Exclude the Windows VMs from the IPsec mesh
+
+#### <a id="include-windows"></a> Adding Windows 2012 VMs to the IPsec Mesh
 
 To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
 
@@ -597,7 +604,7 @@ To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
     if you try to add IPsec to an existing deployment
     without setting <code>optional</code> to <code>true</code> for both Linux and Windows.</p>
 
-###<a id="proposals"></a>(Optional) Custom Linux/Windows Mixed Deployment Proposals
+#####<a id="proposals"></a>(Optional) Custom Linux/Windows Mixed Deployment Proposals
 
 A default proposal set is already selected for the `ipsec-addon.yml`.
 If you want to use different proposals, modify the `ipsec-addon.yml` using the following table:
@@ -693,6 +700,12 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
       <tr>
 
     </table>
+
+### <a id="exclude-windows"></a> Excluding Windows VMs from the IPsec Mesh
+
+1. <a href="https://docs.pivotal.io/pivotalcf/2-6/customizing/add-subnets.html">Create a new subnet</a> under the PAS Runtime Network 
+2. <a href="https://docs.pivotal.io/pivotalcf/2-6/windows/installing.html#config">Assign the new subnet</a> in the PAS Windows Tile
+3. Add the subnet CIDR to <a href="#no_ipsec_subnets"><code><strong>no\_ipsec\_subnets</strong></code> section</a> of your linux IPsec runtime config. 
 
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on

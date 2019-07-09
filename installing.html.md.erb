@@ -65,6 +65,7 @@ Pivotal recommends the following MTU values:
         or empirically test the correct MTU for your environment.
     </table>
 
+
 ##<a id="bestpractices"></a>Best Practices
   * IPsec might affect the functionality of other service tiles.
     As a result, Pivotal recommends deploying PAS
@@ -140,73 +141,74 @@ the protocols listed in the table below:
 
 To configure your Azure environment for IPsec, do the following:
 
-  1. Confirm that your network allows the protocols listed in the table below.
-  <table>
-    <tr>
-      <th width="33%">Protocol Name</th>
-      <th width="33%">Protocol Number</th>
-      <th width="33%">Port(s)</th>
-    </tr>
-    <tr>
-      <td>AH</td>
-      <td>51</td>
-      <td>Any</td>
-    </tr>
-    <tr>
-      <td>ESP</td>
-      <td>50</td>
-      <td>Any</td>
-    </tr>
-    <tr>
-      <td>UDP</td>
-      <td>17</td>
-      <td>500</td>
-    </tr>
-  </table>
+1. Confirm that your network allows the protocols listed in the table below.
+<table>
+  <tr>
+    <th width="33%">Protocol Name</th>
+    <th width="33%">Protocol Number</th>
+    <th width="33%">Port(s)</th>
+  </tr>
+  <tr>
+    <td>AH</td>
+    <td>51</td>
+    <td>Any</td>
+  </tr>
+  <tr>
+    <td>ESP</td>
+    <td>50</td>
+    <td>Any</td>
+  </tr>
+  <tr>
+    <td>UDP</td>
+    <td>17</td>
+    <td>500</td>
+  </tr>
+</table>
 
-  1. Adjust the MTU value to `1438`. For instructions, see <a href="./troubleshooting.html#ipsec-installation-issues">Explanation: Packet Loss</a>.
+1. Adjust the MTU value to `1438`. For instructions, see <a href="./troubleshooting.html#ipsec-installation-issues">Explanation: Packet Loss</a>.
+
 
 ###<a id="aws"></a>Configure Network Security for AWS
 
 To configure your AWS environment for IPsec, do the following:
 
-  1. Navigate to **EC2 Dashboard > Security Groups**.
+1. Navigate to **EC2 Dashboard > Security Groups**.
 
-  2. Select the Security Group with the description **PCF VMs Security Group** and click **Edit**.
+2. Select the Security Group with the description **PCF VMs Security Group** and click **Edit**.
 
-  3. Create the following **Inbound Rules**.
-  <table border="1" class="nice">
-  <tr>
-    <th>Type</th>
-    <th>Protocol Name</th>
-    <th>Protocol Number</th>
-    <th>Port Range</th>
-    <th>Source</th>
-  </tr>
-  <tr>
-    <td>Custom Protocol</td>
-    <td>AH</td>
-    <td>51</td>
-    <td>All</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  <tr>
-    <td>Custom Protocol</td>
-    <td>ESP</td>
-    <td>50</td>
-    <td>All</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  <tr>
-    <td>Custom UDP Rule</td>
-    <td>UDP</td>
-    <td>17</td>
-    <td>500</td>
-    <td>10.0.0.0/16</td>
-  </tr>
-  </table>
+3. Create the following **Inbound Rules**.
+<table border="1" class="nice">
+<tr>
+  <th>Type</th>
+  <th>Protocol Name</th>
+  <th>Protocol Number</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>AH</td>
+  <td>51</td>
+  <td>All</td>
+  <td>10.0.0.0/16</td>
+</tr>
+<tr>
+  <td>Custom Protocol</td>
+  <td>ESP</td>
+  <td>50</td>
+  <td>All</td>
+  <td>10.0.0.0/16</td>
+</tr>
+<tr>
+  <td>Custom UDP Rule</td>
+  <td>UDP</td>
+  <td>17</td>
+  <td>500</td>
+  <td>10.0.0.0/16</td>
+</tr>
+</table>
 
-    <p class="note"><strong>Note</strong>: The default <strong>PCF VMs Security Group</strong> is typically specified with a subnet of <code>10.0.0.0/16</code>. If your PCF subnet is deployed to a different CIDR block, adjust the source as needed.</p>
+  <p class="note"><strong>Note</strong>: The default <strong>PCF VMs Security Group</strong> is typically specified with a subnet of <code>10.0.0.0/16</code>. If your PCF subnet is deployed to a different CIDR block, adjust the source as needed.</p>
 
 ###<a id="openstack"></a>Configure Network Security for OpenStack
 
@@ -214,64 +216,65 @@ To configure your AWS environment for IPsec, do the following:
 
 To configure your Mirantis OpenStack environment for IPsec, perform the following steps:
 
-  1. Navigate to **Project / Access & Security**.
+1. Navigate to **Project / Access & Security**.
 
-  1. Select the security group and click **Manage Rules**.
+1. Select the security group and click **Manage Rules**.
 
-  1. Create the following **Ingress and Egress Rules**. Adjust the source CIDR as needed for your environment.
-  <table border="1" class="nice">
-  <tr>
-    <th>Protocol Name</th>
-    <th>Protocol Number</th>
-    <th>Port Range</th>
-    <th>Source</th>
-  </tr>
-  <tr>
-    <td>ESP</td>
-    <td>50</td>
-    <td>Any</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  <tr>
-    <td>AH</td>
-    <td>51</td>
-    <td>Any</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  <tr>
-    <td>UDP</td>
-    <td>17</td>
-    <td>500</td>
-    <td>0.0.0.0/0</td>
-  </tr>
-  </table>
+1. Create the following **Ingress and Egress Rules**. Adjust the source CIDR as needed for your environment.
+<table border="1" class="nice">
+<tr>
+  <th>Protocol Name</th>
+  <th>Protocol Number</th>
+  <th>Port Range</th>
+  <th>Source</th>
+</tr>
+<tr>
+  <td>ESP</td>
+  <td>50</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>AH</td>
+  <td>51</td>
+  <td>Any</td>
+  <td>0.0.0.0/0</td>
+</tr>
+<tr>
+  <td>UDP</td>
+  <td>17</td>
+  <td>500</td>
+  <td>0.0.0.0/0</td>
+</tr>
+</table>
 
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
-To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`
-that configures IPsec add-on properties for Linux VMs, Windows VMs or both.
+To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`.
+The `ipsec-addon.yml` configures IPsec add-on properties for Linux VMs in PAS deployments
+and Windows VMs in PAS Windows (PASW) deployments.
 
-To add IPsec to VMs in your deployment, do the following:
+To create the IPsec Manifest, do the following:
 
-  1. Create an IPsec runtime config file `ipsec-addon.yml`, with the code below as a template.
-  <pre>releases:
-  \- name: ipsec
-      version: 1.x.x
-  addons:
-  </pre>
+1. [Add Linux VM Support to Your Runtime Config](#linux).
 
-  1. Add properties to the `ipsec-addon.yml` file as described below:
-    + [Add Linux VM Support to Your Runtime Config](#linux)
-    + [Add Windows VM Support to Your Runtime Config](#windows)
-    + [(Optional) Custom Linux/Windows Mixed Deployment Proposals](#proposals)
+1. If you have Windows VMs, do one of the following:
+  - [Add Windows 2012 VMs to the IPsec Mesh](#include-windows) (Windows 2012 only)
+  - [Exclude Windows VMs from the IPsec Mesh](#exclude-windows)
 
-    <p class="note"><strong>Note</strong>: Enabling IPsec for Windows adds IPsec security to Windows VMs that users can create after installing the <a href="https://docs.pivotal.io/pivotalcf/windows2012r2/index.html">PAS for Windows 2012R2</a> tile.</p>
+    <p class="note"><strong>Note</strong>:
+      PASW VMs connect to Linux VMs.
+      Enabling IPsec for Windows adds IPsec security to Windows VMs that users can
+      create after installing the
+      <a href="https://docs.pivotal.io/pivotalcf/windows2012r2/index.html">PAS for Windows 2012R2</a> tile.
+    </p>
 
 ### <a id="linux"></a> Add Linux VM Support to Your Runtime Config
 
-Perform the following steps to add IPsec to Linux VMs in your deployment:
+To add IPsec to Linux VMs in your deployment, do the following:
 
-  1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file:
+1. Create an IPsec runtime config file called `ipsec-addon.yml` and add the following
+YAML:
   <pre>
   <strong>releases:</strong>
   \- name: ipsec
@@ -328,385 +331,393 @@ Perform the following steps to add IPsec to Linux VMs in your deployment:
         - <strong>os</strong>: ubuntu-xenial
   </pre>
 
-  1. Replace the values listed in the template above as follows:
+1. Replace the values listed in the template above as follows:
+  <table>
+    <tr>
+      <th width="35%">Property</th>
+      <th>Instructions</th>
+    </tr>
+    <tr>
+      <td><code><strong>version</strong></code></td>
+      <td>
+        <a name="version"></a>
+        Specify the version number of your IPsec download from Pivotal Network.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>optional</strong></code></td>
+      <td>
+        <a name="optional"></a>
+        This value makes IPsec enforcement optional.
+        To add IPsec to an existing PAS deployment, set this flag to <code>true</code>.
+        After IPsec has been successfully installed, set this flag back to <code>false</code> and redeploy.
+        <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
+          if you try to add IPsec to an existing deployment
+          without setting <code>optional</code> to <code>true</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>ipsec\_subnets</strong></code></td>
+      <td>
+        <a name="ipsec_subnets"></a>
+        List the subnets that you want to be encrypted.
+        You can include the entire deployment to encrypt all traffic or a portion of the network.
+        Encrypt any network that handles business-sensitive data.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>no\_ipsec\_subnets</strong></code></td>
+      <td>
+        <a name="no_ipsec_subnets"></a>
+        List the IP address of your BOSH Director and Ops Manager VM,
+        along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
+        Pivotal recommends that you list the subnets that are used for PCF managed services.
+        Subnets for PCF managed services that do not support IPsec, such as an Pivotal Ops Manager or service tiles,
+        must be listed under <code>no\_ipsec\_subnets</code> and installed in a separate network.
+        <p class="note"><strong>Note: </strong>
+          If you have an external load balancer such as F5, add it to the
+          <code>no\_ipsec\_subnets</code> property.
+          If you want to include it in the <code>ipsec\_subnet</code>, you must
+          configure it manually.
+        </p>
+        <p class="note warning"><strong>Warning:</strong>
+          IPs that are not in <code>ipsec\_subnets</code> or <code>no\_ipsec\_subnets</code>
+          have no default behavior and cannot communicate with other internal VMs.
+          You must specify internal IPs in <code>ipsec\_subnets</code> or
+          <code>no\_ipsec\_subnets</code>.
+        </p>
+        <p class="note warning"><strong>Warning:</strong>
+          In GCP, if you use the default router for DNS instead of the Google public
+          DNS at <code>8.8.8.8</code>, you must add the IP address of the default
+          router in your subnet to <code>no\_ipsec\_subnets</code>.
+          For example, <code>10.0.0.1/32</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td> <code><strong>instance\_certificate</strong></code></td>
+      <td>
+        <a name="instance_certificate"></a>
+        Copy in the signed certificate to be used by all your instance VMs.
+        You must use one of the CAs in the <code>ca\_certificates</code> property to sign this certificate.
+        Pivotal recommends that you use a self-signed certificate.
+        For more information, see
+        <a href="#self-signed">Generate a Self-Signed Certificate</a> below.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>instance\_private\_key</strong></code></td>
+      <td>
+        <a name="instance_private_key"></a>
+        Copy in the private key that corresponds to the <code>instance\_certificate</code> above.
+        This key must not use a pass phrase.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>ca\_certificates</strong></code></td>
+      <td>
+        <a name="ca-certs"></a>
+        Copy in CA certificates for the instance VM to trust during the validation process.
+        In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
+        <br><br>
+        IPsec <strong>v1.8.12</strong> and later supports the CA certificate chain.
+        Concatenate the contents of the root and the intermediate certificates
+        as one of the list items in <strong>ca\_certificates</strong>,
+        with the root CA at the top:
+        <pre><strong>ca\_certificates</strong>:
+         - |
+           -----BEGIN CERTIFICATE-----
+           ... <strong>&#60;ROOT&#62;</strong>
+           -----END CERTIFICATE-----
+           -----BEGIN CERTIFICATE-----
+           ... <strong>&#60;INTERMEDIATE 1 ISSUED BY
+           THE ROOT CERT ABOVE&#62;</strong>
+           -----END CERTIFICATE-----
+           -----BEGIN CERTIFICATE-----
+           ... <strong>&#60;INTERMEDIATE 2 ISSUED BY
+           THE INTERMEDIATE 1 ABOVE
+           ... AND SIGNS THE INSTANCE CERT&#62;</strong>
+           -----END CERTIFICATE-----
+         - |
+           -----BEGIN CERTIFICATE-----
+           ... <strong>&#60;SECOND ROOT&#62;</strong>
+           -----END CERTIFICATE-----
+       </pre>
+        <p class="note"><strong>Note:</strong> The root and the intermediate certificates cannot have the same subjectName,
+           also called the common name and set with <code>CN=</code>.
+           The root <b>must</b> be the first certificate of the chain.</p>
+         </td>
+    </tr>
+    <tr>
+      <td><code><strong>prestart\_timeout</strong></code></td>
+      <td>Use this to modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
+    </tr>
+    <tr>
+      <td><code><strong>stop\_timeout</strong></code></td>
+      <td>Use this to modify the 30-second default post stop timeout value.
+          When IPsec stops, communication between VMs is not encrypted and might cause errors.
+          By default, IPsec waits 30 seconds for all other running jobs to stop before stopping itself.</td>
+    </tr>
+    <tr>
+      <td><code><strong>log\_level</strong></code></td>
+      <td>
+        <a name="log_level"></a>
+        You can specify the IKE daemon numerical log level, ranging from <code>-1</code> to <code>4</code>.
+        For more information, see <a href="https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration">Logger Configuration</a> in the strongSwan documentation.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>optional\_warn\_interval</strong></code></td>
+      <td>
+        <a name="optional_warn_interval"></a>
+        The interval in hours of warning when <code>optional</code> property is set to true.
+        It prints the warning message <code>{Date} - IPsec is set to "Optional"</code> in the file
+        <code>/var/vcap/sys/log/ipsec/ipsec.stdout.log</code> for Linux.
+      </td>
+    </tr>
+    <tr>
+      <td> <code><strong>force\_udp\_encapsulation</strong></code>
+      <a name="force_udp_encapsulation"></a></td>
+      <td>Available on Linux-only deployments.
+      If set to <code>true</code> it forces UDP encapsulation for ESP packets.
+        <p class="note warning"><strong>Warning:</strong> Setting this property to <code>true</code> in
+          mixed deployments causes the deployment to fail.
+          If you do not have a Linux-only deployment, you must set <code>force\_udp\_encapsulation</code>
+           to <code>false</code>. </p>
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>instance\_certificate<br>\_info\_period</strong></code></td>
+      <td>If the instance certificate expires during the set period in days, the IPsec
+      release writes an <code>[INFO]</code> message in the logs.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>instance\_certificate<br>\_warn\_period</strong></code></td>
+      <td>If the instance certificate expires during the set period in days, the IPsec
+      release writes a <code>[WARN]</code> message in the logs.</td>
+    </tr>
+    <tr>
+      <td><code><strong>instance\_certificate<br>\_error\_period</strong></code></td>
+      <td>  If the instance certificate expires during the set period in days, the IPsec
+        release writes an <code>[ERROR]</code> message in the logs.</td>
+    </tr>
+    <tr>
+      <td><code><strong>instance\_certificate<br>\_critical\_period</strong></code></td>
+      <td>If the instance certificate expires during the set period in days, the IPsec
+      release writes a <code>[CRITICAL]</code> message in the logs.</td>
+    </tr>
+  </table>
 
-<table>
-  <tr>
-    <th width="35%">Property</th>
-    <th>Instructions</th>
-  </tr>
 
-  <tr>
-    <td><code><strong>version</strong></code><a name="version"></a></td>
-    <td>Specify the version number of your IPsec download from Pivotal Network.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>optional</strong></code><a name="optional"></a></td>
-    <td>This value makes IPsec enforcement optional.
-              To add IPsec to an existing PAS deployment, set this flag to <code>true</code>.
-              After IPsec has been successfully installed, set this flag back to <code>false</code> and redeploy.
-              <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
-              if you try to add IPsec to an existing deployment
-              without setting <code>optional</code> to <code>true</code>.</p>
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>ipsec_subnets</strong></code> <a name="ipsec_subnets"></a></td>
-    <td>List the subnets that you want to be encrypted.
-            You can include the entire deployment to encrypt all traffic or a portion of the network.
-            Encrypt any network that handles business-sensitive data.
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>no_ipsec_subnets</strong></code> <a name="no_ipsec_subnets"></a></td>
-    <td>  List the IP address of your BOSH Director and Ops Manager VM,
-              along with any other IP addresses in your PCF deployment that you want to communicate with without encryption.
-              Pivotal recommends that you list the subnets that are used for PCF managed services.
-              Subnets for PCF managed services that do not support IPsec, such as an Pivotal Ops Manager or service tiles,
-              must be listed under <code>no_ipsec_subnets</code> and installed in a separate network.
-
-        <p class="note"><strong>Note: </strong>If you have an external load balancer such as F5, add it to the <code>no_ipsec_subnets</code> property.
-         If you want to include it in the <code>ipsec_subnet</code>, you must configure it manually.</p>
-
-        <p class="note warning"><strong>Warning:</strong> IPs that are not in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code> have no default behavior and cannot communicate with other internal VMs. You must specify internal IPs in <code>ipsec_subnets</code> or <code>no_ipsec_subnets</code>.</p>
-
-        <p class="note warning"><strong>Warning:</strong> In GCP, if you use the default router for DNS instead of the Google public DNS at <code>8.8.8.8</code>,
-         you must add the IP address of the default router in your subnet to <code>no_ipsec_subnets</code>.
-         For example, <code>10.0.0.1/32</code>.</p>
-    </td>
-  </tr>
-
-  <tr>
-    <td> <code><strong>instance_certificate</strong></code> <a name="instance_certificate"></a></td>
-    <td>Copy in the signed certificate to be used by all your instance VMs.
-            You must use one of the CAs in the <code>ca_certificates</code> property to sign this certificate.
-            Pivotal recommends that you use a self-signed certificate.
-            For more information, see
-            <a href="#self-signed">Generate a Self-Signed Certificate</a> below.
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>instance_private_key</strong></code><a name="instance_private_key"></a></td>
-    <td>Copy in the private key that corresponds to the <code>instance_certificate</code> above.
-      This key must not use a pass phrase.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>ca_certificates</strong></code> <a name="ca-certs"></a></td>
-    <td>          Copy in CA certificates for the instance VM to trust during the validation process.
-              In most cases, you only need the CA certificate used to sign the instance certificate. During CA credential rotation, you need two CA certificates.
-      <br><br>
-      IPsec <strong>v1.8.12</strong> and later supports the CA certificate chain.
-      Concatenate the contents of the root and the intermediate certificates
-      as one of the list items in <strong>ca_certificates</strong>,
-      with the root CA at the top:
-<pre><strong>ca_certificates</strong>:
-   - |
-     -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;ROOT&#62;</strong>
-     -----END CERTIFICATE-----
-     -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;INTERMEDIATE 1 ISSUED BY
-     THE ROOT CERT ABOVE&#62;</strong>
-     -----END CERTIFICATE-----
-     -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;INTERMEDIATE 2 ISSUED BY
-     THE INTERMEDIATE 1 ABOVE
-     ... AND SIGNS THE INSTANCE CERT&#62;</strong>
-     -----END CERTIFICATE-----
-   - |
-     -----BEGIN CERTIFICATE-----
-     ... <strong>&#60;SECOND ROOT&#62;</strong>
-     -----END CERTIFICATE-----</pre>
-      <p class="note"><strong>Note:</strong> The root and the intermediate certificates cannot have the same subjectName,
-         also called the common name and set with <code>CN=</code>.
-         The root <b>must</b> be the first certificate of the chain.</p>
-       </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>prestart_timeout</strong></code></td>
-    <td>Use this to modify the 30-second default prestart timeout value. This value limits the number of seconds allowed for IPsec to start before failing the attempt.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>stop_timeout</strong></code></td>
-    <td>Use this to modify the 30-second default post stop timeout value.
-        When IPsec stops, communication between VMs is not encrypted and might cause errors.
-        By default, IPsec waits 30 seconds for all other running jobs to stop before stopping itself.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>log_level</strong></code> <a name="log\_level"></a></td>
-    <td> You can specify the IKE daemon numerical log level, ranging from <code>-1</code> to <code>4</code>.
-    For more information, see <a href="https://wiki.strongswan.org/projects/strongswan/wiki/LoggerConfiguration">Logger Configuration</a> in the strongSwan documentation.
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>optional_warn_interval</strong></code><a name="optional\_warn\_interval"></a></td>
-    <td>The interval in hours of warning when <code>optional</code> property is set to true. It prints the warning message <code>{Date} - IPsec is set to "Optional"</code> in the file <code>/var/vcap/sys/log/ipsec/ipsec.stdout.log</code> for Linux.
-    </td>
-  </tr>
-
-  <tr>
-    <td> <code><strong>force_udp_encapsulation</strong></code>
-    <a name="force_udp_encapsulation"></a></td>
-    <td>Available on Linux-only deployments.
-    If set to <code>true</code> it forces UDP encapsulation for ESP packets.
-      <p class="note warning"><strong>Warning:</strong> Setting this property to <code>true</code> in
-        mixed deployments causes the deployment to fail.
-        If you do not have a Linux-only deployment, you must set <code>force_udp_encapsulation</code>
-         to <code>false</code>. </p>
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>instance_certificate_info_period</strong></code></td>
-    <td>If the instance certificate expires during the set period in days, the IPsec
-    release writes an <code>[INFO]</code> message in the logs.
-    </td>
-  </tr>
-
-  <tr>
-    <td><code><strong>instance_certificate_warn_period</strong></code></td>
-    <td>If the instance certificate expires during the set period in days, the IPsec
-    release writes a <code>[WARN]</code> message in the logs.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>instance_certificate<br>_error_period</strong></code></td>
-    <td>  If the instance certificate expires during the set period in days, the IPsec
-      release writes an <code>[ERROR]</code> message in the logs.</td>
-  </tr>
-
-  <tr>
-    <td><code><strong>instance_certificate<br>_critical_period</strong></code></td>
-    <td>If the instance certificate expires during the set period in days, the IPsec
-    release writes a <code>[CRITICAL]</code> message in the logs.</td>
-  </tr>
-</table>
-
-### <a id="windows"></a> Windows Compatibility
-
-Because PAS Windows VMs connect to linux VMs there are two options when configuring IPsec:
-
-1. Include the Windows VMs in the IPsec mesh (Windows 2012 only)
-2. Exclude the Windows VMs from the IPsec mesh
-
-#### <a id="include-windows"></a> Adding Windows 2012 VMs to the IPsec Mesh
+###<a id="include-windows"></a> Add Windows 2012 VMs to the IPsec Mesh
 
 To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
 
-  1. Modify the `ipsec-addon.yml` created during the previous section to add the properties indicated <strong>in bold</strong> below under the `ipsec` key.
-  <pre>
-  \- name: ipsec-addon
-      ...
+1. Modify the `ipsec-addon.yml` created during the [Add Linux VM Support to Your Runtime Config](#linux)
+section above to add the properties indicated in bold in the snippet below.
+Add the properties under the `ipsec` key.
+<pre>
+\- name: ipsec-addon
+    ...
+    properties:
+      ipsec:
+        .
+        .
+        .
+        <strong>ike_version</strong>: ikev1
+        <strong>dpdaction</strong>: none
+</pre>
+
+1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file.
+ Add it under the `ipsec-addon` section for Linux.
+<pre>
+\- name: ipsec-windows-addon
+    jobs:
+    \- <strong>name</strong>: ipsec-win
+      release: ipsec
       properties:
         ipsec:
-          .
-          .
-          .
-          <strong>ike_version</strong>: ikev1
-          <strong>dpdaction</strong>: none
-  </pre>
-
-  1. Add the following YAML under `addons:` to your `ipsec-addon.yml` file.
-   Add it under the `ipsec-addon` section for Linux, if you included one when following the steps in the [Add Linux VM Support to Your Runtime Config](#linux) section above.
-  <pre>
-  \- name: ipsec-windows-addon
-      jobs:
-      \- <strong>name</strong>: ipsec-win
-        release: ipsec
-        properties:
-          ipsec:
-            <strong>optional</strong>: false
-            <strong>ipsec\_subnets</strong>:
-            \- 10.0.1.1/20
-            <strong>no\_ipsec\_subnets</strong>:
-            \- 10.0.1.10/32  # bosh director
-            \- 10.0.1.4/32 # ops manager
-            <strong>instance\_certificate</strong>: |
+          <strong>optional</strong>: false
+          <strong>ipsec\_subnets</strong>:
+          \- 10.0.1.1/20
+          <strong>no\_ipsec\_subnets</strong>:
+          \- 10.0.1.10/32  # bosh director
+          \- 10.0.1.4/32 # ops manager
+          <strong>instance\_certificate</strong>: |
+            -----BEGIN CERTIFICATE-----
+            MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+            ...
+            -----END CERTIFICATE-----
+          <strong>instance\_private\_key</strong>: |
+            -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+            EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+            ...
+            -----END EXAMPLE RSA PRIVATE KEY-----
+          <strong>ca\_certificates</strong>:
+            \- |
               -----BEGIN CERTIFICATE-----
-              MIIEMDCCAhigAwIBAgIRAIvrBY2TttU/LeRhO+V1t0YwDQYJKoZIhvcNAQELBQAw
+              MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
               ...
               -----END CERTIFICATE-----
-            <strong>instance\_private\_key</strong>: |
-              -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-              EXAMPLExRSAxPRIVATExKEYxDATAxEXAMPLExRSAxPRIVATExKEYxDATA
+            \- |
+              -----BEGIN CERTIFICATE-----
+              MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
               ...
-              -----END EXAMPLE RSA PRIVATE KEY-----
-            <strong>ca\_certificates</strong>:
-              \- |
-                -----BEGIN CERTIFICATE-----
-                MIIFCTCCAvGgAwIBAgIBATANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwl0ZXN0
-                ...
-                -----END CERTIFICATE-----
-              \- |
-                -----BEGIN CERTIFICATE-----
-                MIIFCTCCAvGgAwIBAgIBATAAYDVQQDEwl0ZXN0NBgkqhkiG9w0BAQsFADAUMRIwE
-                ...
-                -----END CERTIFICATE-----
-            <strong>quick\_mode\_proposals</strong>:
-              \- encryption: AESGCM128
-                hash: AESGMAC128
-            <strong>main\_mode\_proposals</strong>:
-              \- encryption: AES128
-                hash: SHA256
-                keyexchange: DH14
-      include:
-        stemcell:
-          \- <strong>os</strong>: windows2012R2
-  </pre>
+              -----END CERTIFICATE-----
+          <strong>quick\_mode\_proposals</strong>:
+            \- encryption: AESGCM128
+              hash: AESGMAC128
+          <strong>main\_mode\_proposals</strong>:
+            \- encryption: AES128
+              hash: SHA256
+              keyexchange: DH14
+    include:
+      stemcell:
+        \- <strong>os</strong>: windows2012R2
+</pre>
 
-  1. Replace the values listed in the template as follows:
+1. Replace the values listed in the template as follows:
   <table>
     <tr>
       <th>Property</th>
       <th>Instructions</th>
     </tr>
-
     <tr>
       <td><code><strong>ipsec\_subnets</strong></code></td>
       <td>Copy and paste the value from <a href="#ipsec_subnets">ipsec\_subnets</a> for Linux.</td>
     </tr>
-
     <tr>
       <td><code><strong>no\_ipsec\_subnets</strong></code></td>
       <td>Copy and paste the value from <a href="#no_ipsec_subnets">no\_ipsec\_subnets</a> for Linux.</td>
     </tr>
-
     <tr>
       <td><code><strong>instance\_certificate</strong></code></td>
       <td>Copy and paste the value from <a href="#instance_certificate">instance\_certificate</a> for Linux.</td>
     </tr>
-
     <tr>
       <td><code><strong>instance\_private\_key</strong></code></td>
       <td>Copy and paste the value from <a href="#instance_private_key">instance\_private\_key</a> for Linux.</td>
     </tr>
-
     <tr>
       <td><code><strong>ca\_certificates</strong></code></td>
       <td>Copy and paste the value from <a href="#ca-certs">ca\_certificates</a> for Linux.</td>
     </tr>
-
     <tr>
       <td><code><strong>optional</strong></code></td>
       <td>Copy and paste the value from <a href="#optional">optional</a> for Linux.</td>
   </table>
-
-    <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
+  <p class="note warning"><strong>Warning:</strong> Communication between existing components fails
     if you try to add IPsec to an existing deployment
-    without setting <code>optional</code> to <code>true</code> for both Linux and Windows.</p>
+    without setting <code>optional</code> to <code>true</code> for both Linux and Windows.
+  </p>
 
-#####<a id="proposals"></a>(Optional) Custom Linux/Windows Mixed Deployment Proposals
+
+####<a id="proposals"></a>(Optional) Configure Custom Deployment Proposals
 
 A default proposal set is already selected for the `ipsec-addon.yml`.
 If you want to use different proposals, modify the `ipsec-addon.yml` using the following table:
 
-  1. Select the encryption type from the first row.
-    <table>
-      <tr>
-        <th rowspan="2">Encryption Type</th>
-        <th colspan="2">Linux (ipsec-addon)</th>
-        <th colspan="2">Windows (ipsec-win-addon)</th>
-      </tr>
-      <tr>
-        <th>ike\_proposals</th>
-        <th>esp\_proposals</th>
-        <th>main\_mode\_proposals</th>
-        <th>quick\_mode\_proposals</th>
-      </tr>
-      <tr>
-        <td>128 Bit Encryption</td>
-        <td><pre>aes128-sha256-modp2048!</pre></td>
-        <td><pre>aes128gcm16!</pre></td>
-        <td>
-        <pre>- encryption: AES128
-      hash: SHA256
-      keyexchange: DH14</pre>
-        </td>
-        <td>
-          <pre>- encryption: AESGCM128
-      hash: AESGMAC128</pre>
-         </td>
-      </tr>
-      <tr>
-        <td>256 Bit Encryption</td>
-        <td><pre>aes256-sha256-modp2048!</pre></td>
-        <td><pre>aes256gcm16!</pre></td>
-        <td>
-          <pre>- encryption: AES256
-      hash: SHA256
-      keyexchange: DH14</pre>
-        </td>
-        <td>
-          <pre>- encryption: AESGCM256
-      hash: AESGMAC256</pre>
-         </td>
-      </tr>
-    </table>
+1. Select the encryption type from the first row.
+  <table>
+    <tr>
+      <th rowspan="2">Encryption Type</th>
+      <th colspan="2">Linux (ipsec-addon)</th>
+      <th colspan="2">Windows (ipsec-win-addon)</th>
+    </tr>
+    <tr>
+      <th>ike\_proposals</th>
+      <th>esp\_proposals</th>
+      <th>main\_mode\_proposals</th>
+      <th>quick\_mode\_proposals</th>
+    </tr>
+    <tr>
+      <td>128 Bit Encryption (default)</td>
+      <td><pre>aes128-sha256-modp2048!</pre></td>
+      <td><pre>aes128gcm16!</pre></td>
+      <td>
+      <pre>- encryption: AES128
+    hash: SHA256
+    keyexchange: DH14</pre>
+      </td>
+      <td>
+        <pre>- encryption: AESGCM128
+    hash: AESGMAC128</pre>
+       </td>
+    </tr>
+    <tr>
+      <td>256 Bit Encryption</td>
+      <td><pre>aes256-sha256-modp2048!</pre></td>
+      <td><pre>aes256gcm16!</pre></td>
+      <td>
+        <pre>- encryption: AES256
+    hash: SHA256
+    keyexchange: DH14</pre>
+      </td>
+      <td>
+        <pre>- encryption: AESGCM256
+    hash: AESGMAC256</pre>
+       </td>
+    </tr>
+  </table>
 
-  1. Copy the properties from that row into `ipsec-addon.yml` accordingly. See the `ipsec-addon.yml` file example above.
-    <table>
-      <tr>
-        <th width="35%">Property</th>
-        <th>Instructions</th>
-      </tr>
+1. Copy the properties from that row into `ipsec-addon.yml` accordingly. See the `ipsec-addon.yml` file example above.
+  <table>
+    <tr>
+      <th width="35%">Property</th>
+      <th>Instructions</th>
+    </tr>
 
-      <tr>
-        <td><code><strong>ike\_proposals</strong></code></td>
-        <td> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
-          The default, <code>aes128-sha256-modp2048!</code>, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
-        </td>
-      </tr>
+    <tr>
+      <td><code><strong>ike\_proposals</strong></code></td>
+      <td> You can modify the IKE (Main Mode) encryption and integrity algorithms, and the Diffie-Hellman group.
+        The default, <code>aes128-sha256-modp2048!</code>, is 128 bit AES-CBC for encryption, SHA2\_256\_128 HMAC for integrity, and Group 14 for Diffie-Hellman.
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>esp\_proposals</strong></code></td>
+      <td>You can modify the ESP (Quick Mode) encryption and integrity algorithms.
+        The default, <code>aes128gcm16!</code>, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.</td>
+    </tr>
+    <tr>
+      <td><code><strong>main\_mode\_proposals</strong></code></td>
+      <td>This is an array of Main Mode algorithms for encryption, integrity, and key exchange.
+        This value must match the list specified in **ike_proposals** for Linux.
+        See the table for proposal sets for both Linux and Windows.
+        The default entry that matches the Linux default is:
+          <pre>
+          \- encryption: AES128
+               hash: SHA256
+               keyexchange: DH14
+          </pre>
+      </td>
+    </tr>
+    <tr>
+      <td><code><strong>quick\_mode\_proposals</strong></code></td>
+      <td>his is an array of Quick Mode algorithms for encryption and integrity.
+        This value must match the list specified in **esp_proposals** for Linux.
+        See the table for proposal sets for both Linux and Windows.
+        The default entry that matches the Linux default is:
+          <pre>
+          \- encryption: AESGCM128
+               hash: AESGMAC128
+          </pre>
+      </td>
+    <tr>
+  </table>
 
-      <tr>
-        <td><code><strong>esp\_proposals</strong></code></td>
-        <td>You can modify the ESP (Quick Mode) encryption and integrity algorithms.
-          The default, <code>aes128gcm16!</code>, is 128 bit AES-GCM with 128 bit ICV for both encryption and integrity.</td>
-      </tr>
 
-      <tr>
-        <td><code><strong>main\_mode\_proposals</strong></code></td>
-        <td>This is an array of Main Mode algorithms for encryption, integrity, and key exchange.
-          This value must match the list specified in **ike_proposals** for Linux.
-          See the table for proposal sets for both Linux and Windows.
-          The default entry that matches the Linux default is:
-            <pre>
-            \- encryption: AES128
-                 hash: SHA256
-                 keyexchange: DH14
-            </pre>
-        </td>
-      </tr>
+### <a id="exclude-windows"></a> Exclude Windows VMs from the IPsec Mesh
 
-      <tr>
-        <td><code><strong>quick\_mode\_proposals</strong></code></td>
-        <td>his is an array of Quick Mode algorithms for encryption and integrity.
-          This value must match the list specified in **esp_proposals** for Linux.
-          See the table for proposal sets for both Linux and Windows.
-          The default entry that matches the Linux default is:
-            <pre>
-            \- encryption: AESGCM128
-                 hash: AESGMAC128
-            </pre>
-        </td>
-      <tr>
+To exclude Windows VMs from the IPsec mesh, do the following:
 
-    </table>
-
-### <a id="exclude-windows"></a> Excluding Windows VMs from the IPsec Mesh
-
-1. <a href="https://docs.pivotal.io/pivotalcf/2-6/customizing/add-subnets.html">Create a new subnet</a> under the PAS Runtime Network 
-2. <a href="https://docs.pivotal.io/pivotalcf/2-6/windows/installing.html#config">Assign the new subnet</a> in the PAS Windows Tile
-3. Add the subnet CIDR to <a href="#no_ipsec_subnets"><code><strong>no\_ipsec\_subnets</strong></code> section</a> of your linux IPsec runtime config. 
-
+1. Create a new subnet under the PAS Runtime Network.
+For instructions, see [Expanding Your Network with Additional Subnets](https://docs.pivotal.io/pivotalcf/2-6/customizing/add-subnets.html).
+2. Assign the new subnet in the PAS Windows Tile.
+For instructions, see [Step 3: Configure the Tile](https://docs.pivotal.io/pivotalcf/2-6/windows/installing.html#config).
+3. Add the subnet CIDR to the <code>no\_ipsec\_subnets</code> property in the
+Linux IPsec runtime config created during the [Add Linux VM Support to Your Runtime Config](#linux) section above.
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
@@ -714,165 +725,165 @@ To download the IPsec binary, add your IPsec runtime config to your BOSH manifes
 follow the steps below.
 <p class="note breaking"><strong>Breaking Change: </strong> If you are using PCF v1.12 or later, you must use named runtime configs. If you have not already split your runtime config into multiple named files, do so before upgrading the IPsec Add-on for PCF. For general information about named runtime config files, see <a href="https://bosh.io/docs/configs.html">Generic Configs</a> in the BOSH documentation.</p>
 
-  1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
+1. Download the IPsec add-on software binary from the [Pivotal Network](https://network.pivotal.io/products/p-ipsec-addon) to your local machine.
 
-  1. Copy the software binary to your Ops Manager instance.
-  <pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
+1. Copy the software binary to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-release.tar.gz ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-  1. Copy the IPsec runtime config file to your Ops Manager instance.
-  <pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
+1. Copy the IPsec runtime config file to your Ops Manager instance.
+<pre class="terminal">$ scp -i PATH-TO-PRIVATE-KEY ipsec-addon.yml ubuntu@YOUR-OPS-MANAGER-VM-IP:</pre>
 
-  1. SSH into Ops Manager.
- <pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-VM-IP</pre>
+1. SSH into Ops Manager.
+<pre class="terminal">$ ssh -i PATH-TO-PRIVATE-KEY ubuntu@YOUR-OPS-MANAGER-VM-IP</pre>
 
-  1. On the Ops Manager VM, navigate to the software binary location in your working directory.
-  <pre class="terminal">$ cd PATH-TO-BINARY</pre>
+1. On the Ops Manager VM, navigate to the software binary location in your working directory.
+<pre class="terminal">$ cd PATH-TO-BINARY</pre>
 
-  1. Log in to the BOSH Director.
-    1. On the Ops Manager VM, create an alias in the BOSH CLI for your BOSH Director IP address. For example:
-        <pre class="terminal">$ bosh alias-env my-env -e 10.0.0.3</pre>
-    1. Log in to the BOSH Director, specifying the newly created alias.
-        For example:
-        <pre class="terminal">$ bosh -e my-env log-in</pre>
+1. Log in to the BOSH Director.
+  1. On the Ops Manager VM, create an alias in the BOSH CLI for your BOSH Director IP address. For example:
+      <pre class="terminal">$ bosh alias-env my-env -e 10.0.0.3</pre>
+  1. Log in to the BOSH Director, specifying the newly created alias.
+      For example:
+      <pre class="terminal">$ bosh -e my-env log-in</pre>
 
-  1. Upload your release, specifying the path to the tarballed IPsec binary, by running the following command:
-  <pre class="terminal">$ bosh -e my-env upload-release PATH-TO-BINARY/BINARY-NAME.tar</pre>
+1. Upload your release, specifying the path to the tarballed IPsec binary, by running the following command:
+<pre class="terminal">$ bosh -e my-env upload-release PATH-TO-BINARY/BINARY-NAME.tar</pre>
 
-  1. List the releases by running the following command, and confirm that the IPsec binary file appears:
-  <pre class="terminal">$ bosh -e my-env releases</pre>
+1. List the releases by running the following command, and confirm that the IPsec binary file appears:
+<pre class="terminal">$ bosh -e my-env releases</pre>
 
-  1. Download your current runtime config and save as `bosh-manifest.yml` by running the following command:
-  <pre class="terminal">$ bosh -e my-env runtime-config > bosh-manifest.yml</pre>
+1. Download your current runtime config and save as `bosh-manifest.yml` by running the following command:
+<pre class="terminal">$ bosh -e my-env runtime-config > bosh-manifest.yml</pre>
 
-  1. Update your runtime configuration to include the IPsec add-on.
-  <pre class="terminal">$ bosh -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
+1. Update your runtime configuration to include the IPsec add-on.
+<pre class="terminal">$ bosh -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
 
-  1. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
-  <pre class="terminal"> $ bosh -e my-env runtime-config --name=ipsec</pre>
+1. Verify your runtime configuration changes match what you specified in the IPsec manifest file.
+<pre class="terminal"> $ bosh -e my-env runtime-config --name=ipsec</pre>
 
-    For example:
+  For example:
 
-    <pre class="terminal">
-    $ bosh -e my-env runtime-config --name=ipsec
-    Acting as user 'admin' on 'micro'
+  <pre class="terminal">
+  $ bosh -e my-env runtime-config --name=ipsec
+  Acting as user 'admin' on 'micro'
 
-    releases:
-     <span>-</span> {name: ipsec, version: 1.9.9}
+  releases:
+   <span>-</span> {name: ipsec, version: 1.9.9}
 
-    addons:
-     name: ipsec-addon
-      jobs:
-      <span>-</span> name: ipsec
-        release: ipsec
-        ...
-      <span>-</span> name: ipsec-win  # if using Windows
-        release: ipsec
-        ...
-    </pre>
+  addons:
+   name: ipsec-addon
+    jobs:
+    <span>-</span> name: ipsec
+      release: ipsec
+      ...
+    <span>-</span> name: ipsec-win  # if using Windows
+      release: ipsec
+      ...
+  </pre>
 
-  1. If you have already deployed PAS or are adding IPsec to an existing deployment:
-    1. Set the `optional` flag to `true`.
-    1. Navigate to your **Installation Dashboard** in Ops Manager.
-    1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
-    For more information about this Ops Manager page,
-    see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
-    1. Click **Apply Changes**
-    1. Wait for the installation to complete.
-    1. Set the `optional` flag to `false`.
-    1. Update the runtime config.
-        <pre class="terminal">$ bosh -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
-
-  1. Navigate to your **Installation Dashboard**.
+1. If you have already deployed PAS or are adding IPsec to an existing deployment:
+  1. Set the `optional` flag to `true`.
+  1. Navigate to your **Installation Dashboard** in Ops Manager.
   1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
-  1. Click **Apply Changes**.
+  For more information about this Ops Manager page,
+  see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html).
+  1. Click **Apply Changes**
+  1. Wait for the installation to complete.
+  1. Set the `optional` flag to `false`.
+  1. Update the runtime config.
+      <pre class="terminal">$ bosh -e my-env update-runtime-config --name=ipsec PATH/bosh-manifest.yml</pre>
 
-  1. If the PAS tile is not yet installed:
-    1. Navigate to your **Installation Dashboard** in Ops Manager.
-    1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
-    1. Click **Apply Changes**
-    1. Deploy PAS by following the installation instructions for your IaaS.
-       For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html).
+1. Navigate to your **Installation Dashboard**.
+1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
+1. Click **Apply Changes**.
 
-  1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information. When the deployment process is completed, remove any unneeded copies of these files from the local workstation. Pivotal recommends that you use encryption or logical access controls to secure any archival copies of manifest files you want to retain.
+1. If the PAS tile is not yet installed:
+  1. Navigate to your **Installation Dashboard** in Ops Manager.
+  1. If you are using Ops Manager v2.3 or later, click **Review Pending Changes**.
+  1. Click **Apply Changes**
+  1. Deploy PAS by following the installation instructions for your IaaS.
+     For more information, see [Installing Pivotal Cloud Foundry](http://docs.pivotal.io/pivotalcf/installing/index.html).
+
+1. The `bosh-manifest.yml` and `ipsec-addon.yml` files contain sensitive information. When the deployment process is completed, remove any unneeded copies of these files from the local workstation. Pivotal recommends that you use encryption or logical access controls to secure any archival copies of manifest files you want to retain.
 
 ##<a id="verify"></a>Verify Your IPsec Installation
 
 After installing IPsec and deploying PAS, perform the following steps to verify your IPsec installation:
 
-  1. List the job VMs in your deployment by running the following command:
-    `bosh -e BOSH-ENVIRONMENT vms`
+1. List the job VMs in your deployment by running the following command:
+  `bosh -e BOSH-ENVIRONMENT vms`
 
-  1. Open an SSH connection into the VM, using the job name and index of any VM found above, by running the following command:
-    `bosh -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh JOB-NAME/INDEX`
+1. Open an SSH connection into the VM, using the job name and index of any VM found above, by running the following command:
+  `bosh -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME ssh JOB-NAME/INDEX`
 
-    <p class="note"><strong>Note</strong>: The exact VM does not matter, because installing the IPsec add-on loads IPsec on all VMs deployed by Ops Manager.</p>
+  <p class="note"><strong>Note</strong>: The exact VM does not matter, because installing the IPsec add-on loads IPsec on all VMs deployed by Ops Manager.</p>
 
-  1. Run `sudo su -` to enter the root environment with root privileges.
+1. Run `sudo su -` to enter the root environment with root privileges.
 
-  1. Run `monit summary` to confirm that your `ipsec` job is listed as a `bosh` job.
-  <pre class="terminal">
-  The Monit daemon 5.2.5 uptime: 18h 32m
-  ...
-  Process 'ipsec'                     running
-  System 'system\_localhost'           running
-  </pre>
+1. Run `monit summary` to confirm that your `ipsec` job is listed as a `bosh` job.
+<pre class="terminal">
+The Monit daemon 5.2.5 uptime: 18h 32m
+...
+Process 'ipsec'                     running
+System 'system\_localhost'           running
+</pre>
 
 
-  1. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
-  <pre class="terminal">
-  $ /var/vcap/packages/strongswan-5.6.3/sbin/ipsec statusall
-  Status of IKE charon daemon (strongSwan 5.6.3, Linux 3.19.0-56-generic, x86\_64):
-    uptime: 18 hours, since Mar 16 23:58:50 2016
-    malloc: sbrk 2314240, mmap 0, used 1182400, free 1131840
-    worker threads: 11 of 16 idle, 5/0/0/0 working, job queue: 0/0/0/0, scheduled: 206
-    loaded plugins: charon aes sha1 sha2 random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pkcs8 pkcs12 pem gmp xcbc cmac hmac attr kernel-netlink socket-default stroke
-  Listening IP addresses:
-    10.10.5.66
-  Connections:
-  ipsec-10.10.4.0/24:  %any...%any  IKEv1/2
-  ipsec-10.10.4.0/24:   local:  [CN=test-cert-1-ca-1] uses public key authentication
-  ipsec-10.10.4.0/24:    cert:  "CN=test-cert-1-ca-1"
-  ipsec-10.10.4.0/24:   remote: uses public key authentication
-  ipsec-10.10.9.0/24:   child:  10.10.5.66/32 === 10.10.9.0/24 TRANSPORT
-  no-ipsec-10.10.4.1/32:  %any...%any  IKEv1/2
-  no-ipsec-10.10.4.1/32:   local:  uses public key authentication
-  no-ipsec-10.10.4.1/32:   remote: uses public key authentication
-  no-ipsec-10.10.4.1/32:   child:  dynamic === 10.10.4.1/32 PASS
-  Shunted Connections:
-  no-ipsec-10.10.4.1/32:  dynamic === 10.10.4.1/32 PASS
-  no-ipsec-10.10.5.1/32:  dynamic === 10.10.5.1/32 PASS
-  no-ipsec-10.10.6.1/32:  dynamic === 10.10.6.1/32 PASS
-  Routed Connections:
-  ipsec-10.10.9.0/24{6}:  ROUTED, TRANSPORT, reqid 6
-  ipsec-10.10.9.0/24{6}:   10.10.5.66/32 === 10.10.9.0/24
-  ipsec-10.10.8.0/24{5}:  ROUTED, TRANSPORT, reqid 5
-  ipsec-10.10.4.0/24{1}:   10.10.5.66/32 === 10.10.4.0/24
-  Security Associations (45 up, 0 connecting):
-  ipsec-10.10.4.0/24[459]: ESTABLISHED 13 seconds ago, 10.10.5.66[CN=test-cert-1-ca-1]...10.10.4.38[CN=test-cert-1-ca-1]
-  ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
-  ...
-  </pre>
+1. Run `PATH-TO-IPSEC/ipsec statusall` to confirm that IPsec is running. If IPsec is not running, this command produces no output.
+<pre class="terminal">
+$ /var/vcap/packages/strongswan-5.6.3/sbin/ipsec statusall
+Status of IKE charon daemon (strongSwan 5.6.3, Linux 3.19.0-56-generic, x86\_64):
+  uptime: 18 hours, since Mar 16 23:58:50 2016
+  malloc: sbrk 2314240, mmap 0, used 1182400, free 1131840
+  worker threads: 11 of 16 idle, 5/0/0/0 working, job queue: 0/0/0/0, scheduled: 206
+  loaded plugins: charon aes sha1 sha2 random nonce x509 revocation constraints pubkey pkcs1 pkcs7 pkcs8 pkcs12 pem gmp xcbc cmac hmac attr kernel-netlink socket-default stroke
+Listening IP addresses:
+  10.10.5.66
+Connections:
+ipsec-10.10.4.0/24:  %any...%any  IKEv1/2
+ipsec-10.10.4.0/24:   local:  [CN=test-cert-1-ca-1] uses public key authentication
+ipsec-10.10.4.0/24:    cert:  "CN=test-cert-1-ca-1"
+ipsec-10.10.4.0/24:   remote: uses public key authentication
+ipsec-10.10.9.0/24:   child:  10.10.5.66/32 === 10.10.9.0/24 TRANSPORT
+no-ipsec-10.10.4.1/32:  %any...%any  IKEv1/2
+no-ipsec-10.10.4.1/32:   local:  uses public key authentication
+no-ipsec-10.10.4.1/32:   remote: uses public key authentication
+no-ipsec-10.10.4.1/32:   child:  dynamic === 10.10.4.1/32 PASS
+Shunted Connections:
+no-ipsec-10.10.4.1/32:  dynamic === 10.10.4.1/32 PASS
+no-ipsec-10.10.5.1/32:  dynamic === 10.10.5.1/32 PASS
+no-ipsec-10.10.6.1/32:  dynamic === 10.10.6.1/32 PASS
+Routed Connections:
+ipsec-10.10.9.0/24{6}:  ROUTED, TRANSPORT, reqid 6
+ipsec-10.10.9.0/24{6}:   10.10.5.66/32 === 10.10.9.0/24
+ipsec-10.10.8.0/24{5}:  ROUTED, TRANSPORT, reqid 5
+ipsec-10.10.4.0/24{1}:   10.10.5.66/32 === 10.10.4.0/24
+Security Associations (45 up, 0 connecting):
+ipsec-10.10.4.0/24[459]: ESTABLISHED 13 seconds ago, 10.10.5.66[CN=test-cert-1-ca-1]...10.10.4.38[CN=test-cert-1-ca-1]
+ipsec-10.10.4.0/24{1527}:   10.10.5.66/32 === 10.10.4.38/32
+...
+</pre>
 
-  1. If you installed IPsec for Windows, follow these steps:
-    1. From any Windows VM, open **Windows Firewall with Advanced Security**.
-    1. Click **Connection Security Rules**.
-    1. Confirm that you see rules for each `ipsec` and `no-ipsec` subnet that you listed in your manifest.
+1. If you installed IPsec for Windows, follow these steps:
+  1. From any Windows VM, open **Windows Firewall with Advanced Security**.
+  1. Click **Connection Security Rules**.
+  1. Confirm that you see rules for each `ipsec` and `no-ipsec` subnet that you listed in your manifest.
 
 ##<a id="self-signed"></a>Generate a Self-Signed Certificate with OpenSSL
 
 Follow these steps to generate a self-signed certificate for your IPsec manifest.
 
-  1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
-  1. Navigate to the directory where you downloaded the script:
-    <pre class="terminal">$ cd ~/workspace</pre>
-  1. Change the permissions of the script:
-    <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
-  1. Run the script:
-    <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
-  1. This generates four files in a new `certs` directory where the script is run:
-     * **pcf-ipsec-ca-cert.pem** --- this value can be used as the CA Cert in the `ca_certificates` manifest field.
-     * **pcf-ipsec-ca-key.pem** --- the key used to sign the generated CA Cert.
-     * **pcf-ipsec-peer-key.pem** --- this value can be used as the instance private key in the `instance_private_key` manifest field.
-     * **pcf-ipsec-peer-cert.pem** --- this value can be used as the instance certificate in the `instance_certificate` manifest field.
-  1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
-     For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).
+1. [Download](./scripts/openssl-create-ipsec-certs.sh) the `openssl-create-ipsec-certs.sh` bash script.
+1. Navigate to the directory where you downloaded the script:
+  <pre class="terminal">$ cd ~/workspace</pre>
+1. Change the permissions of the script:
+  <pre class="terminal">$ chmod u+x openssl-create-ipsec-certs.sh</pre>
+1. Run the script:
+  <pre class="terminal">$ ./openssl-create-ipsec-certs.sh</pre>
+1. This generates four files in a new `certs` directory where the script is run:
+   * **pcf-ipsec-ca-cert.pem** --- this value can be used as the CA Cert in the `ca_certificates` manifest field.
+   * **pcf-ipsec-ca-key.pem** --- the key used to sign the generated CA Cert.
+   * **pcf-ipsec-peer-key.pem** --- this value can be used as the instance private key in the `instance_private_key` manifest field.
+   * **pcf-ipsec-peer-cert.pem** --- this value can be used as the instance certificate in the `instance_certificate` manifest field.
+1. Because this certificate expires in 365 days, set a calendar reminder to rotate the certificate within the year.
+   For instructions on changing certificates, see [Rotating IPsec Certificates](credentials.html).

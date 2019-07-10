@@ -251,8 +251,8 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 ##<a id="create-mfest"></a>Create the IPsec Manifest
 
 To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`.
-The `ipsec-addon.yml` configures IPsec add-on properties for Linux VMs in PAS deployments
-and Windows VMs in PAS Windows (PASW) deployments.
+The `ipsec-addon.yml` configures IPsec add-on properties for Linux VMs and,
+if you are using PAS for Windows 2012R2 (PASW), Windows VMs.
 
 To create the IPsec Manifest, do the following:
 
@@ -443,11 +443,12 @@ YAML:
            -----BEGIN CERTIFICATE-----
            ... <strong>&#60;SECOND ROOT&#62;</strong>
            -----END CERTIFICATE-----
-       </pre>
+        </pre>
         <p class="note"><strong>Note:</strong> The root and the intermediate certificates cannot have the same subjectName,
            also called the common name and set with <code>CN=</code>.
-           The root <b>must</b> be the first certificate of the chain.</p>
-         </td>
+           The root <b>must</b> be the first certificate of the chain.
+        </p>
+      </td>
     </tr>
     <tr>
       <td><code><strong>prestart\_timeout</strong></code></td>
@@ -455,9 +456,11 @@ YAML:
     </tr>
     <tr>
       <td><code><strong>stop\_timeout</strong></code></td>
-      <td>Use this to modify the 30-second default post stop timeout value.
-          When IPsec stops, communication between VMs is not encrypted and might cause errors.
-          By default, IPsec waits 30 seconds for all other running jobs to stop before stopping itself.</td>
+      <td>
+        Use this to modify the 30-second default post stop timeout value.
+        When IPsec stops, communication between VMs is not encrypted and might cause errors.
+        By default, IPsec waits 30 seconds for all other running jobs to stop before stopping itself.
+      </td>
     </tr>
     <tr>
       <td><code><strong>log\_level</strong></code></td>
@@ -479,34 +482,42 @@ YAML:
     <tr>
       <td> <code><strong>force\_udp\_encapsulation</strong></code>
       <a name="force_udp_encapsulation"></a></td>
-      <td>Available on Linux-only deployments.
-      If set to <code>true</code> it forces UDP encapsulation for ESP packets.
+      <td>
+        Available on Linux-only deployments.
+        If set to <code>true</code> it forces UDP encapsulation for ESP packets.
         <p class="note warning"><strong>Warning:</strong> Setting this property to <code>true</code> in
           mixed deployments causes the deployment to fail.
           If you do not have a Linux-only deployment, you must set <code>force\_udp\_encapsulation</code>
-           to <code>false</code>. </p>
+          to <code>false</code>. </p>
       </td>
     </tr>
     <tr>
       <td><code><strong>instance\_certificate<br>\_info\_period</strong></code></td>
-      <td>If the instance certificate expires during the set period in days, the IPsec
-      release writes an <code>[INFO]</code> message in the logs.
+      <td>
+        If the instance certificate expires during the set period in days, the IPsec
+        release writes an <code>[INFO]</code> message in the logs.
       </td>
     </tr>
     <tr>
       <td><code><strong>instance\_certificate<br>\_warn\_period</strong></code></td>
-      <td>If the instance certificate expires during the set period in days, the IPsec
-      release writes a <code>[WARN]</code> message in the logs.</td>
+      <td>
+        If the instance certificate expires during the set period in days, the IPsec
+        release writes a <code>[WARN]</code> message in the logs.
+      </td>
     </tr>
     <tr>
       <td><code><strong>instance\_certificate<br>\_error\_period</strong></code></td>
-      <td>  If the instance certificate expires during the set period in days, the IPsec
-        release writes an <code>[ERROR]</code> message in the logs.</td>
+      <td>
+        If the instance certificate expires during the set period in days, the IPsec
+        release writes an <code>[ERROR]</code> message in the logs.
+      </td>
     </tr>
     <tr>
       <td><code><strong>instance\_certificate<br>\_critical\_period</strong></code></td>
-      <td>If the instance certificate expires during the set period in days, the IPsec
-      release writes a <code>[CRITICAL]</code> message in the logs.</td>
+      <td>
+        If the instance certificate expires during the set period in days, the IPsec
+        release writes a <code>[CRITICAL]</code> message in the logs.
+      </td>
     </tr>
   </table>
 
@@ -514,6 +525,14 @@ YAML:
 ###<a id="include-windows"></a> Add Windows 2012 VMs to the IPsec Mesh
 
 To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
+
+1. If you have not already done so, create an `ipsec-addon.yml` file and add support for Linux VMs
+by following the steps in the [Add Linux VM Support to Your Runtime Config](#linux)
+section above.
+  <p class="note"><strong>Note: </strong>
+    PASW VMs connect to Linux VMs. Because of this, your manifest must include the
+    <code>ipsec-addon</code> section for Linux VM support.
+  </p>
 
 1. Modify the `ipsec-addon.yml` created during the [Add Linux VM Support to Your Runtime Config](#linux)
 section above to add the properties indicated in bold in the snippet below.
@@ -616,7 +635,7 @@ Add the properties under the `ipsec` key.
 
 ####<a id="proposals"></a>(Optional) Configure Custom Deployment Proposals
 
-A default proposal set is already selected for the `ipsec-addon.yml`.
+The manifest templates given above configure a default proposal for the `ipsec-addon.yml`.
 If you want to use different proposals, modify the `ipsec-addon.yml` using the following table:
 
 1. Select the encryption type from the first row.
@@ -662,7 +681,8 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
     </tr>
   </table>
 
-1. Copy the properties from that row into `ipsec-addon.yml` accordingly. See the `ipsec-addon.yml` file example above.
+1. Copy the properties from that row into `ipsec-addon.yml` accordingly.
+See the `ipsec-addon.yml` file example above.
   <table>
     <tr>
       <th width="35%">Property</th>
@@ -712,6 +732,13 @@ If you want to use different proposals, modify the `ipsec-addon.yml` using the f
 
 To exclude Windows VMs from the IPsec mesh, do the following:
 
+1. If you have not already done so, create an `ipsec-addon.yml` file and add support for Linux VMs
+support by following the steps in the [Add Linux VM Support to Your Runtime Config](#linux)
+section above.
+  <p class="note"><strong>Note: </strong>
+    PASW VMs connect to Linux VMs. Because of this, your manifest must include the
+    <code>ipsec-addon</code> section for Linux VM support.
+  </p>
 1. Create a new subnet under the PAS Runtime Network.
 For instructions, see [Expanding Your Network with Additional Subnets](https://docs.pivotal.io/pivotalcf/2-6/customizing/add-subnets.html).
 2. Assign the new subnet in the PAS Windows Tile.

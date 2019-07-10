@@ -252,7 +252,7 @@ To configure your Mirantis OpenStack environment for IPsec, perform the followin
 
 To add IPsec to VMs in your deployment, you must create a runtime config file named `ipsec-addon.yml`.
 The `ipsec-addon.yml` configures IPsec add-on properties for Linux VMs and,
-if you are using PAS for Windows 2012R2 (PASW), Windows VMs.
+if you are using PAS for Windows (PASW) 2012R2, Windows VMs.
 
 To create the IPsec Manifest, do the following:
 
@@ -266,7 +266,7 @@ To create the IPsec Manifest, do the following:
       PASW VMs connect to Linux VMs.
       Enabling IPsec for Windows adds IPsec security to Windows VMs that users can
       create after installing the
-      <a href="https://docs.pivotal.io/pivotalcf/windows2012r2/index.html">PAS for Windows 2012R2</a> tile.
+      <a href="https://docs.pivotal.io/pivotalcf/2-5/windows2012r2/index.html">PAS for Windows 2012R2</a> tile.
     </p>
 
 ### <a id="linux"></a> Add Linux VM Support to Your Runtime Config
@@ -524,7 +524,8 @@ YAML:
 
 ###<a id="include-windows"></a> Add Windows 2012 VMs to the IPsec Mesh
 
-To add IPsec to Windows Server 2012R2 VMs in your deployment, do the following:
+If you are using PASW 2012R2, you can add IPsec to the Windows
+Server 2012R2 VMs in your deployment. To do so, do the following:
 
 1. If you have not already done so, create an `ipsec-addon.yml` file and add support for Linux VMs
 by following the steps in the [Add Linux VM Support to Your Runtime Config](#linux)
@@ -534,8 +535,7 @@ section above.
     <code>ipsec-addon</code> section for Linux VM support.
   </p>
 
-1. Modify the `ipsec-addon.yml` created during the [Add Linux VM Support to Your Runtime Config](#linux)
-section above to add the properties indicated in bold in the snippet below.
+1. Modify the `ipsec-addon.yml` to add the properties indicated in bold in the snippet below.
 Add the properties under the `ipsec` key.
 <pre>
 \- name: ipsec-addon
@@ -730,7 +730,9 @@ See the `ipsec-addon.yml` file example above.
 
 ### <a id="exclude-windows"></a> Exclude Windows VMs from the IPsec Mesh
 
-To exclude Windows VMs from the IPsec mesh, do the following:
+IPsec only supports Windows Server 2012R2 VMs.
+If you are using PASW and have VMs that are not on Windows Server 2012R2, you
+must exclude these Windows VMs from the IPsec mesh. To do so, do the following:
 
 1. If you have not already done so, create an `ipsec-addon.yml` file and add support for Linux VMs
 support by following the steps in the [Add Linux VM Support to Your Runtime Config](#linux)
@@ -743,8 +745,7 @@ section above.
 For instructions, see [Expanding Your Network with Additional Subnets](https://docs.pivotal.io/pivotalcf/2-6/customizing/add-subnets.html).
 2. Assign the new subnet in the PAS Windows Tile.
 For instructions, see [Step 3: Configure the Tile](https://docs.pivotal.io/pivotalcf/2-6/windows/installing.html#config).
-3. Add the subnet CIDR to the <code>no\_ipsec\_subnets</code> property in the
-Linux IPsec runtime config created during the [Add Linux VM Support to Your Runtime Config](#linux) section above.
+3. Add the subnet CIDR to the <code>no\_ipsec\_subnets</code> property in `ipsec-addon.yml`.
 
 ##<a id="download-deploy"></a>Download and Deploy the IPsec Add-on
 
